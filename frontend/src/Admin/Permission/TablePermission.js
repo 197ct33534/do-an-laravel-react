@@ -81,7 +81,7 @@ const TablePermission = ({ list, fetchPermissionList, onEdit }) => {
                                             <Button
                                                 size="small"
                                                 color="secondary"
-                                                variant="contained"
+                                                variant="outlined"
                                                 onClick={() => onEdit(row)}
                                             >
                                                 <EditIcon />
@@ -89,7 +89,7 @@ const TablePermission = ({ list, fetchPermissionList, onEdit }) => {
                                             <Button
                                                 size="small"
                                                 color="error"
-                                                variant="contained"
+                                                variant="outlined"
                                                 onClick={() => onDelete(row)}
                                             >
                                                 <DeleteIcon />

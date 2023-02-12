@@ -1,7 +1,7 @@
+import AddIcon from '@mui/icons-material/Add';
 import { Box, Button, Grid, Pagination, Typography } from '@mui/material';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { FaPlus } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import InputField from '../../components/Form/InputField';
@@ -10,7 +10,8 @@ import { removeValuteEmpty } from '../../Helper/Funtion';
 import { fetchAllBrand } from './BrandAPI';
 import FormBrand from './FormBrand';
 import TableBrand from './TableBrand';
-
+import SearchIcon from '@mui/icons-material/Search';
+import SearchOffIcon from '@mui/icons-material/SearchOff';
 const BrandList = () => {
     const imageRef = useRef();
     const dispatch = useDispatch();
@@ -123,15 +124,10 @@ const BrandList = () => {
                         <Button
                             size="small"
                             color="success"
-                            variant="contained"
+                            variant="outlined"
                             onClick={() => showForm()}
                         >
-                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                <Typography variant="style-1" sx={{ paddingRight: '4px' }}>
-                                    Thêm
-                                </Typography>
-                                <FaPlus />
-                            </Box>
+                            <AddIcon />
                         </Button>
                     </Grid>
                     <Grid item xs={12} sm={6} md={5}>
@@ -152,21 +148,21 @@ const BrandList = () => {
                             >
                                 <Button
                                     type="submit"
-                                    variant="contained"
+                                    variant="outlined"
                                     color="primary"
                                     sx={{
                                         marginRight: { xs: '16px' },
                                     }}
                                 >
-                                    Tìm
+                                    <SearchIcon />
                                 </Button>
                                 <Button
                                     mr={3}
                                     onClick={() => handleClearSearch()}
-                                    variant="contained"
+                                    variant="outlined"
                                     color="secondary"
                                 >
-                                    Xóa
+                                    <SearchOffIcon />
                                 </Button>
                             </Box>
                         </Box>

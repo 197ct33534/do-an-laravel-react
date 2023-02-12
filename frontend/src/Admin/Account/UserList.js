@@ -1,15 +1,22 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import AddIcon from '@mui/icons-material/Add';
+import SearchIcon from '@mui/icons-material/Search';
+import SearchOffIcon from '@mui/icons-material/SearchOff';
 import { Box, Button, Grid, Pagination, Typography } from '@mui/material';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import * as yup from 'yup';
+import InputField from '../../components/Form/InputField';
+import SelectField from '../../components/Form/SelectField';
 import { done, pendding } from '../../features/user/userSlice';
 import { configToast } from '../../Helper/Config';
-import { capitalized, removeValuteEmpty, renderError } from '../../Helper/Funtion';
+import { capitalized, renderError } from '../../Helper/Funtion';
 import { ruleAddUser, ruleEditUser } from '../../rules/ruleAccount';
 import { fetchAllRole } from '../Role/RoleApi';
+import FormUser from './FormUser';
 import TableUser from './TableUser';
 import {
     fetchDeleteUser,
@@ -18,11 +25,6 @@ import {
     fetchPutIsActive,
     fetchPutUser,
 } from './UserApi';
-import * as yup from 'yup';
-import InputField from '../../components/Form/InputField';
-import SelectField from '../../components/Form/SelectField';
-import { FaPlus } from 'react-icons/fa';
-import FormUser from './FormUser';
 const UserList = () => {
     const dispatch = useDispatch();
     const [userList, setUserList] = useState();
@@ -246,12 +248,9 @@ const UserList = () => {
         <>
             <Typography variant="h5">Quản Lý Tài Khoản</Typography>
             <Box mt={2} textAlign="left">
-                <Button size="small" color="success" variant="contained" onClick={() => showForm()}>
+                <Button size="small" color="success" variant="outlined" onClick={() => showForm()}>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Typography variant="style-1" sx={{ paddingRight: '4px' }}>
-                            Thêm
-                        </Typography>
-                        <FaPlus />
+                        <AddIcon />
                     </Box>
                 </Button>
             </Box>
@@ -308,21 +307,21 @@ const UserList = () => {
                             >
                                 <Button
                                     type="submit"
-                                    variant="contained"
+                                    variant="outlined"
                                     color="primary"
                                     sx={{
                                         marginRight: { xs: '16px' },
                                     }}
                                 >
-                                    Tìm
+                                    <SearchIcon />
                                 </Button>
                                 <Button
                                     mr={3}
                                     onClick={() => handleClearSearch()}
-                                    variant="contained"
+                                    variant="outlined"
                                     color="secondary"
                                 >
-                                    Xóa
+                                    <SearchOffIcon />
                                 </Button>
                             </Box>
                         </Grid>

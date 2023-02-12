@@ -43,9 +43,9 @@ Route::prefix('products')->middleware(['auth:sanctum', 'checkTokenExpered'])->gr
     Route::get('', [ProductController::class, 'getAllProduct']);
 
     Route::post('', [ProductController::class, 'postProduct']);
-    Route::delete('', [ProductController::class, 'deleteProduct'])->middleware('permission:delete product');
-    Route::post('edit', [ProductController::class, 'postEditProduct'])->middleware('permission:edit product');
-    Route::get('filter', [ProductController::class, 'getFilterProduct'])->middleware('permission:read product');
+    Route::delete('', [ProductController::class, 'deleteProduct']);
+    Route::post('edit', [ProductController::class, 'postEditProduct']);
+    Route::get('filter', [ProductController::class, 'getFilterProduct']);
     Route::get('{id}', [ProductController::class, 'getDetailProduct']);
 });
 Route::post('uploads', [ProductController::class, 'postUploads']);
@@ -82,8 +82,17 @@ Route::prefix('categories')->group(function () {
     Route::delete('', [CategoryController::class, 'deleteCategory']);
 });
 
-Route::prefix('groupsAttribute')->group(function () {
-    Route::get('', [GroupAttributeController::class, 'getAllGroupAttribute']);
+Route::prefix('AttributeValue')->group(function () {
+    Route::get('', [GroupAttributeController::class, 'getAttributeValue']);
+    Route::post('', [GroupAttributeController::class, 'postAttributeValue']);
+    Route::put('', [GroupAttributeController::class, 'putAttributeValue']);
+    Route::delete('', [GroupAttributeController::class, 'deleteAttributeValue']);
 });
-Route::get('attributeSet', [AttributeSetController::class, 'index']);
-Route::get('images/{cate}/{name}', [ImageController::class, 'index']);
+
+
+Route::prefix('attributeSet')->group(function () {
+    Route::get('', [AttributeSetController::class, 'index']);
+    Route::post('', [AttributeSetController::class, 'postAttributeSet']);
+    Route::put('', [AttributeSetController::class, 'putAttributeSet']);
+    Route::delete('', [AttributeSetController::class, 'deleteAttributeSet']);
+});

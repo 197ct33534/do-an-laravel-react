@@ -1,9 +1,13 @@
+import AddIcon from '@mui/icons-material/Add';
+import SearchIcon from '@mui/icons-material/Search';
+import SearchOffIcon from '@mui/icons-material/SearchOff';
 import { Box, Button, Grid, Pagination, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { FaPlus } from 'react-icons/fa';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import InputField from '../../components/Form/InputField';
 import { done, pendding } from '../../features/user/userSlice';
 import { configToast } from '../../Helper/Config';
 import { removeValuteEmpty } from '../../Helper/Funtion';
@@ -11,7 +15,6 @@ import { fetchBrand } from '../Brand/BrandAPI';
 import { fetchCategoryAll } from '../Category/CateApi';
 import { fetchDeleteProduct, fetchGetFilterProduct } from './productAPI';
 import TableProduct from './TableProduct';
-
 const ProductList = () => {
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
@@ -24,29 +27,22 @@ const ProductList = () => {
         min_price: '',
         max_price: '',
         name: '',
-        is_sales: '',
+
         perPage: pagination?.per_page,
         page: 1,
     };
-    const initalProduct = {
-        product_name: '',
-        description: '',
-        product_price: '',
-        // is_sales: "",
-        gender: '1',
-        category: '',
-        brand: '',
-        active: '1',
-        sku: [],
-        image: [],
-        color: [],
-        size: [],
-    };
+
     const searchAsObject = Object.fromEntries(new URLSearchParams(searchParams));
-    const [product, setProduct] = useState(initalProduct);
+
     const [stateSearch, setStateSearch] = useState(
         Object.keys(searchAsObject).length === 0 ? initalSearch : searchAsObject
     );
+    const [search, setSearch] = useState(stateSearch);
+    const formSearch = useForm({
+        defaultValues: useMemo(() => {
+            return search;
+        }, [search]),
+    });
     async function fetchData(param = stateSearch) {
         dispatch(pendding());
         const response = await fetchGetFilterProduct(param);
@@ -57,7 +53,6 @@ const ProductList = () => {
         } else {
             const configParam = removeValuteEmpty(param);
             if (
-                configParam.hasOwnProperty('is_sales') ||
                 configParam.hasOwnProperty('name') ||
                 configParam.hasOwnProperty('min_price') ||
                 configParam.hasOwnProperty('max_price')
@@ -67,8 +62,8 @@ const ProductList = () => {
                 if (response?.data?.data === false) {
                     setData([]);
                 } else {
-                    setStateSearch({ perPage: 20, page: 1 });
-                    setSearchParams({ perPage: 20, page: 1 });
+                    setStateSearch({ perPage: 10, page: 1 });
+                    setSearchParams({ perPage: 10, page: 1 });
                 }
             }
         }
@@ -115,7 +110,22 @@ const ProductList = () => {
             fetchData();
         }
     };
-    console.log(data);
+    const handleClearSearch = () => {
+        const param = removeValuteEmpty(initalSearch);
+        setSearchParams(param);
+        setSearch({ min_price: '', max_price: '', name: '' });
+        setStateSearch(param);
+    };
+    const handleSearch = (formValues) => {
+        const value = removeValuteEmpty(formValues);
+        value.perPage = pagination?.per_page;
+
+        setStateSearch(value);
+        setSearchParams(value);
+    };
+    useEffect(() => {
+        formSearch.reset(search);
+    }, [search, formSearch]);
     useEffect(() => {
         fetchList();
     }, []);
@@ -127,22 +137,92 @@ const ProductList = () => {
         <>
             <Typography variant="h5">Quản Lý Sản Phẩm</Typography>
 
-            <Box mt={3} textAlign="left">
-                <Button
-                    size="small"
-                    color="success"
-                    variant="contained"
-                    onClick={() => navigate('add')}
-                >
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Typography variant="style-1" sx={{ paddingRight: '4px' }}>
-                            Thêm
-                        </Typography>
-                        <FaPlus />
-                    </Box>
-                </Button>
-            </Box>
+            {/* tìm kiếm sản phẩm */}
+            <form onSubmit={formSearch.handleSubmit(handleSearch)}>
+                <Grid container spacing={2} mt={2}>
+                    <Grid item xs={12} sm={12} md={3}>
+                        <Button
+                            size="small"
+                            color="success"
+                            variant="outlined"
+                            onClick={() => navigate('add')}
+                        >
+                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                <AddIcon />
+                            </Box>
+                        </Button>
+                    </Grid>
+                    <Grid item xs={12} sm={12} md={9}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} sm={12} md={4}>
+                                <InputField control={formSearch.control} label="Tên" name="name" />
+                            </Grid>
+                            <Grid item xs={12} sm={12} md={5}>
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'space-between',
+                                    }}
+                                >
+                                    <InputField
+                                        control={formSearch.control}
+                                        label="Giá bán từ"
+                                        name="min_price"
+                                        type="number"
+                                        min="0"
+                                        step=".01"
+                                    />
+                                    <Typography mx={2} variant="style2">
+                                        ~
+                                    </Typography>
+                                    <InputField
+                                        control={formSearch.control}
+                                        label="Giá bán đến"
+                                        name="max_price"
+                                        type="number"
+                                        min="0"
+                                        step=".01"
+                                    />
+                                </Box>
+                            </Grid>
 
+                            <Grid item xs={12} sm={12} md={3}>
+                                <Box
+                                    sx={{
+                                        // marginLeft: '16px',
+                                        display: 'flex',
+                                        justifyContent: {
+                                            md: 'flex-end',
+                                        },
+                                    }}
+                                >
+                                    <Button
+                                        type="submit"
+                                        variant="outlined"
+                                        color="primary"
+                                        sx={{
+                                            marginRight: { xs: '16px' },
+                                        }}
+                                    >
+                                        <SearchIcon />
+                                    </Button>
+                                    <Button
+                                        mr={3}
+                                        onClick={() => handleClearSearch()}
+                                        variant="outlined"
+                                        color="secondary"
+                                    >
+                                        <SearchOffIcon />
+                                    </Button>
+                                </Box>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+
+                    <Grid item md={9}></Grid>
+                </Grid>
+            </form>
             {/* danh sách sản phẩm */}
             <Box
                 mt={5}

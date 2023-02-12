@@ -1,7 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import {
-    Avatar,
     Box,
     Button,
     FormControl,
@@ -33,7 +32,7 @@ import { done, pendding } from '../../features/user/userSlice';
 import { configToast } from '../../Helper/Config';
 import { renderError } from '../../Helper/Funtion';
 import { ruleAddProduct } from '../../rules/ruleProduct';
-import { fetchAttribute, fetchAttributeSet } from '../Attribute/AttributeAPI';
+import { fetchAttributeSet, fetchAttributeValue } from '../Attribute/AttributeAPI';
 import { fetchBrand } from '../Brand/BrandAPI';
 import { fetchCategoryAll } from '../Category/CateApi';
 import { fetchPostProduct } from './productAPI';
@@ -88,11 +87,16 @@ const AddProduct = () => {
         formData.append('category_id', formValues.category);
         formData.append('attribute_set_id', defaultCate);
         formValues.attributes.map((element, idx) => {
-            formData.append(`attributes[${idx}][color]`, element.color);
-            formData.append(`attributes[${idx}][size]`, element.size);
+            // formData.append(`attributes[${idx}][color]`, element.color);
+            // formData.append(`attributes[${idx}][size]`, element.size);
             formData.append(`attributes[${idx}][sku]`, element.sku);
             formData.append(`attributes[${idx}][qty]`, element.qty);
             formData.append(`attributes[${idx}][image]`, element.image[0] ?? '');
+            const { qty, sku, image, ...all } = element;
+
+            Object.keys(all).forEach((item) => {
+                formData.append(`attributes[${idx}][${item}]`, element[item]);
+            });
         });
         if (selectedImage) {
             formData.append('product_image', selectedImage);
@@ -115,7 +119,10 @@ const AddProduct = () => {
         setDefaultCate(event.target.value);
 
         const temp = { sku: '', image: '', qty: '1' };
-        const attrSet = attributeSet.attributeSet[event.target.value - 1]?.attribute_name;
+        const element = attributeSet.attributeSet.find((item) => item.id == event.target.value);
+
+        const attrSet = element?.attribute_name;
+
         attrSet?.map((element) => {
             temp[element] = '';
         });
@@ -148,7 +155,7 @@ const AddProduct = () => {
         dispatch(pendding());
         const res = await fetchBrand();
         const responseCate = await fetchCategoryAll();
-        const responseAttribute = await fetchAttribute();
+        const responseAttribute = await fetchAttributeValue();
         const responseAttributeSet = await fetchAttributeSet();
         let brand = res.data.data;
         let cate = responseCate.data.data;

@@ -79,7 +79,7 @@ const TableRole = ({ list, fetchRoleList, onEdit }) => {
                                             <Button
                                                 size="small"
                                                 color="secondary"
-                                                variant="contained"
+                                                variant="outlined"
                                                 onClick={() => onEdit(row)}
                                             >
                                                 <EditIcon />
@@ -87,7 +87,7 @@ const TableRole = ({ list, fetchRoleList, onEdit }) => {
                                             <Button
                                                 size="small"
                                                 color="error"
-                                                variant="contained"
+                                                variant="outlined"
                                                 onClick={() => onDelete(row)}
                                             >
                                                 <DeleteIcon />

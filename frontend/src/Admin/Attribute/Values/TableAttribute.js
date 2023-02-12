@@ -8,6 +8,7 @@ import {
     DialogContent,
     DialogContentText,
     DialogTitle,
+    Grid,
     Paper,
     Stack,
     Table,
@@ -21,80 +22,52 @@ import {
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import React, { useState } from 'react';
+import { FaPlus } from 'react-icons/fa';
 import { toast } from 'react-toastify';
-import { configToast } from '../../Helper/Config';
-
-import { fetchDeleteBrand } from './BrandAPI';
-const TableBrand = ({ list, fetchBrandList, onEdit }) => {
+import AddIcon from '@mui/icons-material/Add';
+import { fetchDeleteAttributeValue } from '../AttributeAPI';
+import { configToast } from '../../../Helper/Config';
+const TableAttribute = ({ lists, fetchAttributeList, onAdd, onEdit }) => {
     const [open, setOpen] = useState(false);
-    const [brand, setBrand] = useState();
+    const [target, setTarget] = useState();
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-    const onDelete = (row) => {
-        setBrand(row);
+    const onDelete = (row, list) => {
+        setTarget({ row, list });
         setOpen(true);
     };
     const handleDelete = async () => {
-        const res = await fetchDeleteBrand(brand.id);
+        const res = await fetchDeleteAttributeValue(target.row.id);
         const success = res.data.success;
         if (!success) {
             toast.warning(res.data.message, configToast);
         } else {
             toast.success(res.data.message, configToast);
-            fetchBrandList();
+            fetchAttributeList();
         }
         setOpen(false);
     };
     return (
         <>
-            <TableContainer component={Paper}>
+            <TableContainer component={Paper} sx={{ maxHeight: 380 }}>
                 <Table stickyHeader aria-label="simple table">
                     <TableHead>
                         <TableRow>
                             <TableCell sx={{ width: '5%' }}>#</TableCell>
-                            <TableCell sx={{ width: '25%' }}>Tên </TableCell>
-                            <TableCell sx={{ width: '65%' }}>Hình ảnh</TableCell>
+                            <TableCell>Tên </TableCell>
 
-                            <TableCell sx={{ width: '5%' }}>Hành động </TableCell>
+                            <TableCell sx={{ width: '15%' }}>Hành động </TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {list?.length > 0 &&
-                            list.map((row, key) => (
+                        {lists?.length > 0 &&
+                            lists.map((list, key) => (
                                 <TableRow
                                     key={key}
                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                 >
                                     <TableCell>{key + 1}</TableCell>
-                                    <TableCell>
-                                        {row.name.length > 20
-                                            ? row.name.slice(0, 20) + '...'
-                                            : row.name}
-                                    </TableCell>
-                                    <TableCell>
-                                        <Box
-                                            mt={2}
-                                            sx={{
-                                                width: { md: '150px', sm: '150px', xs: '150px' },
-                                                height: { md: '150px', sm: '150px', xs: '150px' },
-                                            }}
-                                        >
-                                            <img
-                                                style={{
-                                                    width: '100%',
-                                                    height: '100%',
-                                                    objectFit: 'contain',
-                                                }}
-                                                src={
-                                                    !row.image
-                                                        ? process.env.PUBLIC_URL +
-                                                          '/assets/images/no-image.png'
-                                                        : row.image
-                                                }
-                                                alt=""
-                                            />
-                                        </Box>
-                                    </TableCell>
+                                    <TableCell>{list.name}</TableCell>
 
                                     <TableCell>
                                         <Stack spacing={2} direction="row">
@@ -102,7 +75,7 @@ const TableBrand = ({ list, fetchBrandList, onEdit }) => {
                                                 size="small"
                                                 color="secondary"
                                                 variant="outlined"
-                                                onClick={() => onEdit(row)}
+                                                // onClick={() => onEdit(row)}
                                             >
                                                 <EditIcon />
                                             </Button>
@@ -110,7 +83,7 @@ const TableBrand = ({ list, fetchBrandList, onEdit }) => {
                                                 size="small"
                                                 color="error"
                                                 variant="outlined"
-                                                onClick={() => onDelete(row)}
+                                                // onClick={() => onDelete(row)}
                                             >
                                                 <DeleteIcon />
                                             </Button>
@@ -119,7 +92,7 @@ const TableBrand = ({ list, fetchBrandList, onEdit }) => {
                                 </TableRow>
                             ))}
 
-                        {list?.length <= 0 && (
+                        {lists?.length <= 0 && (
                             <TableRow>
                                 <TableCell colSpan={3} align="center">
                                     <Typography variant="h5"> Không có dữ liệu</Typography>
@@ -140,8 +113,12 @@ const TableBrand = ({ list, fetchBrandList, onEdit }) => {
                 <DialogTitle id="responsive-dialog-title">Nhắc nhở</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Bạn có muốn xóa thương hiệu "
-                        {brand?.name.length > 20 ? brand?.name.slice(0, 20) + '...' : brand?.name}"
+                        Bạn có muốn xóa {target?.list.name}
+                        {` "${
+                            target?.row.value.length > 20
+                                ? target?.row.value.slice(0, 20) + '...'
+                                : target?.row.value
+                        }" `}
                         không
                     </DialogContentText>
                 </DialogContent>
@@ -163,4 +140,4 @@ const TableBrand = ({ list, fetchBrandList, onEdit }) => {
     );
 };
 
-export default TableBrand;
+export default TableAttribute;

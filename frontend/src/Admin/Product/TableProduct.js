@@ -1,7 +1,6 @@
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import {
-    Avatar,
     Box,
     Button,
     Collapse,
@@ -12,7 +11,6 @@ import {
     DialogTitle,
     IconButton,
     Paper,
-    Stack,
     Table,
     TableBody,
     TableCell,
@@ -87,7 +85,7 @@ function Row(props) {
                                 <Button
                                     size="small"
                                     color="secondary"
-                                    variant="contained"
+                                    variant="outlined"
                                     onClick={() => onEdit(row)}
                                 >
                                     <EditIcon />
@@ -97,7 +95,7 @@ function Row(props) {
                                 <Button
                                     size="small"
                                     color="error"
-                                    variant="contained"
+                                    variant="outlined"
                                     onClick={() => onDelete(row)}
                                 >
                                     <DeleteIcon />
@@ -112,7 +110,7 @@ function Row(props) {
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box sx={{ margin: 1 }}>
                             <Typography variant="h6" gutterBottom component="div">
-                                Sản phẩm
+                                {row.product_name}
                             </Typography>
                             <Table size="small" aria-label="purchases">
                                 <TableHead>
@@ -127,7 +125,9 @@ function Row(props) {
                                 <TableBody>
                                     {row.product_items.map((item, idx) => (
                                         <TableRow key={`product_item_id${item.product_item_id}`}>
-                                            <TableCell>{idx + 1}</TableCell>
+                                            <TableCell>
+                                                {stt}.{idx + 1}
+                                            </TableCell>
                                             <TableCell component="th" scope="row">
                                                 <Box
                                                     mt={2}

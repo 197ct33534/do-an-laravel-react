@@ -3,6 +3,8 @@ import React from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import UserList from './Admin/Account/UserList';
+import AttributeSetList from './Admin/Attribute/Sets/AttributeSetList';
+import AttributeValueList from './Admin/Attribute/Values/AttributeValueList';
 
 import BrandList from './Admin/Brand/BrandList';
 import CateList from './Admin/Category/CateList';
@@ -13,9 +15,11 @@ import ProductList from './Admin/Product/ProductList';
 import RoleList from './Admin/Role/RoleList';
 import { configToast } from './Helper/Config';
 import { CheckLogin } from './middlewares/CheckLogin';
+import Deni from './pages/Deni';
 import Layout from './pages/Layout';
 
 import Login from './pages/Login';
+import NotFound from './pages/NotFound';
 
 // import { CheckLogin } from "./middlewares/CheckLogin";
 // import Deni from "./pages/Deni";
@@ -57,17 +61,20 @@ function App() {
                 <Route path="roles" element={<RoleList />} />
                 <Route path="permissions" element={<PermissionList />} />
                 <Route path="categories" element={<CateList />} />
-
+                <Route path="attribute">
+                    <Route path="sets" element={<AttributeSetList />} />
+                    <Route path="values" element={<AttributeValueList />} />
+                </Route>
                 <Route path="products">
                     <Route path="" element={<ProductList />} />
                     <Route path="add" element={<AddProduct />} />
                     <Route path="edit/:id" element={<EditProduct />} />
                 </Route>
             </Route>
-            {/* <Route path="/403" element={<Deni />} /> */}
+            <Route path="/403" element={<Deni />} />
             {/* <Route path="/500" element={<Page500 />} /> */}
             {/* <Route path="/" element={<Navigate to="manager" />} /> */}
-            {/* <Route path="/*" element={<NotFound />} /> */}
+            <Route path="/*" element={<NotFound />} />
         </Routes>
     );
 }

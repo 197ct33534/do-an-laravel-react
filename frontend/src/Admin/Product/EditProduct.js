@@ -36,7 +36,7 @@ import SelectField from '../../components/Form/SelectField';
 import { done, pendding } from '../../features/user/userSlice';
 import { fetchBrand } from '../Brand/BrandAPI';
 import { fetchCategoryAll } from '../Category/CateApi';
-import { fetchAttribute, fetchAttributeSet } from '../Attribute/AttributeAPI';
+import { fetchAttributeValue, fetchAttributeSet } from '../Attribute/AttributeAPI';
 import { fetchDetailProduct, fetchPostEditProduct } from './productAPI';
 import { renderError } from '../../Helper/Funtion';
 import { configToast } from '../../Helper/Config';
@@ -115,13 +115,18 @@ const EditProduct = () => {
         formData.append('category_id', formValues.category);
         formData.append('attribute_set_id', defaultCate);
         formValues.attributes.map((element, idx) => {
-            formData.append(`attributes[${idx}][color]`, element.color);
-            formData.append(`attributes[${idx}][size]`, element.size);
+            // formData.append(`attributes[${idx}][color]`, element.color);
+            // formData.append(`attributes[${idx}][size]`, element.size);
             formData.append(`attributes[${idx}][sku]`, element.sku);
             formData.append(`attributes[${idx}][qty]`, element.qty);
             formData.append(`attributes[${idx}][product_item_id]`, element.product_item_id ?? 0);
 
             formData.append(`attributes[${idx}][image]`, element.image[0] ?? '');
+            const { qty, sku, image, ...all } = element;
+
+            Object.keys(all).forEach((item) => {
+                formData.append(`attributes[${idx}][${item}]`, element[item]);
+            });
         });
         // trường hợp giữ nguyên tấm hình
         if (selectedImage === product.product_image) {
@@ -187,7 +192,7 @@ const EditProduct = () => {
         dispatch(pendding());
         const res = await fetchBrand();
         const responseCate = await fetchCategoryAll();
-        const responseAttribute = await fetchAttribute();
+        const responseAttribute = await fetchAttributeValue();
         const responseAttributeSet = await fetchAttributeSet();
         let brand = res.data.data;
         let cate = responseCate.data.data;
@@ -524,41 +529,6 @@ const EditProduct = () => {
                                                 )}
                                             </Grid>
                                         </Grid>
-                                        {/* <Grid item xs={12} sm={3} md={3} mt={3}>
-                                            <Box mx={{ md: 3, xs: 0 }}>
-                                                <InputField
-                                                    control={control}
-                                                    label="SKU"
-                                                    name={`attributes.${index}.sku`}
-                                                />
-                                            </Box>
-                                        </Grid> */}
-                                        {/* <Grid item xs={12} sm={3} md={3} mt={3}>
-                                            <Box mx={{ md: 3, xs: 0 }}>
-                                                <InputField
-                                                    control={control}
-                                                    type="number"
-                                                    min={0}
-                                                    label="Số lượng"
-                                                    name={`attributes.${index}.qty`}
-                                                />
-                                            </Box>
-                                        </Grid> */}
-                                        {/* {Object.keys(rest).map(
-                                            (element) =>
-                                                selectAttribute[element] && (
-                                                    <Grid item xs={6} sm={3} md={2} mt={3}>
-                                                        <Box mx={{ md: 3, xs: 0 }}>
-                                                            <SelectField
-                                                                control={control}
-                                                                label={element}
-                                                                name={`attributes.${index}.${element}`}
-                                                                options={selectAttribute[element]}
-                                                            />
-                                                        </Box>
-                                                    </Grid>
-                                                )
-                                        )} */}
 
                                         <Grid item xs={12} md={5} mt={3}>
                                             <Controller

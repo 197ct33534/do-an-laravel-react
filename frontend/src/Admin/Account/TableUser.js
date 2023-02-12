@@ -103,7 +103,7 @@ const TableUser = ({ list, onClock, onDelete, onEdit }) => {
                                                 <Button
                                                     size="small"
                                                     color="secondary"
-                                                    variant="contained"
+                                                    variant="outlined"
                                                     onClick={() => onEdit(row)}
                                                 >
                                                     <EditIcon />
@@ -111,7 +111,7 @@ const TableUser = ({ list, onClock, onDelete, onEdit }) => {
                                                 <Button
                                                     size="small"
                                                     color="error"
-                                                    variant="contained"
+                                                    variant="outlined"
                                                     onClick={() => handleModal(row, 'delete')}
                                                 >
                                                     <DeleteIcon />
@@ -120,7 +120,7 @@ const TableUser = ({ list, onClock, onDelete, onEdit }) => {
                                                 <Button
                                                     size="small"
                                                     color="warning"
-                                                    variant="contained"
+                                                    variant="outlined"
                                                     onClick={() => handleModal(row, 'clock')}
                                                 >
                                                     {row.is_active + '' === '1' ? (

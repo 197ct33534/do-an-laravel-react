@@ -97,7 +97,14 @@ const Sidebar = ({ image, collapsed, toggled, handleToggleSidebar, handleCollaps
                         <MenuItem>
                             Danh sách sản phẩm <Link to="products" />
                         </MenuItem>
-                        <MenuItem>Submenu 3</MenuItem>
+                        <SubMenu title={'Thuộc tính'}>
+                            <MenuItem>
+                                Nhóm thuộc tính <Link to="attribute/sets" />
+                            </MenuItem>
+                            <MenuItem>
+                                Thuộc tính <Link to="attribute/values" />
+                            </MenuItem>
+                        </SubMenu>
                     </SubMenu>
                     <SubMenu
                         prefix={<span className="badge gray">3</span>}

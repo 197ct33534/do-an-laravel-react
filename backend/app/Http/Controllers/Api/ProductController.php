@@ -364,9 +364,6 @@ class ProductController extends Controller
             $where[] = ['product_name', 'like', '%' . $request->input('product_name') . '%'];
         }
 
-        if (in_array($request->input('is_sales'), ['0', '1', '2'])) {
-            $where[] = ['is_sales',   $request->input('is_sales')];
-        }
 
         $query = Product::where($where);
 
@@ -378,7 +375,7 @@ class ProductController extends Controller
             $query->where('product_price', '<=', $request->input('max_price'));
         }
 
-        $perpage = 20;
+        $perpage = 10;
         if ($request->get('perPage')) {
             $arr  = ['10', '15', '20'];
             if (in_array($request->get('perPage'), $arr)) {

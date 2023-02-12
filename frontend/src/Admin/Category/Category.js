@@ -73,7 +73,7 @@ const Category = ({ cate, handleEditCate }) => {
                         <Button
                             size="small"
                             color="secondary"
-                            variant="contained"
+                            variant="outlined"
                             onClick={() => onEdit(cate)}
                         >
                             <EditIcon />
@@ -81,7 +81,7 @@ const Category = ({ cate, handleEditCate }) => {
                         <Button
                             size="small"
                             color="error"
-                            variant="contained"
+                            variant="outlined"
                             onClick={() => onDelete(cate)}
                         >
                             <DeleteIcon />

@@ -1,6 +1,6 @@
+import AddIcon from '@mui/icons-material/Add';
 import { Box, Button, Typography } from '@mui/material';
 import React, { createContext, useEffect, useState } from 'react';
-import { FaPlus } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
 import { done, pendding } from '../../features/user/userSlice';
 import { fetchAllCategory, fetchCategoryAllHaveParent } from './CateApi';
@@ -57,13 +57,8 @@ const CateList = () => {
         <>
             <Typography variant="h5">Quản Lý Loại Mặt Hàng</Typography>
             <Box my={2} textAlign="left">
-                <Button size="small" color="success" variant="contained" onClick={() => showForm()}>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Typography variant="style-1" sx={{ paddingRight: '4px' }}>
-                            Thêm
-                        </Typography>
-                        <FaPlus />
-                    </Box>
+                <Button size="small" color="success" variant="outlined" onClick={() => showForm()}>
+                    <AddIcon />
                 </Button>
             </Box>
             <MenuContext.Provider value={{ cate, fetchMenuList, fetchMenuSelect }}>
