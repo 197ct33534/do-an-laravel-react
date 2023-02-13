@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\ImageController;
+use App\Http\Controllers\Api\AttributeController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -95,4 +97,12 @@ Route::prefix('attributeSet')->group(function () {
     Route::post('', [AttributeSetController::class, 'postAttributeSet']);
     Route::put('', [AttributeSetController::class, 'putAttributeSet']);
     Route::delete('', [AttributeSetController::class, 'deleteAttributeSet']);
+});
+
+Route::prefix('attribute')->group(function () {
+
+    Route::get('', [AttributeController::class, 'index']);
+    Route::post('', [AttributeController::class, 'postAttribute']);
+    Route::put('', [AttributeController::class, 'putAttribute']);
+    Route::delete('', [AttributeController::class, 'deleteAttribute']);
 });

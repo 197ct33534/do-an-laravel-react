@@ -34,3 +34,15 @@ export async function fetchDeleteAttributeValue(id) {
     config.data = { id };
     return await axios.delete(`${URL}/AttributeValue`, config);
 }
+export async function fetchPostAttribute(form) {
+    return await axios.post(`${URL}/attribute`, form, config);
+}
+
+export async function fetchPutAttribute(form) {
+    return await axios.put(`${URL}/attribute`, form, config);
+}
+export async function fetchDeleteAttribute(id) {
+    config.headers['Content-type'] = 'application/json';
+    config.data = { id };
+    return await axios.delete(`${URL}/attribute`, config);
+}

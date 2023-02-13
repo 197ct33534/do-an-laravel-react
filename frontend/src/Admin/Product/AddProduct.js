@@ -59,7 +59,7 @@ const AddProduct = () => {
         category: '',
         brand: '',
         active: '1',
-        attributes: [{ sku: '', qty: '1', image: '', color: '', size: '' }],
+        attributes: [{ sku: '', qty: '1', image: '', Color: '', Size: '' }],
     });
     const { sku, image, qty, ...rest } = product.attributes[0];
 

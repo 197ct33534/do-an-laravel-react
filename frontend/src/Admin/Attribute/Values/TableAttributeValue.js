@@ -60,7 +60,7 @@ const TableAttributeValue = ({ lists, fetchAttributeList, onAdd, onEdit }) => {
                         }}
                     >
                         <Typography variant="h6" sx={{ textTransform: 'capitalize' }}>
-                            {list.name}
+                            {list.name.length > 10 ? list.name.slice(0, 10) + '...' : list.name}
                         </Typography>
                         <Button
                             size="small"
@@ -122,10 +122,10 @@ const TableAttributeValue = ({ lists, fetchAttributeList, onAdd, onEdit }) => {
                                         </TableRow>
                                     ))}
 
-                                {list?.length <= 0 && (
+                                {list.attribute_value <= 0 && (
                                     <TableRow>
                                         <TableCell colSpan={3} align="center">
-                                            <Typography variant="h5"> Không có dữ liệu</Typography>
+                                            <Typography variant="h6"> Không có dữ liệu</Typography>
                                         </TableCell>
                                     </TableRow>
                                 )}

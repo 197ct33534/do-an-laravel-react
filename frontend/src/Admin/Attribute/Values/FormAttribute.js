@@ -8,33 +8,28 @@ import * as yup from 'yup';
 import AlertMui from '../../../components/Common/AlertMui';
 import InputField from '../../../components/Form/InputField';
 import { configToast } from '../../../Helper/Config';
-import { removeValuteEmpty, renderError } from '../../../Helper/Funtion';
-import { ruleAttributeValue } from '../../../rules/ruleAttribute';
-import { fetchPostAttributeValue, fetchPutAttributeValue } from '../AttributeAPI';
-const FormAttributeValue = ({ open, handleClose, fetchAttributeList, target, attributeValue }) => {
-    const name = target.parent?.name;
+import { renderError } from '../../../Helper/Funtion';
+import { ruleAttributeSet } from '../../../rules/ruleAttribute';
+import { fetchPostAttribute, fetchPutAttribute } from '../AttributeAPI';
+const FormAttribute = ({ open, handleClose, fetchAttributeList, target, attributeValue }) => {
+    const name = 'thuộc tính';
     const [openAlert, setOpenAlert] = useState(false);
     const [contentAlert, setContentAlert] = useState('');
-    const schema = yup.object(ruleAttributeValue).required();
-    const intial = { id: target.children?.id, value: target.children?.value };
+    const schema = yup.object(ruleAttributeSet).required();
 
     const { control, handleSubmit, reset } = useForm({
         defaultValues: useMemo(() => {
-            return intial;
-        }, [intial]),
+            return target;
+        }, [target]),
         resolver: yupResolver(schema),
     });
 
     const onSubmit = async (formValues) => {
-        const data = {
-            ...removeValuteEmpty(formValues),
-            attribute_id: target?.parent?.id,
-        };
         let response;
         if (formValues?.id) {
-            response = await fetchPutAttributeValue(data);
+            response = await fetchPutAttribute(formValues);
         } else {
-            response = await fetchPostAttributeValue(data);
+            response = await fetchPostAttribute(formValues);
         }
         const success = response.data.success;
         if (success) {
@@ -49,7 +44,7 @@ const FormAttributeValue = ({ open, handleClose, fetchAttributeList, target, att
 
     useEffect(() => {
         openAlert && setOpenAlert(false);
-        reset(intial);
+        reset(target);
     }, [open]);
     return (
         <Dialog open={open} onClose={handleClose} maxWidth="800px">
@@ -65,8 +60,8 @@ const FormAttributeValue = ({ open, handleClose, fetchAttributeList, target, att
                 <Box mt={3} mx={3}>
                     <InputField
                         control={control}
-                        label="Gía trị"
-                        name="value"
+                        label="Tên"
+                        name="name"
                         sx={{
                             width: 500,
                         }}
@@ -94,4 +89,4 @@ const FormAttributeValue = ({ open, handleClose, fetchAttributeList, target, att
     );
 };
 
-export default FormAttributeValue;
+export default FormAttribute;

@@ -25,19 +25,19 @@ import React, { useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import AddIcon from '@mui/icons-material/Add';
-import { fetchDeleteAttributeValue } from '../AttributeAPI';
+import { fetchDeleteAttribute, fetchDeleteAttributeValue } from '../AttributeAPI';
 import { configToast } from '../../../Helper/Config';
 const TableAttribute = ({ lists, fetchAttributeList, onAdd, onEdit }) => {
     const [open, setOpen] = useState(false);
     const [target, setTarget] = useState();
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-    const onDelete = (row, list) => {
-        setTarget({ row, list });
+    const onDelete = (list) => {
+        setTarget(list);
         setOpen(true);
     };
     const handleDelete = async () => {
-        const res = await fetchDeleteAttributeValue(target.row.id);
+        const res = await fetchDeleteAttribute(target.id);
         const success = res.data.success;
         if (!success) {
             toast.warning(res.data.message, configToast);
@@ -75,7 +75,7 @@ const TableAttribute = ({ lists, fetchAttributeList, onAdd, onEdit }) => {
                                                 size="small"
                                                 color="secondary"
                                                 variant="outlined"
-                                                // onClick={() => onEdit(row)}
+                                                onClick={() => onEdit(list)}
                                             >
                                                 <EditIcon />
                                             </Button>
@@ -83,7 +83,7 @@ const TableAttribute = ({ lists, fetchAttributeList, onAdd, onEdit }) => {
                                                 size="small"
                                                 color="error"
                                                 variant="outlined"
-                                                // onClick={() => onDelete(row)}
+                                                onClick={() => onDelete(list)}
                                             >
                                                 <DeleteIcon />
                                             </Button>
@@ -113,11 +113,11 @@ const TableAttribute = ({ lists, fetchAttributeList, onAdd, onEdit }) => {
                 <DialogTitle id="responsive-dialog-title">Nhắc nhở</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Bạn có muốn xóa {target?.list.name}
+                        Bạn có muốn xóa thuộc tính
                         {` "${
-                            target?.row.value.length > 20
-                                ? target?.row.value.slice(0, 20) + '...'
-                                : target?.row.value
+                            target?.name.length > 20
+                                ? target?.name.slice(0, 20) + '...'
+                                : target?.name
                         }" `}
                         không
                     </DialogContentText>
