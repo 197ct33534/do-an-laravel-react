@@ -17,9 +17,11 @@ import { configToast } from './Helper/Config';
 import { CheckLogin } from './middlewares/CheckLogin';
 import Deni from './pages/Deni';
 import Layout from './pages/Layout';
+import LayoutShop from './pages/LayoutShop';
 
 import Login from './pages/Login';
 import NotFound from './pages/NotFound';
+import Home from './Shop/pages/Home';
 
 // import { CheckLogin } from "./middlewares/CheckLogin";
 // import Deni from "./pages/Deni";
@@ -51,6 +53,9 @@ function App() {
     );
     return (
         <Routes>
+            <Route path="/" element={<LayoutShop />}>
+                <Route path="" element={<Home />} />
+            </Route>
             <Route path="/login" element={<CheckLogin />}>
                 <Route path="" element={<Login />} />
             </Route>

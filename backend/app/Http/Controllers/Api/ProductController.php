@@ -377,7 +377,7 @@ class ProductController extends Controller
 
         $perpage = 10;
         if ($request->get('perPage')) {
-            $arr  = ['10', '15', '20'];
+            $arr  = ['10', '15', '20', '8'];
             if (in_array($request->get('perPage'), $arr)) {
                 $perpage = $request->get('perPage');
             }

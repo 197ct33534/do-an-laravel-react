@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBrandController;
 use App\Http\Requests\UpdateBrandController;
 use App\Http\Resources\BrandCollection;
+use App\Http\Resources\BrandResource;
 use App\Models\Brand;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Lang;
@@ -31,7 +32,7 @@ class BrandController extends Controller
         return response()->json([
             'success'   => true,
             'message'   => Lang::get('messages.action_successful', ['action' => 'Lấy dữ liệu']),
-            'data' => $brandList,
+            'data' =>  BrandResource::collection($brandList),
         ]);
     }
 

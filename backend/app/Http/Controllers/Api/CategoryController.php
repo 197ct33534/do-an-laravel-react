@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
+use App\Http\Resources\CateResource;
 use App\Models\Categories;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Lang;
@@ -69,11 +70,11 @@ class CategoryController extends Controller
                 'message'   => Lang::get('messages.no_data'),
             ]);
         }
-        $cateList = Categories::whereNotNull('parent_id')->get();
+        $cateList = Categories::with('product')->whereNotNull('parent_id')->get();
         return response()->json([
             'success'   => true,
             'message'   => Lang::get('messages.action_successful', ['action' => 'Lấy dữ liệu']),
-            'data' => $cateList,
+            'data' => CateResource::collection($cateList),
         ]);
     }
 

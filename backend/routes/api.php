@@ -40,16 +40,17 @@ Route::prefix('user')->middleware(['auth:sanctum', 'checkTokenExpered', 'checkPe
     Route::put('isActive', [UserController::class, 'putUpdateActive']);
     Route::get('filter', [UserController::class, 'getFilterUser']);
 });
-// , 'role:Super-Admin|editor|reviewer'
+Route::get('products/filter', [ProductController::class, 'getFilterProduct']);
 Route::prefix('products')->middleware(['auth:sanctum', 'checkTokenExpered'])->group(function () {
     Route::get('', [ProductController::class, 'getAllProduct']);
 
     Route::post('', [ProductController::class, 'postProduct']);
     Route::delete('', [ProductController::class, 'deleteProduct']);
     Route::post('edit', [ProductController::class, 'postEditProduct']);
-    Route::get('filter', [ProductController::class, 'getFilterProduct']);
+
     Route::get('{id}', [ProductController::class, 'getDetailProduct']);
 });
+
 Route::post('uploads', [ProductController::class, 'postUploads']);
 
 Route::get('roles', [RoleController::class, 'getAllRole']);
