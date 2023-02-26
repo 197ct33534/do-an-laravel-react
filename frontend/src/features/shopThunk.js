@@ -1,7 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { fetchBrand } from '../Admin/Brand/BrandAPI';
 import { fetchAllCategory, fetchCategory } from '../Admin/Category/CateApi';
-import { fetchGetFilterProduct } from '../Admin/Product/productAPI';
+import { fetchDetailProduct, fetchGetFilterProduct } from '../Admin/Product/productAPI';
+import { fetchAddCart, fetchCartCount } from './shopApi';
 
 export const getBrandAsync = createAsyncThunk('brand/get', async () => {
     const response = await fetchBrand();
@@ -18,5 +19,19 @@ export const getCategoryAllAsync = createAsyncThunk('categoryAll/get', async () 
 
 export const getCategoryAsync = createAsyncThunk('category/get', async () => {
     const response = await fetchAllCategory();
+    return response.data;
+});
+export const getProductDetailAsync = createAsyncThunk('productDetail/get', async (id) => {
+    const response = await fetchDetailProduct(id);
+    return response.data;
+});
+
+export const addCartAsync = createAsyncThunk('addCart/post', async (data) => {
+    const response = await fetchAddCart(data);
+    return response.data;
+});
+
+export const CartCountAsync = createAsyncThunk('cartCount/get', async (data) => {
+    const response = await fetchCartCount(data);
     return response.data;
 });

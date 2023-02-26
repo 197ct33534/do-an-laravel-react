@@ -21,6 +21,7 @@ import LayoutShop from './pages/LayoutShop';
 
 import Login from './pages/Login';
 import NotFound from './pages/NotFound';
+import DetailProduct from './Shop/pages/DetailProduct';
 import Home from './Shop/pages/Home';
 
 // import { CheckLogin } from "./middlewares/CheckLogin";
@@ -55,6 +56,7 @@ function App() {
         <Routes>
             <Route path="/" element={<LayoutShop />}>
                 <Route path="" element={<Home />} />
+                <Route path="san-pham/:id" element={<DetailProduct />} />
             </Route>
             <Route path="/login" element={<CheckLogin />}>
                 <Route path="" element={<Login />} />
@@ -78,7 +80,7 @@ function App() {
             </Route>
             <Route path="/403" element={<Deni />} />
             {/* <Route path="/500" element={<Page500 />} /> */}
-            {/* <Route path="/" element={<Navigate to="manager" />} /> */}
+            <Route path="notfound" element={<NotFound />} />
             <Route path="/*" element={<NotFound />} />
         </Routes>
     );

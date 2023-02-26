@@ -7,6 +7,9 @@ const config = {
         'ngrok-skip-browser-warning': 69420,
     },
 };
-export const fetchBrand = async () => {
-    return await axios.get(`${URL}/brands`, config);
-};
+export async function fetchAddCart(data) {
+    return await axios.post(`${URL}/carts`, data, config);
+}
+export async function fetchCartCount() {
+    return await axios.get(`${URL}/carts/count`, config);
+}

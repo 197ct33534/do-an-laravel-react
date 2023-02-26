@@ -107,6 +107,9 @@ button span {
 .dropdown.show li:hover a {
     color: #ffd333;
 }
+.dropdown.show li:hover {
+    background-color: #3d464d;
+}
 .dropdown .dropdown-submenu {
     position: absolute;
     left: 100%;
@@ -125,6 +128,26 @@ button span {
         padding-left: 0px;
     }
 }
+.shopdetail-zoom > img {
+    object-fit: cover;
+    max-height: 550px;
+    height: 500px;
+}
+.shopdetail-grid {
+    display: grid;
+    grid-template-columns: 1fr 5fr;
+    gap: 8px;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type='number'] {
+    -moz-appearance: textfield;
+}
 @media only screen and (max-width: 640px) {
     .menus {
         flex-direction: column;
@@ -136,5 +159,9 @@ button span {
     }
     .menu-items .arrow {
         display: none;
+    }
+    .shopdetail-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
     }
 }

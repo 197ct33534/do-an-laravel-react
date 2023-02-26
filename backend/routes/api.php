@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\ImageController;
 use App\Http\Controllers\Api\AttributeController;
+use App\Http\Controllers\Api\CartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,14 +42,15 @@ Route::prefix('user')->middleware(['auth:sanctum', 'checkTokenExpered', 'checkPe
     Route::get('filter', [UserController::class, 'getFilterUser']);
 });
 Route::get('products/filter', [ProductController::class, 'getFilterProduct']);
+
+Route::get('products/{id}', [ProductController::class, 'getDetailProduct']);
+
 Route::prefix('products')->middleware(['auth:sanctum', 'checkTokenExpered'])->group(function () {
     Route::get('', [ProductController::class, 'getAllProduct']);
 
     Route::post('', [ProductController::class, 'postProduct']);
     Route::delete('', [ProductController::class, 'deleteProduct']);
     Route::post('edit', [ProductController::class, 'postEditProduct']);
-
-    Route::get('{id}', [ProductController::class, 'getDetailProduct']);
 });
 
 Route::post('uploads', [ProductController::class, 'postUploads']);
@@ -106,4 +108,9 @@ Route::prefix('attribute')->group(function () {
     Route::post('', [AttributeController::class, 'postAttribute']);
     Route::put('', [AttributeController::class, 'putAttribute']);
     Route::delete('', [AttributeController::class, 'deleteAttribute']);
+});
+
+Route::prefix('carts')->middleware('auth:sanctum')->group(function () {
+    Route::post('', [CartController::class, 'addCart']);
+    Route::get('/count', [CartController::class, 'getCartCount']);
 });

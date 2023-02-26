@@ -13,7 +13,7 @@ const Products = () => {
                 <span className="bg-secondary pr-3">Tìm Kiếm Hàng Đầu</span>
             </h2>
             <div className="row px-xl-5">
-                {products.map((product) => (
+                {products?.map((product) => (
                     <div
                         className="col-lg-3 col-md-4 col-sm-6 pb-1"
                         key={'product' + product.product_id}
@@ -42,7 +42,10 @@ const Products = () => {
                                 </div>
                             </div>
                             <div className="text-center py-4">
-                                <Link className="h6 text-decoration-none  product_name" to="">
+                                <Link
+                                    className="h6 text-decoration-none  product_name"
+                                    to={`/san-pham/${product.product_id}`}
+                                >
                                     {product.product_name}
                                 </Link>
                                 <div className="d-flex align-items-center justify-content-center mt-2">

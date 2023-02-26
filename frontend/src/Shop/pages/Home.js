@@ -1,11 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import {
-    getBrandAsync,
-    getCategoryAllAsync,
-    getCategoryAsync,
-    getProductAsync,
-} from '../../features/shopThunk';
+import { getBrandAsync, getCategoryAllAsync, getProductAsync } from '../../features/shopThunk';
 import Carousel from '../components/Carousel';
 import Categories from '../components/Categories';
 import Option from '../components/Option';
@@ -18,7 +13,7 @@ const Home = () => {
     useEffect(() => {
         dispatch(getBrandAsync());
         dispatch(getProductAsync());
-        dispatch(getCategoryAsync());
+
         dispatch(getCategoryAllAsync());
     }, [dispatch]);
 

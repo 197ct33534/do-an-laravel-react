@@ -1,8 +1,12 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { cartCount } from '../../features/shopSlice';
 import ListMenu from './ListMenu';
 
 const NavBar = () => {
+    const cart = useSelector(cartCount);
+
     return (
         <div className="container-fluid bg-dark mb-30">
             <div className="row px-xl-5">
@@ -160,7 +164,7 @@ const NavBar = () => {
                                         className="badge text-secondary border border-secondary rounded-circle"
                                         style={{ paddingBottom: '2px' }}
                                     >
-                                        0
+                                        {cart?.cart_count || 0}
                                     </span>
                                 </Link>
                             </div>
