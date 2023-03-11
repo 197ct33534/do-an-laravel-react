@@ -9,7 +9,7 @@ import InputField from '../../components/Form/InputField';
 import { fetchAddCart } from '../../features/shopApi';
 import { CartCountAsync } from '../../features/shopThunk';
 import { configToast } from '../../Helper/Config';
-import { removeValuteEmpty } from '../../Helper/Funtion';
+import { numberWithCommas, removeValuteEmpty } from '../../Helper/Funtion';
 import { ProductDetailContext } from '../pages/DetailProduct';
 const ShopDetailInfo = () => {
     const dispatch = useDispatch();
@@ -147,7 +147,9 @@ const ShopDetailInfo = () => {
                         </div>
                         <small className="pt-1">(99 Reviews)</small>
                     </div>
-                    <h3 className="font-weight-semi-bold mb-4">{product.product_price}</h3>
+                    <h3 className="font-weight-semi-bold mb-4">
+                        {numberWithCommas(product.product_price)}
+                    </h3>
                     <div className="shopdetail-grid mb-4">
                         <strong>Thương hiệu :</strong>
                         <span>{product.brand_name}</span>

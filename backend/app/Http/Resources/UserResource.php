@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\UserInfo;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource
@@ -18,6 +19,7 @@ class UserResource extends JsonResource
         foreach (PermissionResource::collection($this->getAllPermissions()) as $obj) {
             $permisstion[] = $obj->name;
         }
+        $userInfo = UserInfo::find($this->id);
         return [
             'id' => $this->id,
             'name' => $this->name,

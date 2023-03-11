@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
+use App\Http\Requests\ResigterRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 
@@ -272,6 +273,31 @@ class UserController extends Controller
         return response()->json([
             'success'   => false,
             'message'   => Lang::get('messages.action_failed', ['action' => 'Tìm kiếm']),
+        ]);
+    }
+
+    public function postResigter(ResigterRequest $request)
+    {
+        $user = new User();
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+        $user->password = Hash::make($request->input('password'));
+        $user->group_role = 2;
+        $user->assignRole('editor');
+        $user->save();
+        $tokenResult =  $user->createToken('auth_token');
+
+        $tokenResult->accessToken->expired_at = Carbon::now()->addDay(1)->toDateTimeString();
+        $token = PersonalAccessToken::findToken($tokenResult->plainTextToken);
+        $token->expires_at = $tokenResult->accessToken->expired_at;
+        $token->save();
+
+        return response()->json([
+            'success'   => true,
+            'message'   => Lang::get('messages.action_successful', ['action' => 'Đăng nhập']),
+            'data'      => new UserResource($user),
+            'token' => $tokenResult->plainTextToken,
+            'expires' => $tokenResult->accessToken->expired_at,
         ]);
     }
 }

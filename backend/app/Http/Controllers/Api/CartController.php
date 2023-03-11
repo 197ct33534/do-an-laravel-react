@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CartRequest;
+use App\Http\Requests\UpdateCartRequest;
+use App\Http\Resources\CartResource;
 use App\Models\Cart;
 use App\Models\ProductItem;
 use Illuminate\Http\Request;
@@ -51,14 +53,52 @@ class CartController extends Controller
     {
         $user = \Auth()->user();
 
-        $product = Cart::where('user_id', $user->id)->get();
+        $product = Cart::with(['getProduct'])->where('user_id', $user->id)->get();
+
         return response()->json([
             'success'   => true,
             'message'   => 'Lấy giỏ hàng thành công',
             'data'      => [
-                'cart_count' => $product->count(),
-                'cart_detail' => $product
+                'cart_count' => $product->sum('prod_qty'),
+                'cart_detail' => CartResource::collection($product)
             ]
+        ]);
+    }
+
+    public function updateCart(UpdateCartRequest $request)
+    {
+        $cart_id = $request->get('cart_id');
+        $product_item_id = $request->get('product_item_id');
+
+        $user_id =  $user = \Auth()->user();
+        $cart = Cart::find($cart_id)->where([['user_id', $user->id], ['product_item_id', $product_item_id]])->first();
+        // dd($cart);
+        if (!$cart) {
+            return response()->json([
+                'success'   => false,
+                'message'   => 'Sản phẩm không tồn tại trong giỏ hàng của bạn',
+
+            ]);
+        }
+        $cart->prod_qty =  $request->get('prod_qty');
+        $cart->save();
+        return response()->json([
+            'success'   => true,
+            'message'   => 'Cập nhật giỏ hàng thành công',
+        ]);
+    }
+
+    public function deleteCart(Request $request)
+    {
+        $cart_id = $request->input('cart_id');
+        $user = \Auth()->user();
+
+        $cart = Cart::find($cart_id)->where('user_id', $user->id)->first();
+
+        $cart->delete();
+        return response()->json([
+            'success'   => true,
+            'message'   => 'Xóa sản phẩm trong giỏ hàng thành công',
         ]);
     }
 }

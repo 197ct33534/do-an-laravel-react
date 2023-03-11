@@ -24,6 +24,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+
         'is_active',
         'is_delete',
         'group_role'
@@ -51,5 +52,9 @@ class User extends Authenticatable
     public function role()
     {
         return $this->belongsTo(Role::class, 'group_role', 'id');
+    }
+    public function user_info()
+    {
+        return $this->hasOne(UserInfo::class, 'user_id', 'id');
     }
 }

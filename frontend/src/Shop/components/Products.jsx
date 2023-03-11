@@ -3,6 +3,7 @@ import { memo } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { productList } from '../../features/shopSlice';
+import { numberWithCommas } from '../../Helper/Funtion';
 import '../css/Custom.css';
 const Products = () => {
     const products = useSelector(productList);
@@ -49,7 +50,7 @@ const Products = () => {
                                     {product.product_name}
                                 </Link>
                                 <div className="d-flex align-items-center justify-content-center mt-2">
-                                    <h5>{product.product_price}</h5>
+                                    <h5>{numberWithCommas(product.product_price)}</h5>
                                     {/* <h6 className="text-muted ml-2">
                                         <del>$123.00</del>
                                     </h6> */}

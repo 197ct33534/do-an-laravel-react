@@ -21,6 +21,7 @@ class BrandController extends Controller
      */
     public function getAllBrand()
     {
+
         if (Brand::all()->count() === 0) {
             return response()->json([
                 'success'   => false,

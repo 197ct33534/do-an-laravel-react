@@ -13,3 +13,12 @@ export async function fetchAddCart(data) {
 export async function fetchCartCount() {
     return await axios.get(`${URL}/carts/count`, config);
 }
+
+export async function fetchPutCartCount(data) {
+    return await axios.put(`${URL}/carts`, data, config);
+}
+
+export async function fetchDeleteCartCount(cartId) {
+    config.data = { cart_id: cartId };
+    return await axios.delete(`${URL}/carts`, config);
+}

@@ -13,7 +13,6 @@ const Home = () => {
     useEffect(() => {
         dispatch(getBrandAsync());
         dispatch(getProductAsync());
-
         dispatch(getCategoryAllAsync());
     }, [dispatch]);
 

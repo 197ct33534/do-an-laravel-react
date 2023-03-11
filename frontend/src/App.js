@@ -21,6 +21,9 @@ import LayoutShop from './pages/LayoutShop';
 
 import Login from './pages/Login';
 import NotFound from './pages/NotFound';
+import Resigter from './pages/Resigter';
+import CheckOut from './Shop/components/CheckOut';
+import MyCart from './Shop/components/MyCart';
 import DetailProduct from './Shop/pages/DetailProduct';
 import Home from './Shop/pages/Home';
 
@@ -57,10 +60,13 @@ function App() {
             <Route path="/" element={<LayoutShop />}>
                 <Route path="" element={<Home />} />
                 <Route path="san-pham/:id" element={<DetailProduct />} />
+                <Route path="gio-hang" element={<MyCart />} />
+                <Route path="/thanh-toan" element={<CheckOut />} />
             </Route>
             <Route path="/login" element={<CheckLogin />}>
                 <Route path="" element={<Login />} />
             </Route>
+            <Route path="/dang-ky" element={<Resigter />} />
             <Route path="/admin" element={<Layout />}>
                 <Route path="" element={<h1>trang /</h1>} />
                 <Route path="brands" element={<BrandList />} />

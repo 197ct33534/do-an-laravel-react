@@ -25,12 +25,22 @@ const DetailProduct = () => {
         }
         dispatch(done());
     };
+
+    const BreadPath = [
+        {
+            name: 'Trang chủ',
+            link: '/',
+        },
+        {
+            name: product ? product[0]['product_name'] : '',
+        },
+    ];
     useEffect(() => {
         fetchProduct(id);
     }, [id]);
     return (
         <ProductDetailContext.Provider value={product}>
-            <Breadcrumb />
+            <Breadcrumb PathList={BreadPath} />
             <ShopDetail />
         </ProductDetailContext.Provider>
     );

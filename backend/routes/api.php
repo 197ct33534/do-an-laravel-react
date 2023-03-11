@@ -31,6 +31,7 @@ use App\Http\Controllers\Api\CartController;
 
 
 Route::post('/login', [UserController::class, 'postLogin']);
+Route::post('/resigter', [UserController::class, 'postResigter']);
 Route::post('/refresh-token', [UserController::class, 'refreshToken']);
 Route::get('/logout', [UserController::class, 'getLogout'])->middleware('auth:sanctum');
 Route::prefix('user')->middleware(['auth:sanctum', 'checkTokenExpered', 'checkPermission', 'role:Super-Admin'])->group(function () {
@@ -112,5 +113,7 @@ Route::prefix('attribute')->group(function () {
 
 Route::prefix('carts')->middleware('auth:sanctum')->group(function () {
     Route::post('', [CartController::class, 'addCart']);
+    Route::put('', [CartController::class, 'updateCart']);
     Route::get('/count', [CartController::class, 'getCartCount']);
+    Route::delete('', [CartController::class, 'deleteCart']);
 });
