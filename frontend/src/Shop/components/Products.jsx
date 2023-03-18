@@ -1,13 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { memo } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { productList } from '../../features/shopSlice';
+import { getProductAsync } from '../../features/shopThunk';
 import { numberWithCommas } from '../../Helper/Funtion';
 import '../css/Custom.css';
 const Products = () => {
     const products = useSelector(productList);
-
+    const dispatch = useDispatch();
+    useEffect(() => {
+        if (!products) {
+            dispatch(getProductAsync());
+        }
+    }, [dispatch, products]);
     return (
         <div className="container-fluid pt-5 pb-3">
             <h2 className="section-title position-relative text-uppercase mx-xl-5 mb-4">

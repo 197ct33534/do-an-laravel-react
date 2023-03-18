@@ -15,7 +15,12 @@ const MyCart = () => {
     const carts = useSelector(cartCount);
     const products = carts.cart_detail;
     let total = 0;
+    let ship = 0;
+    const totalShip = () => {
+        if (total === 0 || total > 500000) return 0;
 
+        return 30000;
+    };
     const { control, reset, watch, setValue } = useForm({
         defaultValues: useMemo(() => {
             return { productList: products };
@@ -227,7 +232,7 @@ const MyCart = () => {
                                 <div className="d-flex justify-content-between">
                                     <h6 className="font-weight-medium">Phí giao hàng</h6>
                                     <h6 className="font-weight-medium">
-                                        {total > 500000 ? 0 : numberWithCommas(30000)}
+                                        {numberWithCommas(totalShip())}
                                     </h6>
                                 </div>
                             </div>
@@ -237,7 +242,7 @@ const MyCart = () => {
                                     <h5>
                                         {total > 500000
                                             ? numberWithCommas(total)
-                                            : numberWithCommas(total + 30000)}
+                                            : numberWithCommas(total +totalShip()) }
                                     </h5>
                                 </div>
                                 <button

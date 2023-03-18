@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import OwlCarousel from 'react-owl-carousel';
 import '../css/Custom.css';
 const Carousel = () => {
@@ -8,9 +7,7 @@ const Carousel = () => {
         margin: 30,
         nav: false,
         autoplay: true,
-        // autoplayTimeout: '3000',
 
-        // animateOut: true,
         lazyLoad: true,
         fallbackEasing: 'swing',
         responsive: {
@@ -33,7 +30,20 @@ const Carousel = () => {
                     <OwlCarousel loop {...options}>
                         <div>
                             <img
-                                // style={{ height: ` calc(100vh - ${'175'}px )` }}
+                                className="img-fluid Carousel-my-image"
+                                src="https://media-fmplus.cdn.vccloud.vn/uploads/sliders/f3c83835-70ce-4c6e-a2ee-37263745cfc5.png"
+                                alt=""
+                            />
+                        </div>
+                        <div>
+                            <img
+                                className="img-fluid Carousel-my-image"
+                                src="https://media-fmplus.cdn.vccloud.vn/uploads/sliders/22a4c16a-b9dc-43ac-939e-9fb36e823ea2.png"
+                                alt=""
+                            />
+                        </div>
+                        <div>
+                            <img
                                 className="img-fluid Carousel-my-image"
                                 src="https://media-fmplus.cdn.vccloud.vn/uploads/sliders/76b79ffc-6eee-4dcf-8fb3-22ee3f42150e.png"
                                 alt=""
@@ -41,7 +51,6 @@ const Carousel = () => {
                         </div>
                         <div>
                             <img
-                                // style={{ height: ` calc(100vh - ${'175'}px )` }}
                                 className="img-fluid Carousel-my-image"
                                 src="https://media-fmplus.cdn.vccloud.vn/uploads/sliders/efcab46b-6a33-4417-99a8-f514b0ef27ad.png"
                                 alt=""

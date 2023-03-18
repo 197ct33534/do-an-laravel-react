@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { cartCount } from '../../features/shopSlice';
+import { cartCount, resetCart } from '../../features/shopSlice';
 import { logoutAsync, selectInfoUser } from '../../features/user/userSlice';
 
 import ListMenu from './ListMenu';
@@ -10,12 +10,12 @@ const NavBar = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const cart = useSelector(cartCount);
-    const user = useSelector(selectInfoUser);
+    const user = JSON.parse(localStorage.getItem('userInfo'));
     const handleLogout = async () => {
         await dispatch(logoutAsync());
         localStorage.removeItem('token');
         localStorage.removeItem('userInfo');
-        // navigate('/login');
+        await dispatch(resetCart());
     };
     return (
         <div className="container-fluid bg-dark mb-30">
@@ -77,7 +77,7 @@ const NavBar = () => {
                             <div className="navbar-nav mr-auto py-0 ">
                                 <ListMenu />
                                 <div className="d-xs-block d-lg-none">
-                                    {user?.data ? (
+                                    {user ? (
                                         <button
                                             className="btn btn-outline-warning"
                                             onClick={handleLogout}
@@ -116,7 +116,7 @@ const NavBar = () => {
                                     </span>
                                 </Link>
 
-                                {user?.data ? (
+                                {user ? (
                                     <span
                                         onClick={handleLogout}
                                         className="btn px-0 ml-3"

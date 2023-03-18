@@ -1,33 +1,30 @@
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Button } from '@mui/material';
 import {
-    ProSidebar,
-    Menu,
-    MenuItem,
-    SubMenu,
-    SidebarHeader,
-    SidebarFooter,
-    SidebarContent,
-} from 'react-pro-sidebar';
-import {
-    FaUser,
     FaAngleDoubleLeft,
     FaAngleDoubleRight,
-    FaTachometerAlt,
-    FaGem,
-    FaList,
-    FaRegLaughWink,
-    FaHeart,
-    FaSignOutAlt,
     FaChartBar,
-    FaUserAlt,
     FaFolder,
+    FaHeart,
+    FaList,
+    FaMoneyBillAlt,
     FaProductHunt,
+    FaSignOutAlt,
+    FaUserAlt,
 } from 'react-icons/fa';
-import { Button } from '@mui/material';
+import {
+    Menu,
+    MenuItem,
+    ProSidebar,
+    SidebarContent,
+    SidebarFooter,
+    SidebarHeader,
+    SubMenu,
+} from 'react-pro-sidebar';
 import { useDispatch } from 'react-redux';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { logoutAsync } from '../features/user/userSlice';
 
-const Sidebar = ({ image, collapsed, toggled, handleToggleSidebar, handleCollapsedChange }) => {
+const Sidebar = ({ collapsed, toggled, handleToggleSidebar, handleCollapsedChange }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const handleLogout = async () => {
@@ -38,7 +35,7 @@ const Sidebar = ({ image, collapsed, toggled, handleToggleSidebar, handleCollaps
     };
     return (
         <ProSidebar
-            image={image ? process.env.PUBLIC_URL + '/assets/images/bg1.jpg' : false}
+            // image={image ? process.env.PUBLIC_URL + '/assets/images/bg1.jpg' : false}
             collapsed={collapsed}
             toggled={toggled}
             onToggle={handleToggleSidebar}
@@ -72,7 +69,10 @@ const Sidebar = ({ image, collapsed, toggled, handleToggleSidebar, handleCollaps
             {/* Content */}
             <SidebarContent>
                 <Menu iconShape="circle">
-                    <MenuItem icon={<FaChartBar />} suffix={<span className="badge red">NEW</span>}>
+                    <MenuItem
+                        icon={<FaChartBar />}
+                        suffix={<span className="badge pink">NEW</span>}
+                    >
                         Tổng quan
                         <NavLink to="/" />
                     </MenuItem>
@@ -86,11 +86,7 @@ const Sidebar = ({ image, collapsed, toggled, handleToggleSidebar, handleCollaps
                     <MenuItem icon={<FaUserAlt />}>
                         Tài khoản <Link to="users" />
                     </MenuItem>
-                    <SubMenu
-                        suffix={<span className="badge yellow">3</span>}
-                        title={'Sản phẩm'}
-                        icon={<FaProductHunt />}
-                    >
+                    <SubMenu title={'Sản phẩm'} icon={<FaProductHunt />}>
                         <MenuItem>
                             Thêm sản phẩm <Link to="products/add" />
                         </MenuItem>
@@ -107,13 +103,14 @@ const Sidebar = ({ image, collapsed, toggled, handleToggleSidebar, handleCollaps
                         </SubMenu>
                     </SubMenu>
                     <SubMenu
-                        prefix={<span className="badge gray">3</span>}
-                        title={'With Prefix'}
-                        icon={<FaHeart />}
+                        // prefix={<span className="badge gray">3</span>}
+                        suffix={<span className="badge red">3</span>}
+                        title={'Đơn hàng'}
+                        icon={<FaMoneyBillAlt />}
                     >
-                        <MenuItem>Submenu 1</MenuItem>
-                        <MenuItem>Submenu 2</MenuItem>
-                        <MenuItem>Submenu 3</MenuItem>
+                        <MenuItem>
+                            Danh sách đơn hàng <Link to="orders" />
+                        </MenuItem>
                     </SubMenu>
                     <SubMenu title={'Phân quyền'} icon={<FaList />}>
                         <MenuItem>
@@ -132,7 +129,7 @@ const Sidebar = ({ image, collapsed, toggled, handleToggleSidebar, handleCollaps
             {/* Footer */}
             <SidebarFooter style={{ textAlign: 'center' }}>
                 <div className="sidebar-btn-wrapper" style={{ padding: '16px' }}>
-                    <Button color="warning" variant="outlined" onClick={handleLogout}>
+                    <Button color="warning" variant="outlined" onClick={() => handleLogout()}>
                         <FaSignOutAlt />
                     </Button>
                 </div>

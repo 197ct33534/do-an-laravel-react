@@ -18,4 +18,9 @@ class ProductItem extends Model
     {
         return $this->belongsTo(ProductImage::class, 'id');
     }
+
+    public function getProduct()
+    {
+        return $this->belongsTo(Product::class, 'product_id', 'product_id');
+    }
 }

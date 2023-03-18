@@ -80,7 +80,15 @@ const TableAttributeValue = ({ lists, fetchAttributeList, onAdd, onEdit }) => {
                     >
                         <Table stickyHeader aria-label="simple table">
                             <TableHead>
-                                <TableRow>
+                                <TableRow
+                                    sx={{
+                                        '& th': {
+                                            fontSize: '1rem',
+                                            color: '#3D464D',
+                                            backgroundColor: '#FFCE1A',
+                                        },
+                                    }}
+                                >
                                     <TableCell sx={{ width: '5%' }}>#</TableCell>
                                     <TableCell>Giá trị</TableCell>
 

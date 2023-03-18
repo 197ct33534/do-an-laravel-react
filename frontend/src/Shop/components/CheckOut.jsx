@@ -1,16 +1,21 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as yup from 'yup';
 import InputField from '../../components/Form/InputField';
+import RadioField from '../../components/Form/RadioField';
 import { cartCount } from '../../features/shopSlice';
-import { capitalized, numberWithCommas } from '../../Helper/Funtion';
+import { postOrderAsync } from '../../features/shopThunk';
+import { capitalized, numberWithCommas, removeValuteEmpty } from '../../Helper/Funtion';
 import { ruleCheckOut } from '../../rules/ruleCheckout';
 import Breadcrumb from './Breadcrumb';
 
 const CheckOut = () => {
+    const dispatch = useDispatch(postOrderAsync);
     const carts = useSelector(cartCount);
+    const { email, name } = JSON.parse(localStorage.getItem('userInfo'));
+
     const products = carts.cart_detail;
     const BreadPath = [
         {
@@ -30,22 +35,24 @@ const CheckOut = () => {
     const schema = yup.object(ruleCheckOut(check)).required();
     const { control, handleSubmit } = useForm({
         defaultValues: {
-            name: '',
+            name: name || '',
             phone: '',
-            email: '',
+            email: email || '',
             address: '',
             name2: '',
             phone2: '',
             email2: '',
             address2: '',
             note: '',
+            payment_type: '1',
         },
         resolver: yupResolver(schema),
     });
 
     let total = 0;
     const handleSubmitCheckOut = (data) => {
-        console.log(data);
+        // console.log(removeValuteEmpty(data));
+        dispatch(postOrderAsync(removeValuteEmpty(data)));
     };
 
     return (
@@ -72,6 +79,8 @@ const CheckOut = () => {
                                             control={control}
                                             label="Số điện thoại"
                                             name="phone"
+                                            type="number"
+                                            min="0"
                                         />
                                     </div>
                                     <div className="col-md-6 form-group">
@@ -239,54 +248,21 @@ const CheckOut = () => {
                             </div>
                             <div className="mb-5">
                                 <h5 className="section-title position-relative text-uppercase mb-3">
-                                    <span className="bg-secondary pr-3">Payment</span>
+                                    <span className="bg-secondary pr-3">
+                                        Phương thức thanh toán
+                                    </span>
                                 </h5>
                                 <div className="bg-light p-30">
-                                    <div className="form-group">
-                                        <div className="custom-control custom-radio">
-                                            <input
-                                                type="radio"
-                                                className="custom-control-input"
-                                                name="payment"
-                                                id="paypal"
-                                            />
-                                            <label className="custom-control-label" for="paypal">
-                                                Paypal
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div className="form-group">
-                                        <div className="custom-control custom-radio">
-                                            <input
-                                                type="radio"
-                                                className="custom-control-input"
-                                                name="payment"
-                                                id="directcheck"
-                                            />
-                                            <label
-                                                className="custom-control-label"
-                                                for="directcheck"
-                                            >
-                                                Direct Check
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div className="form-group mb-4">
-                                        <div className="custom-control custom-radio">
-                                            <input
-                                                type="radio"
-                                                className="custom-control-input"
-                                                name="payment"
-                                                id="banktransfer"
-                                            />
-                                            <label
-                                                className="custom-control-label"
-                                                for="banktransfer"
-                                            >
-                                                Bank Transfer
-                                            </label>
-                                        </div>
-                                    </div>
+                                    <RadioField
+                                        name="payment_type"
+                                        control={control}
+                                        options={[
+                                            { label: 'Sau khi nhận hàng', value: '1' },
+                                            { label: 'Momo', value: '2' },
+                                        ]}
+                                        row={false}
+                                    />
+
                                     <button
                                         className="btn btn-block btn-primary font-weight-bold py-3"
                                         type="submit"

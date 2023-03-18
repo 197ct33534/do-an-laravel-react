@@ -4,7 +4,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Outlet } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import SpinnerMui from '../components/Common/SpinnerMui';
-import { getCategoryAsync, CartCountAsync } from '../features/shopThunk';
+import {
+    CartCountAsync,
+    getBrandAsync,
+    getCategoryAllAsync,
+    getCategoryAsync,
+    getProductAsync,
+} from '../features/shopThunk';
 import { selectInfoUser } from '../features/user/userSlice';
 import Footer from '../Shop/components/Footer';
 import Header from '../Shop/components/Header';
@@ -13,11 +19,15 @@ import '../Shop/css/LayoutShop.css';
 
 const LayoutShop = () => {
     const dispatch = useDispatch();
-    const user = useSelector(selectInfoUser);
+    const user = JSON.parse(localStorage.getItem('userInfo'));
 
     useEffect(() => {
         dispatch(getCategoryAsync());
-        if (user.data) {
+        dispatch(getCategoryAllAsync());
+        dispatch(getProductAsync());
+
+        dispatch(getBrandAsync());
+        if (user) {
             dispatch(CartCountAsync());
         }
     }, [dispatch, user]);

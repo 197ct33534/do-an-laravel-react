@@ -27,7 +27,6 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { useNavigate } from 'react-router-dom';
 import { capitalized, numberWithCommas } from '../../Helper/Funtion';
-import { checkPermission } from '../../middlewares/CheckPermission';
 
 function Row(props) {
     const navigate = useNavigate();
@@ -61,14 +60,14 @@ function Row(props) {
                             style={{
                                 width: '100%',
                                 height: '100%',
-                                objectFit: 'contain',
+                                objectFit: 'cover',
                             }}
                             src={
                                 !row.product_image
                                     ? process.env.PUBLIC_URL + '/assets/images/no-image.png'
                                     : row.product_image
                             }
-                            alt="Thumb"
+                            alt={row.product_name}
                         />
                     </Box>
                 </TableCell>
@@ -77,33 +76,30 @@ function Row(props) {
                         ? row.product_name.slice(0, 20) + '...'
                         : row.product_name}
                 </TableCell>
-                <TableCell>${numberWithCommas(row.product_price || 0)}</TableCell>
-                {(checkPermission('delete product') || checkPermission('edit product')) && (
+                <TableCell align="right">{numberWithCommas(row.product_price || 0)}đ</TableCell>
+                {
                     <TableCell>
                         <Box sx={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
-                            {checkPermission('edit product') && (
-                                <Button
-                                    size="small"
-                                    color="secondary"
-                                    variant="outlined"
-                                    onClick={() => onEdit(row)}
-                                >
-                                    <EditIcon />
-                                </Button>
-                            )}
-                            {checkPermission('delete product') && (
-                                <Button
-                                    size="small"
-                                    color="error"
-                                    variant="outlined"
-                                    onClick={() => onDelete(row)}
-                                >
-                                    <DeleteIcon />
-                                </Button>
-                            )}
+                            <Button
+                                size="small"
+                                color="secondary"
+                                variant="outlined"
+                                onClick={() => onEdit(row)}
+                            >
+                                <EditIcon />
+                            </Button>
+
+                            <Button
+                                size="small"
+                                color="error"
+                                variant="outlined"
+                                onClick={() => onDelete(row)}
+                            >
+                                <DeleteIcon />
+                            </Button>
                         </Box>
                     </TableCell>
-                )}
+                }
             </TableRow>
             <TableRow>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -114,12 +110,24 @@ function Row(props) {
                             </Typography>
                             <Table size="small" aria-label="purchases">
                                 <TableHead>
-                                    <TableRow>
+                                    <TableRow
+                                        sx={{
+                                            '& th': {
+                                                fontSize: '1rem',
+                                                color: '#3D464D',
+                                                backgroundColor: '#FFCE1A',
+                                            },
+                                        }}
+                                    >
                                         <TableCell sx={{ width: '10%' }}>STT</TableCell>
-                                        <TableCell sx={{ width: '20%' }}>Hình ảnh</TableCell>
+                                        <TableCell align="center" sx={{ width: '20%' }}>
+                                            Hình ảnh
+                                        </TableCell>
                                         <TableCell>SKU</TableCell>
-                                        <TableCell>Thuộc tính</TableCell>
-                                        <TableCell align="right">Số lượng</TableCell>
+                                        <TableCell align="right">Thuộc tính</TableCell>
+                                        <TableCell align="right" sx={{ width: '10%' }}>
+                                            Số lượng
+                                        </TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -148,7 +156,7 @@ function Row(props) {
                                                         style={{
                                                             width: '100%',
                                                             height: '100%',
-                                                            objectFit: 'contain',
+                                                            objectFit: 'cover',
                                                         }}
                                                         src={
                                                             !item.image
@@ -156,12 +164,12 @@ function Row(props) {
                                                                   '/assets/images/no-image.png'
                                                                 : item.image
                                                         }
-                                                        alt="Thumb"
+                                                        alt={row.product_name}
                                                     />
                                                 </Box>
                                             </TableCell>
                                             <TableCell>{item.sku}</TableCell>
-                                            <TableCell>
+                                            <TableCell align="right">
                                                 {item.attribute_value.map((e) => (
                                                     <>
                                                         <span>
@@ -207,18 +215,26 @@ const TableProduct = ({ list, onDelete, onEdit }) => {
             <TableContainer component={Paper}>
                 <Table stickyHeader aria-label="collapsible table">
                     <TableHead>
-                        <TableRow>
+                        <TableRow
+                            sx={{
+                                '& th': {
+                                    fontSize: '1rem',
+                                    color: '#3D464D',
+                                    backgroundColor: '#FFCE1A',
+                                },
+                            }}
+                        >
                             <TableCell sx={{ width: '5%' }} />
                             <TableCell sx={{ width: '5%' }}>#</TableCell>
-                            <TableCell sx={{ width: '10%' }}>Ảnh</TableCell>
+                            <TableCell align="center" sx={{ width: '10%' }}>
+                                Ảnh
+                            </TableCell>
                             <TableCell>Tên </TableCell>
 
-                            <TableCell>Giá</TableCell>
-
-                            {(checkPermission('delete product') ||
-                                checkPermission('edit product')) && (
-                                <TableCell align="right">Hành động </TableCell>
-                            )}
+                            <TableCell align="right">Giá</TableCell>
+                            <TableCell align="right" sx={{ width: '10%' }}>
+                                Hành động
+                            </TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>

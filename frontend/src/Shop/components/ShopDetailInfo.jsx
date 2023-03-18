@@ -2,12 +2,13 @@ import { Box } from '@mui/material';
 import $ from 'jquery';
 import React, { useContext, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import InputField from '../../components/Form/InputField';
 import { fetchAddCart } from '../../features/shopApi';
 import { CartCountAsync } from '../../features/shopThunk';
+import { selectInfoUser } from '../../features/user/userSlice';
 import { configToast } from '../../Helper/Config';
 import { numberWithCommas, removeValuteEmpty } from '../../Helper/Funtion';
 import { ProductDetailContext } from '../pages/DetailProduct';
@@ -15,7 +16,7 @@ const ShopDetailInfo = () => {
     const dispatch = useDispatch();
     const products = useContext(ProductDetailContext);
     const product = products ? products[0] : false;
-    // console.log(product);
+    const user = useSelector(selectInfoUser);
     const options = [];
     const attributes = { key: [] };
     const notInArray = (arr, value) => {
@@ -27,13 +28,6 @@ const ShopDetailInfo = () => {
     };
 
     product.product_items?.map((element) => {
-        // const temp = element.attribute_value.map((attr) => {
-        //     return `${attr.attribute_name}: ${attr.value}`;
-        // });
-        // options.push({
-        //     value: element.product_item_id,
-        //     label: temp.join(' - '),
-        // });
         let myObjectcode = { id: element.product_item_id };
         element.attribute_value.map((attr) => {
             if (!attributes.hasOwnProperty(attr.attribute_name)) {
@@ -92,18 +86,7 @@ const ShopDetailInfo = () => {
             handleAddCart(data);
         }
     };
-    // $("input[name^='product_']").on('change', (e) => {
-    //     const choose_radio = {};
-    //     attributes.key.map((name) => {
-    //         choose_radio[name] = $(`input[name='product_${name}']:checked`).val();
-    //     });
 
-    //     options.map(option =>{
-    //         attributes.key.map((name)=>{
-
-    //         })
-    //     })
-    // });
     const handleChangeRadio = (e) => {
         const element = $(e.target);
         const target = element.data('targert');
@@ -124,12 +107,16 @@ const ShopDetailInfo = () => {
         });
     };
     const handleAddCart = async (data) => {
-        const res = await fetchAddCart(data);
-        if (res.data.success === false) {
-            toast.warning(res.data.message, configToast);
+        if (user.data) {
+            const res = await fetchAddCart(data);
+            if (res.data.success === false) {
+                toast.warning(res.data.message, configToast);
+            } else {
+                toast.success(res.data.message, configToast);
+                dispatch(CartCountAsync());
+            }
         } else {
-            toast.success(res.data.message, configToast);
-            dispatch(CartCountAsync());
+            toast.warning('Vui lòng đăng nhập để thêm sản phẩm', configToast);
         }
     };
     return (

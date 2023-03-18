@@ -1,43 +1,52 @@
-import React from 'react';
+import React, { memo } from 'react';
+import { useContext } from 'react';
+import { useEffect } from 'react';
 import OwlCarousel from 'react-owl-carousel';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { categoryListNoParent } from '../../features/shopSlice';
-// import 'owl.carousel/dist/assets/owl.carousel.css';
-// import 'owl.carousel/dist/assets/owl.theme.default.css';
-const Categories = () => {
-    const categories = useSelector(categoryListNoParent);
-    const options = {
-        loop: true,
-        margin: 30,
-        nav: false,
-        autoplay: true,
-        autoplayTimeout: '2000',
-        autoplayHoverPause: true,
-        animateIn: true,
-        lazyLoad: true,
+import { getCategoryAllAsync } from '../../features/shopThunk';
+import { HomeContext } from '../pages/Home';
+const options = {
+    loop: true,
+    margin: 30,
+    nav: false,
+    autoplay: true,
+    autoplayTimeout: '2000',
+    autoplayHoverPause: true,
+    animateIn: true,
 
-        responsive: {
-            0: {
-                items: 1,
-                dots: false,
-            },
-            600: {
-                items: 3,
-            },
-            1000: {
-                items: 4,
-                slideBy: 2,
-            },
+    responsive: {
+        0: {
+            items: 1,
+            dots: false,
         },
-    };
+        600: {
+            items: 3,
+        },
+        1000: {
+            items: 4,
+            slideBy: 2,
+        },
+    },
+};
+const Categories = () => {
+    const { categories } = useContext(HomeContext);
+    // const categories = useSelector(categoryListNoParent);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (!categories) {
+            dispatch(getCategoryAllAsync());
+        }
+    }, [dispatch, categories]);
     return (
         <div className="container-fluid pt-5">
             <h2 className="section-title position-relative text-uppercase mx-xl-5 mb-4">
                 <span className="bg-secondary pr-3">THỂ LOẠI</span>
             </h2>
             <div className="row px-xl-5 pb-3">
-                <OwlCarousel className="owl-theme" nav {...options}>
+                <OwlCarousel className="owl-theme" {...options}>
                     {categories?.map((category, i) => (
                         // <div className="col-lg-3 col-md-4 col-sm-6 pb-1">
                         <Link className="text-decoration-none" to="">

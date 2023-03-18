@@ -69,3 +69,14 @@ export async function fetchGetFilterUser(listParam) {
     }
     return await axios.get(`${URL}/user/filter?${str.join('&')}`, config);
 }
+
+export async function fetchGetOrder(listParam) {
+    let param = '';
+    if (listParam) {
+        param = Object.entries(listParam)
+            .map(([k, v]) => `${k}=${v}`)
+            .join('&');
+    }
+    console.log(param);
+    return await axios.get(`${URL}/orders?${param}`, config);
+}

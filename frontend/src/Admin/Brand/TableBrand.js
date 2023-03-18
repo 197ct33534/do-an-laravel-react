@@ -25,6 +25,7 @@ import { toast } from 'react-toastify';
 import { configToast } from '../../Helper/Config';
 
 import { fetchDeleteBrand } from './BrandAPI';
+// import '../../Scss/table.scss';
 const TableBrand = ({ list, fetchBrandList, onEdit }) => {
     const [open, setOpen] = useState(false);
     const [brand, setBrand] = useState();
@@ -48,9 +49,17 @@ const TableBrand = ({ list, fetchBrandList, onEdit }) => {
     return (
         <>
             <TableContainer component={Paper}>
-                <Table stickyHeader aria-label="simple table">
+                <Table stickyHeader aria-label="simple table" className="content-table">
                     <TableHead>
-                        <TableRow>
+                        <TableRow
+                            sx={{
+                                '& th': {
+                                    fontSize: '1rem',
+                                    color: '#3D464D',
+                                    backgroundColor: '#FFCE1A',
+                                },
+                            }}
+                        >
                             <TableCell sx={{ width: '5%' }}>#</TableCell>
                             <TableCell sx={{ width: '25%' }}>Tên </TableCell>
                             <TableCell sx={{ width: '65%' }}>Hình ảnh</TableCell>

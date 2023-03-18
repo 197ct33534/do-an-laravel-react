@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\ImageController;
 use App\Http\Controllers\Api\AttributeController;
 use App\Http\Controllers\Api\CartController;
+use App\Http\Controllers\Api\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -116,4 +117,8 @@ Route::prefix('carts')->middleware('auth:sanctum')->group(function () {
     Route::put('', [CartController::class, 'updateCart']);
     Route::get('/count', [CartController::class, 'getCartCount']);
     Route::delete('', [CartController::class, 'deleteCart']);
+});
+Route::prefix('orders')->middleware('auth:sanctum')->group(function () {
+    Route::post('', [OrderController::class, 'postOrder']);
+    Route::get('', [OrderController::class, 'getOrder']);
 });

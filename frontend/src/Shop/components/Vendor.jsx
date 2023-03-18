@@ -1,11 +1,20 @@
 import React, { memo } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { brandList } from '../../features/shopSlice';
 import OwlCarousel from 'react-owl-carousel';
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
+import { useEffect } from 'react';
+import { getBrandAsync } from '../../features/shopThunk';
 const Vendor = () => {
     const brands = useSelector(brandList);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (!brands) {
+            dispatch(getBrandAsync());
+        }
+    }, [dispatch, brands]);
     const options = {
         loop: true,
         // margin: 16,
@@ -29,6 +38,9 @@ const Vendor = () => {
     };
     return (
         <div className="container-fluid py-5">
+            <h2 className="section-title position-relative text-uppercase mx-xl-5 mb-4">
+                <span className="bg-secondary pr-3">Các thương hiệu nổi tiếng</span>
+            </h2>
             <div className="row px-xl-5">
                 <div className="col">
                     <OwlCarousel loop {...options}>

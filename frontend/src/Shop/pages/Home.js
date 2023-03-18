@@ -1,29 +1,31 @@
-import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { getBrandAsync, getCategoryAllAsync, getProductAsync } from '../../features/shopThunk';
+import React, { createContext } from 'react';
+import { useSelector } from 'react-redux';
+import { categoryListNoParent } from '../../features/shopSlice';
 import Carousel from '../components/Carousel';
 import Categories from '../components/Categories';
 import Option from '../components/Option';
 import Products from '../components/Products';
 import Vendor from '../components/Vendor';
-
+export const HomeContext = createContext();
 const Home = () => {
-    const dispatch = useDispatch();
+    const categories = useSelector(categoryListNoParent);
 
-    useEffect(() => {
-        dispatch(getBrandAsync());
-        dispatch(getProductAsync());
-        dispatch(getCategoryAllAsync());
-    }, [dispatch]);
+    // const dispatch = useDispatch();
+
+    // useEffect(() => {
+    //     dispatch(getCategoryAllAsync());
+    //     dispatch(getProductAsync());
+    //     dispatch(getBrandAsync());
+    // }, [dispatch]);
 
     return (
-        <>
+        <HomeContext.Provider value={{ categories }}>
             <Carousel />
             <Option />
             <Categories />
             <Products />
             <Vendor />
-        </>
+        </HomeContext.Provider>
     );
 };
 

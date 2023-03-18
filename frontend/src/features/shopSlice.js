@@ -6,6 +6,7 @@ import {
     getCategoryAllAsync,
     getCategoryAsync,
     getProductAsync,
+    postOrderAsync,
 } from './shopThunk';
 const initialState = {
     load: 'idle',
@@ -24,6 +25,9 @@ export const shopSlice = createSlice({
         },
         done: (state) => {
             state.load = 'idle';
+        },
+        resetCart: (state) => {
+            state.cartCount = [];
         },
     },
     extraReducers: (builder) => {
@@ -76,6 +80,9 @@ export const shopSlice = createSlice({
             .addCase(CartCountAsync.fulfilled, (state, action) => {
                 state.load = 'idle';
                 state.cartCount = action.payload.data;
+            })
+            .addCase(postOrderAsync.pending, (state) => {
+                state.load = 'loading';
             });
     },
 });
@@ -86,5 +93,5 @@ export const categoryListNoParent = (state) => state.shop.categoryListNoParent;
 export const categoryList = (state) => state.shop.categoryList;
 export const cartCount = (state) => state.shop.cartCount;
 
-export const { pendding, done } = shopSlice.actions;
+export const { pendding, done, resetCart } = shopSlice.actions;
 export default shopSlice.reducer;

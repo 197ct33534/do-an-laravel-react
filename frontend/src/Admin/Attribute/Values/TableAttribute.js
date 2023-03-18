@@ -52,7 +52,15 @@ const TableAttribute = ({ lists, fetchAttributeList, onAdd, onEdit }) => {
             <TableContainer component={Paper} sx={{ maxHeight: 380 }}>
                 <Table stickyHeader aria-label="simple table">
                     <TableHead>
-                        <TableRow>
+                        <TableRow
+                            sx={{
+                                '& th': {
+                                    fontSize: '1rem',
+                                    color: '#3D464D',
+                                    backgroundColor: '#FFCE1A',
+                                },
+                            }}
+                        >
                             <TableCell sx={{ width: '5%' }}>#</TableCell>
                             <TableCell>Tên </TableCell>
 

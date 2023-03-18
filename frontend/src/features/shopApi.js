@@ -22,3 +22,6 @@ export async function fetchDeleteCartCount(cartId) {
     config.data = { cart_id: cartId };
     return await axios.delete(`${URL}/carts`, config);
 }
+export async function fetchpostOrder(data) {
+    return await axios.post(`${URL}/orders`, data, config);
+}

@@ -12,29 +12,24 @@ import '../Scss/style.scss';
 const Layout = () => {
     const navigate = useNavigate();
     const [collapsed, setCollapsed] = useState(false);
-    const [image, setImage] = useState(false);
+
     const [toggled, setToggled] = useState(false);
     const user = JSON.parse(localStorage.getItem('userInfo'));
     const handleCollapsedChange = () => {
         setCollapsed(!collapsed);
     };
 
-    const handleImageChange = (checked) => {
-        setImage(checked);
-    };
-
     const handleToggleSidebar = (value) => {
         setToggled(value);
     };
 
-    if (user && user.group_role !== 'Super') {
-    } else {
-        navigate('/login');
-    }
+    // if (user && user.group_role !== 'Super') {
+    // } else {
+    //     navigate('/login');
+    // }
     return (
         <div className={`app ${toggled ? 'toggled' : ''}`}>
             <Sidebar
-                image={image}
                 collapsed={collapsed}
                 toggled={toggled}
                 handleToggleSidebar={handleToggleSidebar}

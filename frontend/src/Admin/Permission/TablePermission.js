@@ -49,7 +49,15 @@ const TablePermission = ({ list, fetchPermissionList, onEdit }) => {
             <TableContainer component={Paper}>
                 <Table stickyHeader aria-label="simple table">
                     <TableHead>
-                        <TableRow>
+                        <TableRow
+                            sx={{
+                                '& th': {
+                                    fontSize: '1rem',
+                                    color: '#3D464D',
+                                    backgroundColor: '#FFCE1A',
+                                },
+                            }}
+                        >
                             <TableCell sx={{ width: '5%' }}>#</TableCell>
                             <TableCell sx={{ width: '45%' }}>Quyền</TableCell>
                             <TableCell sx={{ width: '45%' }}>Tiêu đề</TableCell>

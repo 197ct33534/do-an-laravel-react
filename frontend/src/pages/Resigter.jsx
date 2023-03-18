@@ -15,6 +15,7 @@ import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import * as yup from 'yup';
 import AlertMui from '../components/Common/AlertMui';
@@ -27,6 +28,7 @@ import {
     selectInfoUser,
     selectIsLogggedin,
 } from '../features/user/userSlice';
+import { configToast } from '../Helper/Config';
 import { rule } from '../rules/ruleResigter';
 
 const Resigter = () => {
@@ -52,8 +54,6 @@ const Resigter = () => {
     });
 
     const handleSubmitForm = async (formValues) => {
-        console.log(formValues);
-
         await dispatch(resigterAsync(formValues));
     };
     // kiểm tra đã login và có token thì sẽ chuyển trang
@@ -66,6 +66,7 @@ const Resigter = () => {
                 } else {
                     navigate('/');
                 }
+                toast.success('Chúc mừng bạn đăng ký tài khoản thành công', configToast);
             });
         }
     }, [isLogggedin, navigate, userInfo]);
