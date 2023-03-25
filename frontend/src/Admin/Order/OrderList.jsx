@@ -1,17 +1,16 @@
+import SearchIcon from '@mui/icons-material/Search';
+import SearchOffIcon from '@mui/icons-material/SearchOff';
 import { Box, Button, Grid, Pagination, Typography } from '@mui/material';
 import React, { createContext, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
 import InputField from '../../components/Form/InputField';
+import SelectField from '../../components/Form/SelectField';
 import { done, pendding } from '../../features/shopSlice';
 import { fetchGetOrder } from '../../features/user/userAPI';
-import OrderTable from './OrderTable';
-import AddIcon from '@mui/icons-material/Add';
-import SearchIcon from '@mui/icons-material/Search';
-import SearchOffIcon from '@mui/icons-material/SearchOff';
-import { useSearchParams } from 'react-router-dom';
-import SelectField from '../../components/Form/SelectField';
 import { removeValuteEmpty } from '../../Helper/Funtion';
+import OrderTable from './OrderTable';
 export const OrderContext = createContext();
 const OrderList = () => {
     const dispatch = useDispatch();
@@ -61,6 +60,9 @@ const OrderList = () => {
         }
         dispatch(done());
     };
+    const updateStatusOrder = () => {
+        fetchOrderList();
+    };
     const formSearch = useForm({
         defaultValues: useMemo(() => {
             return search;
@@ -96,16 +98,16 @@ const OrderList = () => {
     useEffect(() => {
         formSearch.reset(search);
     }, [search, formSearch]);
-    console.log('parent change');
+
     return (
         <OrderContext.Provider value={{ orderList }}>
             <Typography variant="h5">Quản Lý Đơn Hàng</Typography>
             <form onSubmit={formSearch.handleSubmit(handleSearch)}>
                 <Grid container spacing={2} mt={2}>
-                    <Grid item xs={12} sm={12} md={2}>
-                    <InputField control={formSearch.control} label="Tên" name="name" />
+                    <Grid item xs={12} sm={6} md={2}>
+                        <InputField control={formSearch.control} label="Tên" name="name" />
                     </Grid>
-                    <Grid item xs={12} sm={12} md={2}>
+                    <Grid item xs={12} sm={6} md={2}>
                         <InputField
                             control={formSearch.control}
                             label="Số điện thoại"
@@ -195,7 +197,7 @@ const OrderList = () => {
                     width: '100%',
                 }}
             >
-                <OrderTable />
+                <OrderTable updateStatusOrder={updateStatusOrder} />
             </Box>
             {orderList?.data && orderList?.pagination?.total > 10 && (
                 <Grid container spacing={3} my={3} alignItems="center">

@@ -57,11 +57,18 @@ const Login = () => {
 
         await dispatch(loginAsync(data));
     };
+    const back = localStorage.getItem('back');
+  
     // kiểm tra đã login và có token thì sẽ chuyển trang
     useEffect(() => {
         if (isLogggedin && localStorage.getItem('token')) {
             Promise.resolve().then(function () {
                 localStorage.setItem('userInfo', JSON.stringify(userInfo.data));
+                const back = localStorage.getItem('back');
+          
+                if (back) {
+                    navigate(back);
+                }
                 if (userInfo.data.group_role === 'Super') {
                     navigate('/admin');
                 } else {

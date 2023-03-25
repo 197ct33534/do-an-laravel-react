@@ -2,11 +2,14 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import * as yup from 'yup';
 import InputField from '../../components/Form/InputField';
 import RadioField from '../../components/Form/RadioField';
-import { cartCount } from '../../features/shopSlice';
+import { fetchpostOrder } from '../../features/shopApi';
+import { cartCount, resetCart } from '../../features/shopSlice';
 import { postOrderAsync } from '../../features/shopThunk';
+import { configToast } from '../../Helper/Config';
 import { capitalized, numberWithCommas, removeValuteEmpty } from '../../Helper/Funtion';
 import { ruleCheckOut } from '../../rules/ruleCheckout';
 import Breadcrumb from './Breadcrumb';
@@ -50,9 +53,18 @@ const CheckOut = () => {
     });
 
     let total = 0;
-    const handleSubmitCheckOut = (data) => {
+    const handleSubmitCheckOut = async (data) => {
         // console.log(removeValuteEmpty(data));
-        dispatch(postOrderAsync(removeValuteEmpty(data)));
+        // dispatch(postOrderAsync(removeValuteEmpty(data)));
+        const res = await fetchpostOrder(removeValuteEmpty(data));
+
+        const success = res.data.success;
+        if (success) {
+            toast.success(res.data.message, configToast);
+            dispatch(resetCart());
+        } else {
+            toast.warning(res.data.message, configToast);
+        }
     };
 
     return (

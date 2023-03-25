@@ -114,8 +114,8 @@ function Row(props) {
                                         sx={{
                                             '& th': {
                                                 fontSize: '1rem',
-                                                color: '#3D464D',
-                                                backgroundColor: '#FFCE1A',
+                                                color: '#262626',
+                                                backgroundColor: '#FFE075',
                                             },
                                         }}
                                     >
@@ -219,8 +219,8 @@ const TableProduct = ({ list, onDelete, onEdit }) => {
                             sx={{
                                 '& th': {
                                     fontSize: '1rem',
-                                    color: '#3D464D',
-                                    backgroundColor: '#FFCE1A',
+                                    color: '#262626',
+                                    backgroundColor: '#FFE075',
                                 },
                             }}
                         >

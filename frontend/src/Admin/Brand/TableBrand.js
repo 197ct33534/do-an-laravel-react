@@ -49,14 +49,23 @@ const TableBrand = ({ list, fetchBrandList, onEdit }) => {
     return (
         <>
             <TableContainer component={Paper}>
-                <Table stickyHeader aria-label="simple table" className="content-table">
+                <Table
+                    sx={{
+                        '& .MuiTableRow-root:hover': {
+                            backgroundColor: '#f5f4e8e3',
+                        },
+                    }}
+                    stickyHeader
+                    aria-label="simple table"
+                    className="content-table"
+                >
                     <TableHead>
                         <TableRow
                             sx={{
                                 '& th': {
                                     fontSize: '1rem',
-                                    color: '#3D464D',
-                                    backgroundColor: '#FFCE1A',
+                                    color: '#262626',
+                                    backgroundColor: '#FFE075',
                                 },
                             }}
                         >

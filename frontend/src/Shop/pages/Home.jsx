@@ -9,15 +9,6 @@ import Vendor from '../components/Vendor';
 export const HomeContext = createContext();
 const Home = () => {
     const categories = useSelector(categoryListNoParent);
-
-    // const dispatch = useDispatch();
-
-    // useEffect(() => {
-    //     dispatch(getCategoryAllAsync());
-    //     dispatch(getProductAsync());
-    //     dispatch(getBrandAsync());
-    // }, [dispatch]);
-
     return (
         <HomeContext.Provider value={{ categories }}>
             <Carousel />

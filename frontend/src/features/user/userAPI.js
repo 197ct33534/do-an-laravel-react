@@ -80,3 +80,7 @@ export async function fetchGetOrder(listParam) {
     console.log(param);
     return await axios.get(`${URL}/orders?${param}`, config);
 }
+
+export async function fetchPutOrder(data) {
+    return await axios.put(`${URL}/orders`, data, config);
+}

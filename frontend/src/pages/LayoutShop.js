@@ -20,17 +20,21 @@ import '../Shop/css/LayoutShop.css';
 const LayoutShop = () => {
     const dispatch = useDispatch();
     const user = JSON.parse(localStorage.getItem('userInfo'));
-
+    if (user) {
+        dispatch(CartCountAsync());
+    }
     useEffect(() => {
         dispatch(getCategoryAsync());
         dispatch(getCategoryAllAsync());
         dispatch(getProductAsync());
 
         dispatch(getBrandAsync());
-        if (user) {
-            dispatch(CartCountAsync());
-        }
-    }, [dispatch, user]);
+    }, [dispatch]);
+    // useEffect(() => {
+    //     if (user) {
+    //         dispatch(CartCountAsync());
+    //     }
+    // }, [user, dispatch]);
     return (
         <>
             <Header />

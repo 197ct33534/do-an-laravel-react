@@ -9,7 +9,7 @@ class OrderItem extends Model
 {
     use HasFactory;
     protected $table = 'order_items';
-    protected $fiillable = ['id', 'order_id', 'prod_id', 'price', 'qty'];
+    protected $fiillable = ['id', 'order_id', 'prod_id', 'product_id', 'price', 'qty'];
     public function productItem()
     {
         return $this->belongsTo(ProductItem::class, 'prod_id', 'id');

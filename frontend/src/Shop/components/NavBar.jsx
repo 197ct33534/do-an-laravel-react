@@ -5,6 +5,7 @@ import { cartCount, resetCart } from '../../features/shopSlice';
 import { logoutAsync, selectInfoUser } from '../../features/user/userSlice';
 
 import ListMenu from './ListMenu';
+import PositionedMenu from './PositionedMenu';
 
 const NavBar = () => {
     const dispatch = useDispatch();
@@ -31,10 +32,6 @@ const NavBar = () => {
                             <span className="navbar-toggler-icon"></span>
                         </button>
                         <Link to="" className="text-decoration-none d-block d-lg-none">
-                            {/* <span className="h1 text-uppercase text-dark bg-light px-2">Nghĩa</span>
-                            <span className="h1 text-uppercase text-light bg-primary px-2 ml-n1">
-                                Store
-                            </span> */}
                             <div style={{ width: '50px', height: '50px' }}>
                                 <img
                                     style={{
@@ -69,6 +66,7 @@ const NavBar = () => {
                                     {cart?.cart_count || 0}
                                 </span>
                             </Link>
+                            <PositionedMenu />
                         </div>
                         <div
                             className="my-2 collapse navbar-collapse justify-content-between"
@@ -76,25 +74,6 @@ const NavBar = () => {
                         >
                             <div className="navbar-nav mr-auto py-0 ">
                                 <ListMenu />
-                                <div className="d-xs-block d-lg-none">
-                                    {user ? (
-                                        <button
-                                            className="btn btn-outline-warning"
-                                            onClick={handleLogout}
-                                        >
-                                            <span class="mr-2">Đăng xuất</span>
-                                            <i class="fas fa-sign-out-alt "></i>
-                                        </button>
-                                    ) : (
-                                        <button
-                                            className="btn btn-outline-warning"
-                                            onClick={() => navigate('/login')}
-                                        >
-                                            <span class="mr-2">Đăng nhập</span>
-                                            <i class="fas fa-user "></i>
-                                        </button>
-                                    )}
-                                </div>
                             </div>
                             <div className="navbar-nav ml-auto py-0 d-none d-lg-block">
                                 <Link to="" className="btn px-0" title="Sản phẩm yêu thích">
@@ -115,20 +94,7 @@ const NavBar = () => {
                                         {cart?.cart_count || 0}
                                     </span>
                                 </Link>
-
-                                {user ? (
-                                    <span
-                                        onClick={handleLogout}
-                                        className="btn px-0 ml-3"
-                                        title="Đăng xuất"
-                                    >
-                                        <i class="fas fa-sign-out-alt text-primary"></i>
-                                    </span>
-                                ) : (
-                                    <Link to="/login" className="btn px-0 ml-3" title="Đăng nhập">
-                                        <i class="fas fa-user text-primary"></i>
-                                    </Link>
-                                )}
+                                <PositionedMenu />
                             </div>
                         </div>
                     </nav>

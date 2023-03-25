@@ -78,14 +78,22 @@ const TableAttributeValue = ({ lists, fetchAttributeList, onAdd, onEdit }) => {
                         component={Paper}
                         key={`${list.name}-${list.id}`}
                     >
-                        <Table stickyHeader aria-label="simple table">
+                        <Table
+                            stickyHeader
+                            aria-label="simple table"
+                            sx={{
+                                '& .MuiTableRow-root:hover': {
+                                    backgroundColor: '#f5f4e8e3',
+                                },
+                            }}
+                        >
                             <TableHead>
                                 <TableRow
                                     sx={{
                                         '& th': {
                                             fontSize: '1rem',
-                                            color: '#3D464D',
-                                            backgroundColor: '#FFCE1A',
+                                            color: '#262626',
+                                            backgroundColor: '#FFE075',
                                         },
                                     }}
                                 >

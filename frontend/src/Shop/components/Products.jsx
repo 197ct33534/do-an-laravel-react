@@ -1,3 +1,4 @@
+import { Rating } from '@mui/material';
 import React, { useEffect } from 'react';
 import { memo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -34,7 +35,7 @@ const Products = () => {
                                     alt=""
                                 />
                                 <div className="product-action">
-                                    <Link className="btn btn-outline-dark btn-square" to="">
+                                    {/* <Link className="btn btn-outline-dark btn-square" to="">
                                         <i className="fa fa-shopping-cart"></i>
                                     </Link>
                                     <Link className="btn btn-outline-dark btn-square" to="">
@@ -45,7 +46,7 @@ const Products = () => {
                                     </Link>
                                     <Link className="btn btn-outline-dark btn-square" to="">
                                         <i className="fa fa-search"></i>
-                                    </Link>
+                                    </Link> */}
                                 </div>
                             </div>
                             <div className="text-center py-4">
@@ -62,12 +63,12 @@ const Products = () => {
                                     </h6> */}
                                 </div>
                                 <div className="d-flex align-items-center justify-content-center mb-1">
-                                    <small className="fa fa-star text-primary mr-1"></small>
-                                    <small className="fa fa-star text-primary mr-1"></small>
-                                    <small className="fa fa-star text-primary mr-1"></small>
-                                    <small className="fa fa-star text-primary mr-1"></small>
-                                    <small className="fa fa-star text-primary mr-1"></small>
-                                    <small>(99)</small>
+                                    <Rating
+                                        defaultValue={product.star_avg}
+                                        precision={0.5}
+                                        readOnly
+                                    />
+                                    <small>({product.vote_count} đánh giá)</small>
                                 </div>
                             </div>
                         </div>

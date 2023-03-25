@@ -41,7 +41,10 @@ class Product extends Model
     {
         return $this->hasMany(ProductItem::class, 'product_id')->with(['attributeValue', 'productItemImage']);
     }
-
+    public function comments()
+    {
+        return $this->hasMany(Rating::class, 'prod_id', 'product_id');
+    }
     // public function attribute(){
     //     return $this->hasManyThrough(Attribute::class,AttributeProductValue::class,'attribute_id',)
     // }

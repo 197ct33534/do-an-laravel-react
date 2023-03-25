@@ -427,7 +427,7 @@ class ProductController extends Controller
 
     public function getDetailProduct($id)
     {
-        $pro = Product::where('product_id', $id)->with(['productItems'])->get();
+        $pro = Product::where('product_id', $id)->with(['productItems', 'comments'])->get();
 
         return response()->json([
             'success'   => true,

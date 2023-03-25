@@ -51,7 +51,7 @@ const Category = ({ cate, handleEditCate }) => {
                 <Box
                     p={2}
                     sx={{
-                        display: 'flex',
+                        display: { md: 'flex',sm: 'flex', xs: 'block' },
                         alignItems: 'center',
                         justifyContent: 'center',
                         background: 'white',
@@ -59,14 +59,15 @@ const Category = ({ cate, handleEditCate }) => {
                         boxShadow: 3,
                     }}
                 >
-                    <Typography sx={{ flexGrow: '1' }} variant="h6">
+                    <Typography sx={{ flexGrow: '1',textAlign:{xs:'center',md:'left',sm:'left'} }} variant="h6">
                         {capitalized(cate.name)}
                     </Typography>
                     <Box
                         sx={{
-                            width: '50%',
+                            marginTop:{xs:'8px',md:'0',sm:'0'},
+                            width: {xs:'100%',md:'50%',sm:'50%'},
                             display: 'flex',
-                            justifyContent: 'flex-end',
+                            justifyContent: {xs:'center',md:'flex-end',sm:'flex-end'},
                             gap: '16px',
                         }}
                     >

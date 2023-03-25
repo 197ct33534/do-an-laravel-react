@@ -1,22 +1,27 @@
-import { Box } from '@mui/material';
+import { Box, Rating } from '@mui/material';
+
 import $ from 'jquery';
 import React, { useContext, useMemo } from 'react';
+import { memo } from 'react';
 import { useForm } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { Link, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import InputField from '../../components/Form/InputField';
 import { fetchAddCart } from '../../features/shopApi';
 import { CartCountAsync } from '../../features/shopThunk';
-import { selectInfoUser } from '../../features/user/userSlice';
 import { configToast } from '../../Helper/Config';
 import { numberWithCommas, removeValuteEmpty } from '../../Helper/Funtion';
 import { ProductDetailContext } from '../pages/DetailProduct';
 const ShopDetailInfo = () => {
+    const { pathname } = useLocation();
+
+    localStorage.removeItem('back');
     const dispatch = useDispatch();
-    const products = useContext(ProductDetailContext);
-    const product = products ? products[0] : false;
-    const user = useSelector(selectInfoUser);
+    var { product } = useContext(ProductDetailContext);
+
+    product = product ? product[0] : false;
+    const user = localStorage.getItem('userInfo');
     const options = [];
     const attributes = { key: [] };
     const notInArray = (arr, value) => {
@@ -107,7 +112,7 @@ const ShopDetailInfo = () => {
         });
     };
     const handleAddCart = async (data) => {
-        if (user.data) {
+        if (user) {
             const res = await fetchAddCart(data);
             if (res.data.success === false) {
                 toast.warning(res.data.message, configToast);
@@ -116,23 +121,20 @@ const ShopDetailInfo = () => {
                 dispatch(CartCountAsync());
             }
         } else {
+            localStorage.setItem('back', pathname);
             toast.warning('Vui lòng đăng nhập để thêm sản phẩm', configToast);
         }
     };
     return (
-        <div className="col-lg-7 h-auto mb-30">
+        <div className="col-lg-7 h-auto mb-30" style={{ zIndex: '0' }}>
             {product && (
                 <div className="h-100 bg-light p-30">
                     <h3>{product.product_name}</h3>
                     <div className="d-flex mb-3">
                         <div className="text-primary mr-2">
-                            <small className="fas fa-star"></small>
-                            <small className="fas fa-star"></small>
-                            <small className="fas fa-star"></small>
-                            <small className="fas fa-star-half-alt"></small>
-                            <small className="far fa-star"></small>
+                            <Rating defaultValue={product.star_avg} precision={0.5} readOnly />
                         </div>
-                        <small className="pt-1">(99 Reviews)</small>
+                        <small className="pt-1">({product.vote_count} đánh giá)</small>
                     </div>
                     <h3 className="font-weight-semi-bold mb-4">
                         {numberWithCommas(product.product_price)}
@@ -236,4 +238,4 @@ const ShopDetailInfo = () => {
     );
 };
 
-export default ShopDetailInfo;
+export default memo(ShopDetailInfo);

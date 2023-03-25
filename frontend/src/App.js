@@ -28,6 +28,8 @@ import CheckOut from './Shop/components/CheckOut';
 import MyCart from './Shop/components/MyCart';
 import DetailProduct from './Shop/pages/DetailProduct';
 import Home from './Shop/pages/Home';
+import OrderStatus from './Shop/pages/OrderStatus';
+import ScrollToTop from './Shop/pages/ScrollToTop';
 
 // import { CheckLogin } from "./middlewares/CheckLogin";
 // import Deni from "./pages/Deni";
@@ -58,11 +60,13 @@ function App() {
         }
     );
     return (
+        // <ScrollToTop>
         <Routes>
             <Route path="/" element={<LayoutShop />}>
                 <Route path="" element={<Home />} />
                 <Route path="san-pham/:id" element={<DetailProduct />} />
                 <Route path="gio-hang" element={<MyCart />} />
+                <Route path="trang-thai-don-hang" element={<OrderStatus />} />
                 <Route path="/thanh-toan" element={<CheckOut />} />
             </Route>
             <Route path="/login" element={<CheckLogin />}>
@@ -96,6 +100,7 @@ function App() {
             <Route path="notfound" element={<NotFound />} />
             <Route path="/*" element={<NotFound />} />
         </Routes>
+        // </ScrollToTop>
     );
 }
 

@@ -15,8 +15,8 @@ const TextareaMui = ({ name, control, placeholder, ...inputProps }) => {
             maxRows={4}
             color="primary"
             placeholder={placeholder}
-            style={{ width: '100%', height: 100 }}
-            resize={4}
+            style={{ width: '100%', height: '250px', resize: 'none', padding: '8px' }}
+            resize={false}
             error={invalid}
             helperText={error?.message}
             inputProps={inputProps}

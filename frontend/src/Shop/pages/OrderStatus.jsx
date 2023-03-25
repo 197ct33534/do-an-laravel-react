@@ -1,7 +1,7 @@
 import {
+    Box,
     Button,
     Collapse,
-    Dialog,
     IconButton,
     Paper,
     Table,
@@ -12,26 +12,19 @@ import {
     TableRow,
     Typography,
 } from '@mui/material';
-import React, { useContext, useState } from 'react';
-import { OrderContext } from './OrderList';
+import React from 'react';
+import { useEffect } from 'react';
+import { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { fetchgetOrderStatus } from '../../features/shopApi';
+import Breadcrumb from '../components/Breadcrumb';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { useNavigate } from 'react-router-dom';
-import { Box } from '@mui/system';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 import { capitalized, numberWithCommas } from '../../Helper/Funtion';
-import FormOrder from './FormOrder';
-
 function Row(props) {
     const navigate = useNavigate();
-    const { row, stt, handleUpdateStatusOrder } = props;
+    const { row, stt, handleOpenNewTab } = props;
     const [open, setOpen] = useState(false);
-
-    const onEdit = (row) => {
-        handleUpdateStatusOrder(row);
-    };
-
     return (
         <React.Fragment>
             <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
@@ -100,20 +93,14 @@ function Row(props) {
                         row.address
                     )}
                 </TableCell>
+                <TableCell align="left">{row.created_at}</TableCell>
 
                 <TableCell align="right">{numberWithCommas(row.total_price)}đ</TableCell>
-                <TableCell align="right">
-                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                        <span style={{ marginRight: '8px' }}>{row.status_text}</span>
-                        <Button
-                            size="small"
-                            color="secondary"
-                            variant="outlined"
-                            onClick={() => onEdit(row)}
-                        >
-                            <EditIcon />
-                        </Button>
-                    </Box>
+                <TableCell
+                    align="left"
+                    sx={row.status == 3 ? 'color:green' : row.status == 4 ? 'color:red' : ''}
+                >
+                    {row.status_text}
                 </TableCell>
                 <TableCell align="right">{row.payment_type_text}</TableCell>
             </TableRow>
@@ -137,13 +124,29 @@ function Row(props) {
                                                 },
                                             }}
                                         >
-                                            <TableCell>SKU</TableCell>
-                                            <TableCell align="center">Hình ảnh</TableCell>
-                                            <TableCell align="left">Thuộc tính</TableCell>
+                                            <TableCell style={{ minWidth: '80px' }}>SKU</TableCell>
+                                            <TableCell align="center" style={{ minWidth: '200px' }}>
+                                                Hình ảnh
+                                            </TableCell>
+                                            <TableCell align="left" style={{ minWidth: '150px' }}>
+                                                Thuộc tính
+                                            </TableCell>
 
-                                            <TableCell align="left">Đơn giá</TableCell>
+                                            <TableCell align="left" style={{ minWidth: '150px' }}>
+                                                Đơn giá
+                                            </TableCell>
                                             <TableCell align="right">SL</TableCell>
-                                            <TableCell align="right">Thành tiền</TableCell>
+                                            <TableCell align="right" style={{ minWidth: '200px' }}>
+                                                Thành tiền
+                                            </TableCell>
+                                            {row.status == 3 && (
+                                                <TableCell
+                                                    align="right"
+                                                    style={{ minWidth: '200px' }}
+                                                >
+                                                    Hành động
+                                                </TableCell>
+                                            )}
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
@@ -201,6 +204,28 @@ function Row(props) {
                                             <TableCell align="right">
                                                 {numberWithCommas(order.price * order.qty)}đ
                                             </TableCell>
+                                            <>
+                                                {row.status == 3 && !order.is_comment && (
+                                                    <TableCell align="right">
+                                                        <button
+                                                            className="btn btn-outline-success"
+                                                            onClick={() => handleOpenNewTab(order)}
+                                                        >
+                                                            Đánh giá sản phẩm
+                                                        </button>
+                                                    </TableCell>
+                                                )}
+                                                {row.status == 3 && order.is_comment && (
+                                                    <TableCell align="right">
+                                                        <button
+                                                            className="btn btn-outline-warning "
+                                                            onClick={() => handleOpenNewTab(order)}
+                                                        >
+                                                            Xem đánh giá
+                                                        </button>
+                                                    </TableCell>
+                                                )}
+                                            </>
                                         </TableRow>
                                     </TableBody>
                                 </Table>
@@ -212,85 +237,111 @@ function Row(props) {
         </React.Fragment>
     );
 }
-const OrderTable = ({ updateStatusOrder }) => {
-    const { orderList } = useContext(OrderContext);
-    const [open, setOpen] = useState(false);
-    const [row, setRow] = useState();
-    const handleUpdateStatusOrder = (row) => {
-        setRow(row);
-        setOpen(true);
+const OrderStatus = () => {
+    const BreadPath = [
+        {
+            name: 'Trang chủ',
+            link: '/',
+        },
+        {
+            name: 'Đơn đặt hàng',
+        },
+    ];
+    const [data, setData] = useState();
+    const asyncGetOrderStatus = async () => {
+        const res = await fetchgetOrderStatus();
+
+        if (res.data.success) {
+            setData(res.data.data);
+        }
     };
+    const handleOpenNewTab = (order) => {
+        const url = window.location.origin + '/san-pham/' + order.product_id + '#binh-luan';
+        window.open(url, '_blank', 'noreferrer');
+    };
+    useEffect(() => {
+        asyncGetOrderStatus();
+    }, []);
 
     return (
         <>
-            <TableContainer
-                component={Paper}
-                style={{ maxWidth: '100%', width: '100%', overflowX: 'auto' }}
-            >
-                <Table
-                    stickyHeader
-                    aria-label="collapsible table"
-                    sx={{
-                        '& .MuiTableRow-root:hover': {
-                            backgroundColor: '#f5f4e8e3',
-                        },
-                    }}
+            <Breadcrumb PathList={BreadPath} />
+            <div className="col-lg-12">
+                <TableContainer
+                    component={Paper}
+                    style={{ maxWidth: '100%', width: '100%', overflowX: 'auto' }}
                 >
-                    <TableHead>
-                        <TableRow
-                            sx={{
-                                '& th': {
-                                    fontSize: '1rem',
-                                    color: '#262626',
-                                    backgroundColor: '#FFE075',
-                                },
-                            }}
-                        >
-                            <TableCell sx={{ width: '5%' }} />
-                            <TableCell>#</TableCell>
-                            <TableCell align="left">Tên</TableCell>
-                            <TableCell>SĐT </TableCell>
-                            <TableCell>Email </TableCell>
-                            <TableCell align="left">Địa chỉ</TableCell>
-                            <TableCell align="right">Tổng tiền</TableCell>
-                            <TableCell align="center">Trạng thái</TableCell>
-                            <TableCell align="right">Thanh toán</TableCell>
-                            {/* <TableCell align="right" sx={{ width: '8%' }}>
+                    <Table
+                        stickyHeader
+                        aria-label="collapsible table"
+                        sx={{
+                            '& .MuiTableRow-root:hover': {
+                                backgroundColor: '#f5f4e8e3',
+                            },
+                        }}
+                    >
+                        <TableHead>
+                            <TableRow
+                                sx={{
+                                    '& th': {
+                                        fontSize: '1rem',
+                                        color: '#262626',
+                                        backgroundColor: '#FFE075',
+                                    },
+                                }}
+                            >
+                                <TableCell sx={{ maxWidth: '5%' }} />
+                                <TableCell>#</TableCell>
+                                <TableCell align="left">Tên</TableCell>
+                                <TableCell>SĐT </TableCell>
+                                <TableCell>Email </TableCell>
+                                <TableCell align="left" style={{ minWidth: '200px' }}>
+                                    Địa chỉ
+                                </TableCell>
+                                <TableCell align="left" style={{ minWidth: '100px' }}>
+                                    Ngày đặt
+                                </TableCell>
+                                <TableCell align="right" style={{ minWidth: '150px' }}>
+                                    Tổng tiền
+                                </TableCell>
+                                <TableCell align="left" style={{ minWidth: '200px' }}>
+                                    Trạng thái
+                                </TableCell>
+                                <TableCell align="right" style={{ minWidth: '200px' }}>
+                                    Thanh toán
+                                </TableCell>
+
+                                {/* <TableCell align="right" sx={{ width: '8%' }}>
                                 Hành động
                             </TableCell> */}
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {orderList?.data?.map((row, key) => (
-                            <Row
-                                key={row.order_id}
-                                row={row}
-                                stt={
-                                    (orderList?.pagination.current_page - 1) *
-                                        orderList?.pagination.per_page +
-                                    (key + 1)
-                                }
-                                handleUpdateStatusOrder={handleUpdateStatusOrder}
-                            />
-                        ))}
-                        {!orderList?.data && (
-                            <TableRow>
-                                <TableCell colSpan={9} align="center">
-                                    <Typography variant="h5"> Không có dữ liệu</Typography>
-                                </TableCell>
                             </TableRow>
-                        )}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-            <FormOrder
-                open={open}
-                updateStatusOrder={updateStatusOrder}
-                handleClose={() => setOpen(false)}
-                row={row}
-            />
+                        </TableHead>
+                        <TableBody>
+                            {data?.data?.map((row, key) => (
+                                <Row
+                                    key={row.order_id}
+                                    row={row}
+                                    stt={
+                                        (data?.pagination.current_page - 1) *
+                                            data?.pagination.per_page +
+                                        (key + 1)
+                                    }
+                                    handleOpenNewTab={handleOpenNewTab}
+                                />
+                            ))}
+                            {!data?.data && (
+                                <TableRow>
+                                    <TableCell colSpan={9} align="center">
+                                        <Typography variant="h5"> Chưa có đơn hàng nào</Typography>
+                                    </TableCell>
+                                </TableRow>
+                            )}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </div>
         </>
     );
 };
 
-export default OrderTable;
+export default OrderStatus;

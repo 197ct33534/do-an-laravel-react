@@ -79,16 +79,16 @@ const MyCart = () => {
                         </h5>
                         <table
                             className="table table-light table-borderless table-hover text-center mb-0"
-                            style={{ width: '100%' }}
+                            style={{ width: '100%', overflowX: 'auto' }}
                         >
                             <thead className="thead-dark">
                                 <tr>
-                                    <th style={{ width: '10%', textAlign: 'left' }}>Hình ảnh</th>
+                                    <th style={{ width: '10%', textAlign: 'left' }}>Ảnh</th>
                                     <th style={{ width: '20%', textAlign: 'left' }}>Sản phẩm</th>
                                     <th style={{ width: '20%', textAlign: 'left' }}>Lựa chọn</th>
 
                                     <th>Đơn giá</th>
-                                    <th style={{ width: '10%', textAlign: 'center' }}>Số lượng</th>
+                                    <th style={{ width: '15%', textAlign: 'center' }}>Số lượng</th>
                                     <th style={{ textAlign: 'right' }}>Tổng</th>
                                     <th>Xóa</th>
                                 </tr>
@@ -242,7 +242,7 @@ const MyCart = () => {
                                     <h5>
                                         {total > 500000
                                             ? numberWithCommas(total)
-                                            : numberWithCommas(total +totalShip()) }
+                                            : numberWithCommas(total + totalShip())}
                                     </h5>
                                 </div>
                                 <button

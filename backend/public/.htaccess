@@ -7,7 +7,9 @@
         Header set Access-Control-Allow-Origin: *
     </IfModule>
 
-
+    <IfModule mod_php5.c>
+        php_value max_execution_time 300
+    </IfModule>
     RewriteEngine On
 
     # Handle Authorization Header

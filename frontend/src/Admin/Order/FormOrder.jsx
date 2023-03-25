@@ -1,29 +1,29 @@
-import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Dialog, DialogTitle, Grid, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import * as yup from 'yup';
-import AlertMui from '../../components/Common/AlertMui';
-import InputField from '../../components/Form/InputField';
 import SelectField from '../../components/Form/SelectField';
+import { fetchPutOrder } from '../../features/user/userAPI';
 import { configToast } from '../../Helper/Config';
-import { renderError } from '../../Helper/Funtion';
-import { ruleAddRole } from '../../rules/RuleRole';
 
-const FormOrder = ({ open, handleClose, row }) => {
-    const [openAlert, setOpenAlert] = useState(true);
-    const [contentAlert, setContentAlert] = useState('');
-    const schema = yup.object(ruleAddRole).required();
+const FormOrder = ({ open, handleClose, row, updateStatusOrder }) => {
     const { control, handleSubmit, reset } = useForm({
         defaultValues: useMemo(() => {
             return row;
         }, [row]),
-        resolver: yupResolver(schema),
     });
-
     const onSubmit = async (formValues) => {
+        const { order_id, status } = formValues;
+        console.log({ order_id, status });
+        const response = await fetchPutOrder({ order_id, status });
+        const success = response.data.success;
+
+        if (success) {
+            handleClose();
+            toast.success(response.data.message, configToast);
+            updateStatusOrder();
+        }
         // let response;
         // if (formValues?.id) {
         //     response = await fetchPutPermission(formValues);
@@ -42,91 +42,133 @@ const FormOrder = ({ open, handleClose, row }) => {
     };
 
     useEffect(() => {
-        setOpenAlert(false);
         reset(row);
     }, [open]);
     return (
-        <Dialog open={open} onClose={handleClose} maxWidth="800px">
+        <Dialog open={open} onClose={handleClose} width="800px">
             <DialogTitle textAlign="center">
-                <Typography variant="h5">Cập nhật hóa đơn</Typography>
+                <Typography variant="h5">
+                    Cập nhật hóa đơn số <strong>{row?.order_id}</strong>
+                </Typography>
             </DialogTitle>
-            <Box mt={3} mx={3}>
+            <Box mt={1} mx={3} style={{ maxWidth: { xs: '100%', md: '600px' } }}>
                 <Grid container>
-                    <Grid item xs={2} md={3}>
-                        <strong>Mã hóa đơn:</strong>
+                    <Grid item sm={12} md={row?.delivery_address ? 6 : 12}>
+                        <Grid container>
+                            <Grid item xs={12} md={12}>
+                                <Typography variant="h6">Khách hàng</Typography>
+                            </Grid>
+                            <Grid item xs={3} md={3}>
+                                <strong>Tên :</strong>
+                            </Grid>
+                            <Grid item xs={9} md={9}>
+                                {row?.name}
+                            </Grid>
+                            <Grid item xs={3} md={3}>
+                                <strong>SĐT:</strong>
+                            </Grid>
+                            <Grid item xs={9} md={9}>
+                                {row?.phone}
+                            </Grid>
+                            <Grid item xs={3} md={3}>
+                                <strong>Email:</strong>
+                            </Grid>
+                            <Grid item xs={9} md={9}>
+                                {row?.email}
+                            </Grid>
+                            <Grid item xs={3} md={3}>
+                                <strong>Địa chỉ:</strong>
+                            </Grid>
+                            <Grid item xs={9} md={9}>
+                                {row?.address}
+                            </Grid>
+                        </Grid>
                     </Grid>
-                    <Grid item xs={10} md={9}>
-                        {row?.order_id}
-                    </Grid>
-                    <Grid item xs={2} md={3}>
-                        <strong>Tên khách hàng:</strong>
-                    </Grid>
-                    <Grid item xs={10} md={9}>
-                        {row?.name}
-                    </Grid>
-                    <Grid item xs={2} md={3}>
-                        <strong>Số điện thoại:</strong>
-                    </Grid>
-                    <Grid item xs={10} md={9}>
-                        {row?.phone}
-                    </Grid>
-                    <Grid item xs={2} md={3}>
-                        <strong>Email:</strong>
-                    </Grid>
-                    <Grid item xs={10} md={9}>
-                        {row?.email}
-                    </Grid>
-                    <Grid item xs={2} md={3}>
-                        <strong>Địa chỉ:</strong>
-                    </Grid>
-                    <Grid item xs={10} md={9}>
-                        {row?.address}
+                    {row?.delivery_address && (
+                        <Grid item sm={12} md={6} mt={{ xs: 2, md: 0 }}>
+                            <Grid container>
+                                <Grid item xs={12} md={12}>
+                                    <Typography variant="h6">Người nhận</Typography>
+                                </Grid>
+                                <Grid item xs={3} md={3}>
+                                    <strong>Tên:</strong>
+                                </Grid>
+                                <Grid item xs={9} md={9}>
+                                    {row?.delivery_address.name}
+                                </Grid>
+                                <Grid item xs={3} md={3}>
+                                    <strong>SĐT:</strong>
+                                </Grid>
+                                <Grid item xs={9} md={9}>
+                                    {row?.delivery_address.phone}
+                                </Grid>
+                                <Grid item xs={3} md={3}>
+                                    <strong>Email:</strong>
+                                </Grid>
+                                <Grid item xs={9} md={9}>
+                                    {row?.delivery_address.email}
+                                </Grid>
+                                <Grid item xs={3} md={3}>
+                                    <strong>Địa chỉ:</strong>
+                                </Grid>
+                                <Grid item xs={9} md={9}>
+                                    {row?.delivery_address.address}
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    )}
+                    <Grid item sm={12} md={12}>
+                        <form onSubmit={handleSubmit(onSubmit)}>
+                            <Box
+                                mt={2}
+                                sx={{
+                                    width: { xs: '250px', sm: '100%', md: '100%' },
+                                    display: 'flex',
+                                    alignItems: 'flex-end',
+                                    justifyContent: 'flex-end',
+                                }}
+                            >
+                                <SelectField
+                                    control={control}
+                                    label="Trạng thái"
+                                    name="status"
+                                    maxHeight="50%"
+                                    options={[
+                                        { value: 1, label: 'Đặt hàng' },
+                                        { value: 2, label: 'Đang giao hàng' },
+                                        { value: 3, label: 'Giao hàng thành công' },
+                                        { value: 4, label: 'Giao hàng thất bại' },
+                                    ]}
+                                />
+                            </Box>
+
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'flex-end',
+                                    justifyContent: 'flex-end',
+                                }}
+                                m={3}
+                                mr={0}
+                            >
+                                <Button
+                                    onClick={handleClose}
+                                    variant="contained"
+                                    color="warning"
+                                    sx={{
+                                        marginRight: '16px',
+                                    }}
+                                >
+                                    Hủy
+                                </Button>
+                                <Button type="submit" variant="contained" color="primary">
+                                    OK
+                                </Button>
+                            </Box>
+                        </form>
                     </Grid>
                 </Grid>
             </Box>
-            <form onSubmit={handleSubmit(onSubmit)}>
-                {contentAlert && contentAlert !== '' && (
-                    <AlertMui open={openAlert} setOpen={setOpenAlert} content={contentAlert} />
-                )}
-
-                <Box
-                    mt={3}
-                    mx={3}
-                    sx={{
-                        width: 500,
-                    }}
-                >
-                    <SelectField
-                        control={control}
-                        label="Trạng thái"
-                        name="status_order"
-                        maxHeight="50%"
-                        options={[
-                            { value: 1, label: 'Đặt hàng' },
-                            { value: 2, label: 'Đang giao hàng' },
-                            { value: 3, label: 'Giao hàng thành công' },
-                            { value: 4, label: 'Giao hàng thất bại' },
-                        ]}
-                    />
-                </Box>
-
-                <Box textAlign="right" m={3}>
-                    <Button
-                        mr={3}
-                        onClick={handleClose}
-                        variant="contained"
-                        color="warning"
-                        sx={{
-                            marginRight: '16px',
-                        }}
-                    >
-                        Hủy
-                    </Button>
-                    <Button type="submit" variant="contained" color="primary">
-                        OK
-                    </Button>
-                </Box>
-            </form>
         </Dialog>
     );
 };

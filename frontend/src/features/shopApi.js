@@ -25,3 +25,12 @@ export async function fetchDeleteCartCount(cartId) {
 export async function fetchpostOrder(data) {
     return await axios.post(`${URL}/orders`, data, config);
 }
+export async function fetchpostComment(data) {
+    return await axios.post(`${URL}/comments`, data, config);
+}
+export async function fetchgetOrderStatus() {
+    return await axios.get(`${URL}/orders/status`, config);
+}
+export async function fetchgetProductComment(id) {
+    return await axios.get(`${URL}/comments/${id}`, config);
+}

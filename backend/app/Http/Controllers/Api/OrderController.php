@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderRequest;
+use App\Http\Requests\UpdateOrderRequest;
 use App\Http\Resources\OrderResource;
 use App\Models\Cart;
 use App\Models\OrderItem;
@@ -31,6 +32,7 @@ class OrderController extends Controller
                 $orderItem[] = [
                     'order_id' => $order->id,
                     'prod_id' => $cart->product_item_id,
+                    'product_id' => $cart->product_id,
                     'qty' => $cart->prod_qty,
                     'price' => $cart->getProduct->product_price,
                     'created_at' => $order->created_at,
@@ -68,7 +70,7 @@ class OrderController extends Controller
             $where[] = ['name', 'like', '%' . $request->input('name') . '%'];
         }
         if ($request->input('status')) {
-            $where[] = ['status', $request->input('status') ];
+            $where[] = ['status', $request->input('status')];
         }
         if ($request->input('phone')) {
             $where[] = ['phone', 'like', '%' . $request->input('phone') . '%'];
@@ -106,6 +108,37 @@ class OrderController extends Controller
         return response()->json([
             'success'   => false,
             'message'   => Lang::get('messages.action_failed', ['action' => 'Tìm kiếm']),
+        ]);
+    }
+    public function updateOrder(UpdateOrderRequest $request)
+    {
+        $status = $request->input('status');
+        $id = $request->input('order_id');
+        $order = Orders::find($id);
+        $order->status = $status;
+        $order->save();
+        return response()->json([
+            'success'   => true,
+            'message'   => 'Cập nhật trạng thái đơn hàng thành công',
+        ]);
+    }
+
+    public function getStatusOrder()
+    {
+        $user_id = \Auth::user()->id;
+
+        $orders = Orders::with(['orderItem', 'orderItem.productItem', 'orderItem.productItem.productItemImage', 'orderItem.productItem.attributeValue', 'orderItem.productItem.getProduct'])->where('user_id', $user_id)->orderBy('created_at', 'desc')->paginate(10);
+
+        if ($orders->count() > 0) {
+            return response()->json([
+                'success'   => true,
+                'message'   => Lang::get('messages.action_successful', ['action' => 'Tìm kiếm']),
+                'data' => new OrderResource($orders)
+            ]);
+        }
+        return response()->json([
+            'success'   => false,
+            'message'   => 'Chưa có đơn hàng bất kỳ',
         ]);
     }
 }

@@ -18,7 +18,7 @@ class ProductResource extends JsonResource
     public function toArray($request)
     {
         $genderArr = ['1' => 'Nam', '2' => 'Nữ', '3' => 'Không phân biệt giới tính'];
-        // dd($this->productItems[0]);
+
         return [
             'attribute_set_code' => $this->productItems[0]->attribute_set_id,
 
@@ -26,6 +26,8 @@ class ProductResource extends JsonResource
             'product_name' => $this->product_name,
             'product_image' => $this->product_image ? asset('storage/images/products/' . $this->product_image) : '',
             'product_price' => $this->product_price,
+            'star_avg' => $this->comments->avg('stars_rated') ?? 0,
+            'vote_count' => $this->comments->count(),
             'active_code' => $this->active,
             'active' => $this->active === 1 ? 'Hiển thị' : 'Không hiển thị',
 
