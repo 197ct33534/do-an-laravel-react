@@ -77,10 +77,40 @@ export async function fetchGetOrder(listParam) {
             .map(([k, v]) => `${k}=${v}`)
             .join('&');
     }
-    console.log(param);
+
     return await axios.get(`${URL}/orders?${param}`, config);
 }
 
 export async function fetchPutOrder(data) {
     return await axios.put(`${URL}/orders`, data, config);
+}
+export async function fetchPutComment(data) {
+    return await axios.put(`${URL}/comments`, data, config);
+}
+export async function fetchGetAllComment(listParam = '') {
+    let str = [];
+    if (listParam.setinment || listParam.setinment == '0') {
+        str.push(`setinment=${listParam.setinment}`);
+    }
+    if (listParam.content_review) {
+        str.push(`content_review=${listParam.content_review}`);
+    }
+    if (listParam.is_clothing || listParam.is_clothing == '0') {
+        str.push(`is_clothing=${listParam.is_clothing}`);
+    }
+    if (listParam.star) {
+        str.push(`star=${listParam.star}`);
+    }
+    if (listParam.is_show || listParam.is_show == '0') {
+        str.push(`is_show=${listParam.is_show}`);
+    }
+    if (listParam.perPage) {
+        str.push(`perPage=${listParam.perPage}`);
+    }
+    if (listParam.page) {
+        str.push(`page=${listParam.page}`);
+    } else {
+        str.push(`page=1`);
+    }
+    return await axios.get(`${URL}/comments?${str.join('&')}`, config);
 }

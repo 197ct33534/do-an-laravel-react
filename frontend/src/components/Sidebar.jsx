@@ -111,6 +111,9 @@ const Sidebar = ({ collapsed, toggled, handleToggleSidebar, handleCollapsedChang
                         <MenuItem>
                             Danh sách đơn hàng <Link to="orders" />
                         </MenuItem>
+                        <MenuItem>
+                            Đánh giá của khách hàng <Link to="comments" />
+                        </MenuItem>
                     </SubMenu>
                     <SubMenu title={'Phân quyền'} icon={<FaList />}>
                         <MenuItem>

@@ -8,6 +8,7 @@ import AttributeValueList from './Admin/Attribute/Values/AttributeValueList';
 
 import BrandList from './Admin/Brand/BrandList';
 import CateList from './Admin/Category/CateList';
+import CommentList from './Admin/Comment/CommentList';
 import OrderList from './Admin/Order/OrderList';
 import PermissionList from './Admin/Permission/PermissionList';
 import AddProduct from './Admin/Product/AddProduct';
@@ -92,6 +93,9 @@ function App() {
                     </Route>
                     <Route path="orders">
                         <Route path="" element={<OrderList />} />
+                    </Route>
+                    <Route path="comments">
+                        <Route path="" element={<CommentList />} />
                     </Route>
                 </Route>
             </Route>

@@ -8,8 +8,10 @@ use App\Models\Rating;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Helpers\Bayes\CommentBayes;
+use App\Http\Requests\UpdateCommentRequest;
 use App\Http\Resources\BaseResource;
 use App\Models\Orders;
+use Illuminate\Support\Facades\Lang;
 
 class CommentController extends Controller
 {
@@ -81,6 +83,68 @@ class CommentController extends Controller
             'success'   => false,
             'message'   => 'Sản phẩm chưa có đánh giá nào',
 
+        ]);
+    }
+
+    public function getAllComment(Request $request)
+    {
+        $where = [['user_id', '!=', 0]];
+        if ($request->input('star')) {
+            $where[] = ['stars_rated', $request->input('star')];
+        }
+
+        if ($request->input('setinment') || $request->input('setinment') === '0') {
+            $where[] = ['stars_rated', $request->input('setinment') ?? 0];
+        }
+
+        if ($request->input('is_clothing') || $request->input('is_clothing') === '0') {
+            $where[] = ['is_clothing', $request->is_clothing ?? 0];
+        }
+
+        if ($request->input('product_name')) {
+            $where[] = ['content_review', 'like', '%' . $request->input('content_review') . '%'];
+        }
+
+        if ($request->input('is_show') || $request->input('is_show') === '0') {
+            $where[] = ['is_show',  $request->input('is_show') ?? 0];
+        }
+
+        $perpage = 1;
+        if ($request->get('perPage')) {
+            $arr  = ['10', '15', '20', '8', '1'];
+            if (in_array($request->get('perPage'), $arr)) {
+                $perpage = $request->get('perPage');
+            }
+        }
+
+        $comments = Rating::with(['user', 'product'])->where($where)->orderBy('created_at', 'desc')->paginate($perpage);
+
+        if ($comments->count() > 0) {
+            return response()->json([
+                'success'   => true,
+                'message'   => Lang::get('messages.action_successful', ['action' => 'Tìm kiếm']),
+                'data' => new BaseResource($comments)
+            ]);
+        }
+
+
+        return response()->json([
+            'success'   => false,
+            'message'   => Lang::get('messages.action_failed', ['action' => 'Tìm kiếm']),
+        ]);
+    }
+
+    public function putComment(UpdateCommentRequest $request)
+    {
+        $comment = Rating::find($request->input('id'));
+        $comment->setinment = $request->input('setinment');
+        $comment->is_clothing = $request->input('is_clothing');
+        $comment->is_show = $request->input('is_show');
+        $comment->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Cập nhật bình luận thành công',
         ]);
     }
 }

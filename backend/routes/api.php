@@ -128,4 +128,6 @@ Route::prefix('orders')->middleware('auth:sanctum')->group(function () {
 Route::get('comments/{id}', [CommentController::class, 'getProductComment']);
 Route::prefix('comments')->middleware('auth:sanctum')->group(function () {
     Route::post('', [CommentController::class, 'postComment']);
+    Route::put('', [CommentController::class, 'putComment']);
+    Route::get('', [CommentController::class, 'getAllComment']);
 });
