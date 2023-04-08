@@ -16,10 +16,10 @@ class AttributeValueResource extends JsonResource
     public function toArray($request)
     {
         // dd($this);
-        $code = AttributeValue::where([['value', $this->value], ['attribute_id', $this->attribute_id]])->first();
+        $code = AttributeValue::where([['id', $this->value], ['attribute_id', $this->attribute_id]])->first();
 
         return [
-            'value' => $this->value,
+            'value' => $code->value,
             'value_code' => $code->id,
             'attribute_name' => $this->attributes->name
         ];

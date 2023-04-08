@@ -124,7 +124,7 @@ class CategoryController extends Controller
     {
         $id = $request->input('id');
 
-        if (Categories::find($id)->product) {
+        if (Categories::find($id)->product->count() !== 0) {
             return response()->json([
                 'success'   => false,
                 'message'   => 'Danh mục đã được sử dụng bạn không thề xóa',

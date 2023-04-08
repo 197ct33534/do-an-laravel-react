@@ -36,8 +36,8 @@ const ShopDetailImage = () => {
         },
     };
     return (
-        <div className="col-lg-5  bg-light">
-            <div className="d-none d-sm-none  d-lg-block">
+        <div className="col-lg-5  ">
+            <div className="d-none d-sm-none bg-light d-lg-block">
                 {product && (
                     <SliderImage
                         data={arr_image}

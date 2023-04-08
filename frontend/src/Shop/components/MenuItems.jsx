@@ -56,7 +56,7 @@ const MenuItems = ({ items, depthLevel }) => {
                         {window.innerWidth < 960 && depthLevel === 0 ? (
                             items.name
                         ) : (
-                            <Link to={items.id}>{items.name}</Link>
+                            <Link to={`/mat-hang/${items.id}`}>{items.name}</Link>
                         )}
 
                         {depthLevel > 0 && window.innerWidth < 960 ? null : depthLevel > 0 &&
@@ -80,7 +80,7 @@ const MenuItems = ({ items, depthLevel }) => {
                         aria-expanded={dropdown ? 'true' : 'false'}
                         onClick={() => setDropdown((prev) => !prev)}
                     >
-                        {items.name}{' '}
+                        {items.name}
                         {depthLevel > 0 ? <span>&raquo;</span> : <span className="arrow" />}
                     </button>
                     <Dropdown
@@ -90,7 +90,7 @@ const MenuItems = ({ items, depthLevel }) => {
                     />
                 </>
             ) : (
-                <Link to={items.id}>{items.name}</Link>
+                <Link to={`/mat-hang/${items.id}`}>{items.name}</Link>
             )}
         </li>
     );

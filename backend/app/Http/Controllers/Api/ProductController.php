@@ -6,13 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Resources\ProductCollection;
 use App\Helpers\Functions;
+use App\Http\Resources\BaseResource;
 use App\Http\Resources\ProductResource;
 use App\Models\AttributeProductValue;
 use App\Models\AttributeValue;
+use App\Models\Categories;
 use App\Models\Product;
 use App\Models\ProductAttribute;
 use App\Models\ProductImage;
 use App\Models\ProductItem;
+use Attribute;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -111,7 +114,7 @@ class ProductController extends Controller
                 $attributeProduct->product_item_id = $product_item->id;
                 $attributeValue = AttributeValue::find($v);
                 $attributeProduct->attribute_id  = $attributeValue->attribute_id;
-                $attributeProduct->value  = $attributeValue->value;
+                $attributeProduct->value  = $v;
                 $attributeProduct->save();
             }
         }
@@ -267,7 +270,7 @@ class ProductController extends Controller
                     $attributeProduct->product_item_id = $product_item_id;
                     $attributeValue = AttributeValue::find($v);
                     $attributeProduct->attribute_id  = $attributeValue->attribute_id;
-                    $attributeProduct->value  = $attributeValue->value;
+                    $attributeProduct->value  = $v;
                     $attributeProduct->save();
                 }
             } else {
@@ -434,6 +437,91 @@ class ProductController extends Controller
             'message'   => Lang::get('messages.action_successful', ['action' => 'Lấy chi tiết sản phẩm']),
             'data' =>  ProductResource::collection($pro),
 
+        ]);
+    }
+
+    public function getProductCategory(Request $request)
+    {
+        $data_category = [];
+        $cate_id = $request->input('category_id');
+        $cate = Categories::find($cate_id);
+        $data_category[] = ['name' => $cate->name, 'link' => '/mat-hang/' . $cate->id];
+
+        $parent_id = '';
+        while (true) {
+            $cate = Categories::find($cate->parent_id);
+            array_unshift($data_category, ['name' => $cate->name, 'link' => '/mat-hang/' . $cate->id]);
+
+            if (is_null($cate->parent_id)) {
+                $parent_id = $cate->id;
+                break;
+            }
+        }
+        $where = [];
+        if ($cate_id) {
+            $where[] = ['category_id', $cate_id];
+        };
+
+        $product_id_list = Product::where($where)->select('product_id')->pluck('product_id')->unique();
+        // dd($product_id_list);
+        $product_item_id_list = ProductItem::whereIn('product_id', $product_id_list)->select('id')->pluck('id')->unique();
+
+        $attribute_product_value = AttributeProductValue::whereIn('product_item_id', $product_item_id_list)->select(['attribute_id', 'value'])->groupBy('attribute_id')->groupBy('value')->pluck('attribute_id', 'value');
+
+        $data_filter = [];
+        foreach ($attribute_product_value as $key => $value) {
+            if (!\Arr::exists($data_filter, $value)) {
+                $data_filter[$value] = [];
+            }
+            $label = AttributeValue::find($key)->value;
+            $data_filter[$value][] = ['value' => $key, 'label' => $label];
+        }
+        $name_attribute = \DB::table('attributes')->select(['id', 'name'])->get();
+        $query = Product::with(['productItems'])->where($where);
+
+        if (is_numeric($request->input('min_price')) && is_numeric($request->input('max_price'))) {
+            $query->whereBetween('product_price', [$request->input('min_price'), $request->input('max_price')]);
+        } else if (is_numeric($request->input('min_price'))) {
+            $query->where('product_price', '>=', $request->input('min_price'));
+        } else if (is_numeric($request->input('max_price'))) {
+            $query->where('product_price', '<=', $request->input('max_price'));
+        }
+        $perpage = 9;
+        if ($request->get('perPage')) {
+            $arr  = ['6', '9', '12', '15', '18'];
+            if (in_array($request->get('perPage'), $arr)) {
+                $perpage = $request->get('perPage');
+            }
+        }
+        $allRequest =  $request->except(['perPage', 'min_price', 'max_price', 'category_id']);
+
+        $arr = array_unique(\Arr::collapse($allRequest));
+        if (count($arr) > 0) {
+            $product_item_id_list = AttributeProductValue::whereIn('value', $arr)->select('product_item_id')->get();
+
+            $product_id_list_accept = ($product_item_id_list->pluck('product_item_id'))->toArray();
+            $product_id_list = (ProductItem::whereIn('id', $product_id_list_accept)->groupBy('product_id')->pluck('product_id')->toArray());
+            $data_products = $query->whereIn('product_id', $product_id_list)->orderBy('created_at', 'desc')->paginate($perpage);
+        } else {
+            $data_products = $query->orderBy('created_at', 'desc')->paginate($perpage);
+        }
+
+
+        // $filtered_data_collection = $data_products->filter(function ($item) use ($product_id_list_accept) {
+        //     foreach ($item->productItems as $productItem) {
+        //         if (in_array($productItem->id, $product_id_list_accept)) {
+        //             return true;
+        //         }
+        //     }
+        // })->values();
+        // dd($data_products);
+        //paginate($perpage
+        return response()->json([
+            'success' => true,
+            'message'   => Lang::get('messages.action_successful', ['action' => 'Lấy sản phẩm theo danh mụcs']),
+            'data_filter' => ['name' => $name_attribute, 'data' => $data_filter],
+            'category_tree' => $data_category,
+            'data' => new ProductCollection($data_products),
         ]);
     }
 }

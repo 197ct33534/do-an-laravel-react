@@ -1,10 +1,7 @@
-import React, { memo } from 'react';
-import { useContext } from 'react';
-import { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import OwlCarousel from 'react-owl-carousel';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { categoryListNoParent } from '../../features/shopSlice';
 import { getCategoryAllAsync } from '../../features/shopThunk';
 import { HomeContext } from '../pages/Home';
 const options = {
@@ -32,7 +29,7 @@ const options = {
 };
 const Categories = () => {
     const { categories } = useContext(HomeContext);
-    // const categories = useSelector(categoryListNoParent);
+
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -40,43 +37,46 @@ const Categories = () => {
             dispatch(getCategoryAllAsync());
         }
     }, [dispatch, categories]);
+
     return (
         <div className="container-fluid pt-5">
             <h2 className="section-title position-relative text-uppercase mx-xl-5 mb-4">
                 <span className="bg-secondary pr-3">THỂ LOẠI</span>
             </h2>
             <div className="row px-xl-5 pb-3">
-                <OwlCarousel className="owl-theme" {...options}>
-                    {categories?.map((category, i) => (
-                        // <div className="col-lg-3 col-md-4 col-sm-6 pb-1">
-                        <Link className="text-decoration-none" to="">
-                            <div className="cat-item d-flex align-items-center mb-4 ">
-                                <div
-                                    className="overflow-hidden"
-                                    style={{ width: '100px', height: '100px' }}
-                                >
-                                    <img
-                                        className="img-fluid"
-                                        src={
-                                            category.product_image_avatar
-                                                ? category.product_image_avatar
-                                                : process.env.PUBLIC_URL +
-                                                  '/assets/images/no-image.png'
-                                        }
-                                        alt=""
-                                    />
+                {categories?.length > 0 && (
+                    <OwlCarousel className="owl-theme" {...options}>
+                        {categories?.map((category, i) => (
+                            // <div className="col-lg-3 col-md-4 col-sm-6 pb-1">
+                            <Link className="text-decoration-none" to="">
+                                <div className="cat-item d-flex align-items-center mb-4 ">
+                                    <div
+                                        className="overflow-hidden"
+                                        style={{ width: '100px', height: '100px' }}
+                                    >
+                                        <img
+                                            className="img-fluid"
+                                            src={
+                                                category.product_image_avatar
+                                                    ? category.product_image_avatar
+                                                    : process.env.PUBLIC_URL +
+                                                      '/assets/images/no-image.png'
+                                            }
+                                            alt=""
+                                        />
+                                    </div>
+                                    <div className="flex-fill pl-3">
+                                        <h6>{category.name}</h6>
+                                        <small className="text-body">
+                                            {category.product_count} sản phẩm
+                                        </small>
+                                    </div>
                                 </div>
-                                <div className="flex-fill pl-3">
-                                    <h6>{category.name}</h6>
-                                    <small className="text-body">
-                                        {category.product_count} sản phẩm
-                                    </small>
-                                </div>
-                            </div>
-                        </Link>
-                        // </div>
-                    ))}
-                </OwlCarousel>
+                            </Link>
+                            // </div>
+                        ))}
+                    </OwlCarousel>
+                )}
             </div>
         </div>
     );

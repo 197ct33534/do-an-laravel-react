@@ -31,6 +31,7 @@ import DetailProduct from './Shop/pages/DetailProduct';
 import Home from './Shop/pages/Home';
 import OrderStatus from './Shop/pages/OrderStatus';
 import ScrollToTop from './Shop/pages/ScrollToTop';
+import ShopCategory from './Shop/pages/ShopCategory';
 
 // import { CheckLogin } from "./middlewares/CheckLogin";
 // import Deni from "./pages/Deni";
@@ -69,6 +70,7 @@ function App() {
                 <Route path="gio-hang" element={<MyCart />} />
                 <Route path="trang-thai-don-hang" element={<OrderStatus />} />
                 <Route path="/thanh-toan" element={<CheckOut />} />
+                <Route path="mat-hang/:category_id" element={<ShopCategory />} />
             </Route>
             <Route path="/login" element={<CheckLogin />}>
                 <Route path="" element={<Login />} />

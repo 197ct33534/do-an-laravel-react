@@ -71,7 +71,7 @@ body {
     line-height: 1.5 !important;
     color: #6c757d !important;
     text-align: left !important;
-    background-color: #f8f9fa !important;
+    background-color: #ecf3f9 !important;
 }
 
 [tabindex='-1']:focus:not(:focus-visible) {
@@ -3430,7 +3430,7 @@ input[type='button'].btn-block {
 .dropdown-item:focus {
     color: #16181b;
     text-decoration: none;
-    background-color: #f8f9fa;
+    background-color: #ecf3f9;
 }
 
 .dropdown-item.active,
@@ -5342,7 +5342,7 @@ a.badge-dark.focus {
     z-index: 1;
     color: #495057;
     text-decoration: none;
-    background-color: #f8f9fa;
+    background-color: #ecf3f9;
 }
 
 .list-group-item-action:active {

@@ -46,6 +46,7 @@ Route::prefix('user')->middleware(['auth:sanctum', 'checkTokenExpered', 'checkPe
 });
 Route::get('products/filter', [ProductController::class, 'getFilterProduct']);
 
+Route::get('products_cate/filter', [ProductController::class, 'getProductCategory']);
 Route::get('products/{id}', [ProductController::class, 'getDetailProduct']);
 
 Route::prefix('products')->middleware(['auth:sanctum', 'checkTokenExpered'])->group(function () {

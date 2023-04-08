@@ -43,28 +43,30 @@ const Vendor = () => {
             </h2>
             <div className="row px-xl-5">
                 <div className="col">
-                    <OwlCarousel loop {...options}>
-                        {brands.map(
-                            (brand) =>
-                                brand.image && (
-                                    <div
-                                        className="bg-light "
-                                        key={'vendor-' + brand.id}
-                                        // style={{ marginRight: '16px' }}
-                                    >
-                                        <img
-                                            src={brand.image}
-                                            style={{
-                                                width: '100%',
-                                                objectFit: 'contain',
-                                                height: '200px',
-                                            }}
-                                            alt={brand.name}
-                                        />
-                                    </div>
-                                )
-                        )}
-                    </OwlCarousel>
+                    {brands.length > 0 && (
+                        <OwlCarousel loop {...options}>
+                            {brands.map(
+                                (brand) =>
+                                    brand.image && (
+                                        <div
+                                            className="bg-light "
+                                            key={'vendor-' + brand.id}
+                                            // style={{ marginRight: '16px' }}
+                                        >
+                                            <img
+                                                src={brand.image}
+                                                style={{
+                                                    width: '100%',
+                                                    objectFit: 'contain',
+                                                    height: '200px',
+                                                }}
+                                                alt={brand.name}
+                                            />
+                                        </div>
+                                    )
+                            )}
+                        </OwlCarousel>
+                    )}
                 </div>
             </div>
         </div>
