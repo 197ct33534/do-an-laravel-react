@@ -37,15 +37,28 @@ export async function fetchgetProductComment(id) {
 export async function fetchgetProductCategory(listParam = '') {
     let str = [];
     if (listParam.category_id) {
-        str.push(`category_id=${listParam.category_id}`);
+        let category_id = listParam.category_id;
+        if (Array.isArray(category_id)) {
+            category_id = category_id.join('');
+        }
+        str.push(`category_id=${category_id}`);
         delete listParam.category_id;
     }
     if (listParam.min_price) {
-        str.push(`min_price=${listParam.min_price}`);
+        let min = listParam.min_price;
+
+        if (Array.isArray(min)) {
+            min = min.join('');
+        }
+        str.push(`min_price=${min}`);
         delete listParam.min_price;
     }
     if (listParam.max_price) {
-        str.push(`max_price=${listParam.max_price}`);
+        let max = listParam.max_price;
+        if (Array.isArray(max)) {
+            max = max.join('');
+        }
+        str.push(`max_price=${max}`);
         delete listParam.max_price;
     }
 

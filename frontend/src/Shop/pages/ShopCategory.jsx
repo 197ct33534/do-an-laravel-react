@@ -1,29 +1,41 @@
-import { Checkbox, FormControlLabel, FormGroup, Pagination, Slider } from '@mui/material';
+import { Checkbox, FormControlLabel, FormGroup, Pagination } from '@mui/material';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useParams, useSearchParams } from 'react-router-dom';
+import MultiRangeSlider from '../../components/Form/MultiRangeSlider';
+import SelectField from '../../components/Form/SelectField';
 import { fetchgetProductCategory } from '../../features/shopApi';
 import Breadcrumb from '../components/Breadcrumb';
 import ProductCategoryList from '../components/ProductCategoryList';
-import MultiRangeSlider from '../../components/Form/MultiRangeSlider';
-import SelectField from '../../components/Form/SelectField';
 
 const ShopCategory = () => {
     const param = useParams();
     const [respone, setRespone] = useState();
     const [searchParams, setSearchParams] = useSearchParams();
-    const searchAsObject = Object.fromEntries(new URLSearchParams(searchParams));
+    const s_param = new URLSearchParams(searchParams);
+
+    const searchAsObject = { ...Object.fromEntries(s_param) };
+    const { max_price, min_price, category_id, page, perPage, ...rest } = searchAsObject;
+    if (max_price || min_price) {
+        searchAsObject.price = { max: max_price, min: min_price };
+        delete searchAsObject[max_price];
+        delete searchAsObject[min_price];
+    }
+
+    Object.keys(rest).map((k) => {
+        searchAsObject[k] = s_param.getAll(k);
+    });
+
     const initalSearch = {
         perPage: 9,
         page: 1,
         category_id: param?.category_id,
     };
+
     const [stateSearch, setStateSearch] = useState(
         Object.keys(searchAsObject).length === 0 ? initalSearch : searchAsObject
     );
-    console.log({ param, stateSearch });
 
-    // const [initalSearch, setInitalSearch] = useState({ perPage: 9 });
     const BreadPath = [
         {
             name: 'Trang chủ',
@@ -32,15 +44,19 @@ const ShopCategory = () => {
     ];
 
     const fetchProductCategory = async (data = stateSearch) => {
-        const response = await fetchgetProductCategory(data);
-        if (response.data.success) {
-            setRespone(response.data);
-            let temp = { perPage: data.perPage, price: null };
-            response.data.data_filter.name.map((val) => {
-                temp[val.name.toLowerCase()] = [];
-            });
+        if (data.category_id) {
+            const response = await fetchgetProductCategory(data);
+            if (response.data.success) {
+                setRespone(response.data);
+                if (Object.keys(data).length === 0) {
+                    let temp = { perPage: data.perPage, price: null };
+                    response.data.data_filter.name.map((val) => {
+                        temp[val.name.toLowerCase()] = [];
+                    });
 
-            reset(temp);
+                    reset(temp);
+                }
+            }
         }
     };
     const { control, handleSubmit, reset } = useForm({
@@ -50,18 +66,26 @@ const ShopCategory = () => {
     });
 
     const onSubmit = (data) => {
+        delete data.max_price;
+        delete data.min_price;
+        delete data.category_id;
+
         const price = {};
-        if (data.price) {
-            price.max_price = data.price.max;
-            price.min_price = data.price.min;
+        if (!(data?.max_price || data?.min_price)) {
+            if (data.price) {
+                price.max_price = data.price.max;
+                price.min_price = data.price.min;
+            }
         }
+
         let newParam = {
             ...param,
             ...price,
             perPage: data.perPage,
         };
+
         Object.keys(data).map((k) => {
-            if (data[k]?.length > 0) {
+            if (Array.isArray(newParam[k])) {
                 newParam[k] = [...data[k]];
             }
         });
@@ -70,14 +94,30 @@ const ShopCategory = () => {
         setSearchParams(newParam);
         // fetchProductCategory(newParam);
     };
-    const handlePageChange = (e, page) => {
-        console.log(page);
+    const handlePageChange = (e, nextPage) => {
+        if (!(nextPage == page)) {
+            const { category_id } = param;
+
+            const newParam = {
+                ...stateSearch,
+                page: nextPage,
+                perPage: respone?.data.pagination.per_page,
+                category_id,
+            };
+            Object.keys(newParam).map((k) => {
+                if (Array.isArray(newParam[k])) {
+                    newParam[k] = [...newParam[k]];
+                }
+            });
+            setStateSearch(newParam);
+            setSearchParams(newParam);
+        }
     };
     useEffect(() => {
         // reset(stateSearch);
         fetchProductCategory();
     }, [stateSearch]);
-
+    // console.log(control);
     return (
         <>
             {respone?.category_tree && (
@@ -102,6 +142,8 @@ const ShopCategory = () => {
                                         <MultiRangeSlider
                                             min={10000}
                                             max={2000000}
+                                            currentMax={max_price || 2000000}
+                                            currentMin={min_price || 10000}
                                             onChange={onChange}
                                         />
                                     )}
@@ -145,6 +187,9 @@ const ShopCategory = () => {
                                                                         control={
                                                                             <Checkbox
                                                                                 value={item.value}
+                                                                                checked={field.value?.includes(
+                                                                                    item.value + ''
+                                                                                )}
                                                                                 onChange={(
                                                                                     event,
                                                                                     checked
@@ -164,7 +209,7 @@ const ShopCategory = () => {
                                                                                                 (
                                                                                                     value
                                                                                                 ) =>
-                                                                                                    value !==
+                                                                                                    value !=
                                                                                                     event
                                                                                                         .target
                                                                                                         .value
@@ -232,10 +277,12 @@ const ShopCategory = () => {
                             <Pagination
                                 xs={12}
                                 color="warning"
-                                variant="success"
-                                className="paginationCategory"
+                                variant="outlined"
+                                className={`paginationCategory ${
+                                    respone?.data.pagination.current_page
+                                } ${+page || 1}`}
                                 shape="rounded"
-                                page={respone?.data.pagination.current_page}
+                                page={+page || 1}
                                 count={Math.ceil(
                                     respone?.data.pagination.total /
                                         respone?.data.pagination.per_page

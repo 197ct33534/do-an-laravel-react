@@ -7,11 +7,13 @@ import SliderImage from 'react-zoom-slider';
 import { ProductDetailContext } from '../pages/DetailProduct';
 const ShopDetailImage = () => {
     const { product } = useContext(ProductDetailContext);
-    const arr_image = [];
+    let arr_image = [];
     if (product) {
         arr_image.push({ image: product[0]?.product_image });
         product[0]?.product_items.forEach((element) => {
-            arr_image.push({ image: element.image });
+            if (element.image) {
+                arr_image.push({ image: element.image });
+            }
         });
     }
 

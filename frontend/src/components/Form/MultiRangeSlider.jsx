@@ -3,9 +3,9 @@ import classnames from 'classnames';
 import './multiRangeSlider.css';
 import { numberWithCommas } from '../../Helper/Funtion';
 
-const MultiRangeSlider = ({ min, max, onChange }) => {
-    const [minVal, setMinVal] = useState(min);
-    const [maxVal, setMaxVal] = useState(max);
+const MultiRangeSlider = ({ min, max, onChange, currentMin, currentMax }) => {
+    const [minVal, setMinVal] = useState(currentMin || min);
+    const [maxVal, setMaxVal] = useState(currentMax || max);
     const minValRef = useRef(null);
     const maxValRef = useRef(null);
     const range = useRef(null);
