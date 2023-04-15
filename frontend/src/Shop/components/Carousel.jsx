@@ -56,6 +56,13 @@ const Carousel = () => {
                                 alt=""
                             />
                         </div>
+                        <div>
+                            <img
+                                className="img-fluid Carousel-my-image"
+                                src="https://media-fmplus.cdn.vccloud.vn/uploads/sliders/169531c2-b3d7-4c65-93e3-e520ee48136a.png"
+                                alt=""
+                            />
+                        </div>
                     </OwlCarousel>
                 </div>
             </div>

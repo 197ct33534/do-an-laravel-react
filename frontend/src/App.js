@@ -32,6 +32,7 @@ import Home from './Shop/pages/Home';
 import OrderStatus from './Shop/pages/OrderStatus';
 import ScrollToTop from './Shop/pages/ScrollToTop';
 import ShopCategory from './Shop/pages/ShopCategory';
+import DashBoard from './Admin/Dashboard/DashBoard';
 
 // import { CheckLogin } from "./middlewares/CheckLogin";
 // import Deni from "./pages/Deni";
@@ -78,7 +79,7 @@ function App() {
             <Route path="/dang-ky" element={<Resigter />} />
             <Route path="/admin" element={<CheckPermission />}>
                 <Route path="" element={<Layout />}>
-                    <Route path="" element={<h1>trang /</h1>} />
+                    <Route path="" element={<DashBoard />} />
                     <Route path="brands" element={<BrandList />} />
                     <Route path="users" element={<UserList />} />
                     <Route path="roles" element={<RoleList />} />

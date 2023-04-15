@@ -25,16 +25,12 @@ const ShopCategory = () => {
     Object.keys(rest).map((k) => {
         searchAsObject[k] = s_param.getAll(k);
     });
-
-    const initalSearch = {
+    searchAsObject.category_id = param?.category_id;
+    let initalSearch = {
         perPage: 9,
         page: 1,
         category_id: param?.category_id,
     };
-
-    const [stateSearch, setStateSearch] = useState(
-        Object.keys(searchAsObject).length === 0 ? initalSearch : searchAsObject
-    );
 
     const BreadPath = [
         {
@@ -43,26 +39,19 @@ const ShopCategory = () => {
         },
     ];
 
-    const fetchProductCategory = async (data = stateSearch) => {
+    const fetchProductCategory = async (data = initalSearch) => {
         if (data.category_id) {
             const response = await fetchgetProductCategory(data);
             if (response.data.success) {
                 setRespone(response.data);
-                if (Object.keys(data).length === 0) {
-                    let temp = { perPage: data.perPage, price: null };
-                    response.data.data_filter.name.map((val) => {
-                        temp[val.name.toLowerCase()] = [];
-                    });
-
-                    reset(temp);
-                }
             }
+            return response.data;
         }
     };
-    const { control, handleSubmit, reset } = useForm({
+    const { control, handleSubmit, reset, getValues } = useForm({
         defaultValues: useMemo(() => {
-            return stateSearch;
-        }, [stateSearch]),
+            return initalSearch;
+        }, [initalSearch]),
     });
 
     const onSubmit = (data) => {
@@ -85,39 +74,70 @@ const ShopCategory = () => {
         };
 
         Object.keys(data).map((k) => {
-            if (Array.isArray(newParam[k])) {
+            if (Array.isArray(data[k]) && data[k].length > 0) {
                 newParam[k] = [...data[k]];
             }
         });
-        // console.log(newParam);
-        setStateSearch(newParam);
+
         setSearchParams(newParam);
-        // fetchProductCategory(newParam);
+        fetchProductCategory(newParam);
     };
     const handlePageChange = (e, nextPage) => {
         if (!(nextPage == page)) {
             const { category_id } = param;
+            let newParam = getValues();
+            newParam.page = nextPage;
+            newParam.category_id = category_id;
 
-            const newParam = {
-                ...stateSearch,
-                page: nextPage,
-                perPage: respone?.data.pagination.per_page,
-                category_id,
-            };
+            if (newParam['price'] !== null) {
+                newParam.max_price = newParam['price'].max;
+                newParam.min_price = newParam['price'].min;
+            }
+            delete newParam['price'];
+
             Object.keys(newParam).map((k) => {
-                if (Array.isArray(newParam[k])) {
-                    newParam[k] = [...newParam[k]];
+                if (Array.isArray(newParam[k]) && newParam[k].length === 0) {
+                    delete newParam[k];
                 }
             });
-            setStateSearch(newParam);
+            // setStateSearch(newParam);
             setSearchParams(newParam);
+            fetchProductCategory(newParam);
+        }
+    };
+    const firstLoad = async () => {
+        let res;
+
+        if (Object.keys(searchAsObject).length >= 2) {
+            res = await fetchProductCategory(searchAsObject);
+            let temp = {
+                perPage: res.data.pagination.per_page + '' || 9,
+                price: null,
+            };
+
+            res.data_filter.name.map((val) => {
+                console.log(searchAsObject[val.name.toLowerCase()]);
+                temp[val.name.toLowerCase()] = searchAsObject[val.name.toLowerCase()] || [];
+            });
+
+            reset(temp);
+        } else {
+            res = await fetchProductCategory();
+            let temp = {
+                perPage: res.data.pagination.per_page + '' || 9,
+                price: null,
+            };
+
+            res.data_filter.name.map((val) => {
+                temp[val.name.toLowerCase()] = [];
+            });
+            reset(temp);
         }
     };
     useEffect(() => {
-        // reset(stateSearch);
-        fetchProductCategory();
-    }, [stateSearch]);
-    // console.log(control);
+        firstLoad();
+    }, [param.category_id]);
+
     return (
         <>
             {respone?.category_tree && (
@@ -258,11 +278,11 @@ const ShopCategory = () => {
                                                 name="perPage"
                                                 maxHeight="50%"
                                                 options={[
-                                                    { label: 6, value: 6 },
-                                                    { label: 9, value: 9 },
-                                                    { label: 12, value: 12 },
-                                                    { label: 15, value: 15 },
-                                                    { label: 18, value: 18 },
+                                                    { label: '6', value: '6' },
+                                                    { label: '9', value: '9' },
+                                                    { label: '12', value: '12' },
+                                                    { label: '15', value: '15' },
+                                                    { label: '18', value: '18' },
                                                 ]}
                                             />
                                             {/* </div> */}
@@ -278,9 +298,7 @@ const ShopCategory = () => {
                                 xs={12}
                                 color="warning"
                                 variant="outlined"
-                                className={`paginationCategory ${
-                                    respone?.data.pagination.current_page
-                                } ${+page || 1}`}
+                                className={`paginationCategory`}
                                 shape="rounded"
                                 page={+page || 1}
                                 count={Math.ceil(

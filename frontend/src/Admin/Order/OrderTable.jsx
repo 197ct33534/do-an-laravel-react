@@ -22,7 +22,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { capitalized, numberWithCommas } from '../../Helper/Funtion';
 import FormOrder from './FormOrder';
-
+import PrintIcon from '@mui/icons-material/Print';
 function Row(props) {
     const navigate = useNavigate();
     const { row, stt, handleUpdateStatusOrder } = props;
@@ -116,6 +116,11 @@ function Row(props) {
                     </Box>
                 </TableCell>
                 <TableCell align="right">{row.payment_type_text}</TableCell>
+                <TableCell align="right">
+                    <Button variant="outlined" color="primary">
+                        <PrintIcon />
+                    </Button>
+                </TableCell>
             </TableRow>
 
             {row.order_items?.map((order, index) => (
@@ -223,10 +228,7 @@ const OrderTable = ({ updateStatusOrder }) => {
 
     return (
         <>
-            <TableContainer
-                component={Paper}
-                style={{ maxWidth: '100%', width: '100%', overflowX: 'auto' }}
-            >
+            <TableContainer component={Paper} style={{ overflowX: 'auto' }}>
                 <Table
                     stickyHeader
                     aria-label="collapsible table"
@@ -248,16 +250,26 @@ const OrderTable = ({ updateStatusOrder }) => {
                         >
                             <TableCell sx={{ width: '5%' }} />
                             <TableCell>#</TableCell>
-                            <TableCell align="left">Tên</TableCell>
+                            <TableCell align="left" sx={{ width: '200px' }}>
+                                Tên
+                            </TableCell>
                             <TableCell>SĐT </TableCell>
                             <TableCell>Email </TableCell>
-                            <TableCell align="left">Địa chỉ</TableCell>
-                            <TableCell align="right">Tổng tiền</TableCell>
-                            <TableCell align="center">Trạng thái</TableCell>
-                            <TableCell align="right">Thanh toán</TableCell>
-                            {/* <TableCell align="right" sx={{ width: '8%' }}>
+                            <TableCell align="left" sx={{ width: '250px' }}>
+                                Địa chỉ
+                            </TableCell>
+                            <TableCell align="right" sx={{ width: '200px' }}>
+                                Tổng tiền
+                            </TableCell>
+                            <TableCell align="center" sx={{ width: '250px' }}>
+                                Trạng thái
+                            </TableCell>
+                            <TableCell align="right" sx={{ width: '250px' }}>
+                                Thanh toán
+                            </TableCell>
+                            <TableCell align="right" sx={{ width: '140px' }}>
                                 Hành động
-                            </TableCell> */}
+                            </TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -275,7 +287,7 @@ const OrderTable = ({ updateStatusOrder }) => {
                         ))}
                         {!orderList?.data && (
                             <TableRow>
-                                <TableCell colSpan={9} align="center">
+                                <TableCell colSpan={10} align="center">
                                     <Typography variant="h5"> Không có dữ liệu</Typography>
                                 </TableCell>
                             </TableRow>

@@ -50,9 +50,10 @@ class CommentBayes
     public function priorProbability()
     {
         $totalDataTraining = $this->totalDataTraining();
-        $P_C['-1'] = $this->AmountOfClassData()['-1']  / ($totalDataTraining);
-        $P_C['0'] = $this->AmountOfClassData()['0'] / ($totalDataTraining);
-        $P_C['1'] = $this->AmountOfClassData()['1'] / ($totalDataTraining);
+        $result = $this->AmountOfClassData();
+        $P_C['-1'] =  $result['-1']  / ($totalDataTraining);
+        $P_C['0'] =  $result['0'] / ($totalDataTraining);
+        $P_C['1'] =  $result['1'] / ($totalDataTraining);
         return $P_C;
     }
 
@@ -70,21 +71,26 @@ class CommentBayes
             $arr_query = Rating::select($vertical_column_name)
                 ->where($vertical_column_name, 'like', '%' . ($val) . '%')
                 ->where($nameColumn, $label);
+            // dd($arr_query->pluck($vertical_column_name));
+            $subset = $arr_query->pluck($vertical_column_name)->filter(function ($item) use ($val) {
 
-            $subset = $arr_query->get()->filter(function ($item) use ($val) {
-                if (str_contains($item->content_review, $val)) {
-                    return collect($item)
-                        ->only('content_review')
-                        ->all();
+                if (str_contains($item, $val)) {
+                    return $item;
+                    // dd(collect($item)->only('content_review')->all());
+                    // return collect($item)
+                    //     ->only('content_review')
+                    //     ->all();
                 }
             });
-            $arr_string =  array_column($subset->all(), 'content_review');
+
+            // $arr_string =  array_column($subset->all(), 'content_review');
             if ($nameColumn === 'setinment') {
-                $conditionalProbability[$label] = (float) ($this->wordCount($arr_string, $val) / $this->AmountOfClassData()[$label]);
+                $conditionalProbability[$label] = (float) ($this->wordCount($subset->toArray(), $val) / $this->AmountOfClassData()[$label]);
             } else {
-                $conditionalProbability[$label] = (float) ($this->wordCount($arr_string, $val) / $this->AmountOfClassClothing()[$label]);
+                $conditionalProbability[$label] = (float) ($this->wordCount($subset->toArray(), $val) / $this->AmountOfClassClothing()[$label]);
             }
         }
+
         return $conditionalProbability;
     }
     // hàm doc file vn_stropwords

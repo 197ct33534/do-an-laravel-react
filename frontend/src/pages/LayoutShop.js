@@ -25,10 +25,10 @@ const LayoutShop = () => {
     }
     useEffect(() => {
         dispatch(getCategoryAsync());
-        dispatch(getCategoryAllAsync());
-        dispatch(getProductAsync());
+        // dispatch(getCategoryAllAsync());
+        // dispatch(getProductAsync());
 
-        dispatch(getBrandAsync());
+        // dispatch(getBrandAsync());
     }, [dispatch]);
     // useEffect(() => {
     //     if (user) {
@@ -45,6 +45,9 @@ const LayoutShop = () => {
                 <SpinnerMui />
             </Box>
             <ToastContainer autoClose={3000} />
+            <a href="#" className="btn btn-primary back-to-top" style={{ display: 'inline' }}>
+                <i class="fa fa-angle-double-up"></i>
+            </a>
         </>
     );
 };

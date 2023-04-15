@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\ImageController;
 use App\Http\Controllers\Api\AttributeController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CommentController;
+use App\Http\Controllers\Api\DashBoardController;
 use App\Http\Controllers\Api\OrderController;
 
 /*
@@ -131,4 +132,9 @@ Route::prefix('comments')->middleware('auth:sanctum')->group(function () {
     Route::post('', [CommentController::class, 'postComment']);
     Route::put('', [CommentController::class, 'putComment']);
     Route::get('', [CommentController::class, 'getAllComment']);
+});
+
+Route::prefix('dashboard')->middleware('auth:sanctum')->group(function () {
+
+    Route::get('budget', [DashBoardController::class, 'index']);
 });
