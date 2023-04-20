@@ -18,4 +18,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/comment', [RatingController::class,'index']);
+Route::get('/comment', [RatingController::class, 'index']);
+Route::get('/apriori', [RatingController::class, 'test']);

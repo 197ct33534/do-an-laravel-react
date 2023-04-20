@@ -54,8 +54,6 @@ const CheckOut = () => {
 
     let total = 0;
     const handleSubmitCheckOut = async (data) => {
-        // console.log(removeValuteEmpty(data));
-        // dispatch(postOrderAsync(removeValuteEmpty(data)));
         const res = await fetchpostOrder(removeValuteEmpty(data));
 
         const success = res.data.success;

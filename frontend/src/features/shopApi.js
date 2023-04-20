@@ -34,6 +34,7 @@ export async function fetchgetOrderStatus() {
 export async function fetchgetProductComment(id) {
     return await axios.get(`${URL}/comments/${id}`, config);
 }
+
 export async function fetchgetProductCategory(listParam = '') {
     let str = [];
     if (listParam.category_id) {
@@ -80,4 +81,8 @@ export async function fetchgetProductCategory(listParam = '') {
         }
     });
     return await axios.get(`${URL}/products_cate/filter?${str.join('&')}`, config);
+}
+
+export async function fetchgetProductRecommend() {
+    return await axios.get(`${URL}/products/recommend`, config);
 }

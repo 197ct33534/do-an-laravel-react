@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use  App\Helpers\Apriori\AprioriAlgorithm;
 
 class ProductController extends Controller
 {
@@ -430,13 +431,31 @@ class ProductController extends Controller
 
     public function getDetailProduct($id)
     {
+        $pro = Product::where('product_id', $id)->with(['productItems', 'comments'])->firstOrFail();
+        $data_category = [];
+
+        $cate = Categories::find($pro->category_id);
+
+        $data_category[] = ['name' => $cate->name, 'link' => '/mat-hang/' . $cate->id];
+
+        // $parent_id = '';
+        // while (true) {
+        //     $cate = Categories::find($cate->parent_id);
+        //     array_unshift($data_category, ['name' => $cate->name, 'link' => '/mat-hang/' . $cate->id]);
+
+        //     if (is_null($cate->parent_id)) {
+        //         $parent_id = $cate->id;
+        //         break;
+        //     }
+        // }
+        $data_category[] = ['name' => $pro->product_name, 'link' => '#'];
         $pro = Product::where('product_id', $id)->with(['productItems', 'comments'])->get();
 
         return response()->json([
             'success'   => true,
             'message'   => Lang::get('messages.action_successful', ['action' => 'Lấy chi tiết sản phẩm']),
             'data' =>  ProductResource::collection($pro),
-
+            'category_tree' => $data_category,
         ]);
     }
 
@@ -507,21 +526,30 @@ class ProductController extends Controller
         }
 
 
-        // $filtered_data_collection = $data_products->filter(function ($item) use ($product_id_list_accept) {
-        //     foreach ($item->productItems as $productItem) {
-        //         if (in_array($productItem->id, $product_id_list_accept)) {
-        //             return true;
-        //         }
-        //     }
-        // })->values();
-        // dd($data_products);
-        //paginate($perpage
         return response()->json([
             'success' => true,
             'message'   => Lang::get('messages.action_successful', ['action' => 'Lấy sản phẩm theo danh mụcs']),
             'data_filter' => ['name' => $name_attribute, 'data' => $data_filter],
             'category_tree' => $data_category,
             'data' => new ProductCollection($data_products),
+        ]);
+    }
+
+    public function getProductRecommend()
+    {
+
+        $apriori = new AprioriAlgorithm();
+        $apriori->runApriori();
+        $apriori->associationLawWithApriori();
+        $product_id_recomment = $apriori->productRecommend();
+
+        $productList = Product::whereIn('product_id', $product_id_recomment)->orderBy('created_at', 'desc')->paginate(20);
+
+        return response()->json([
+            'success' => true,
+            'message'   => Lang::get('messages.action_successful', ['action' => 'Lấy sản phẩm đề xuất cho khách hàng']),
+
+            'data' => ProductResource::collection($productList),
         ]);
     }
 }

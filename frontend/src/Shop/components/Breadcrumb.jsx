@@ -9,10 +9,10 @@ const Breadcrumb = ({ PathList }) => {
                     <nav className="breadcrumb bg-light mb-30">
                         {PathList?.map((path, index) =>
                             index == PathList.length - 1 ? (
-                                <span className="breadcrumb-item active">{path.name}</span>
+                                <span className="breadcrumb-item active">{path?.name}</span>
                             ) : (
-                                <Link className="breadcrumb-item text-dark" to={path.link}>
-                                    {path.name}
+                                <Link className="breadcrumb-item text-dark" to={path?.link}>
+                                    {path?.name}
                                 </Link>
                             )
                         )}

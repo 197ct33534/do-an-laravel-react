@@ -9,6 +9,7 @@ import { CartCountAsync, deleteCartAsync, updateCartAsync } from '../../features
 import { configToast } from '../../Helper/Config';
 import { capitalized, numberWithCommas } from '../../Helper/Funtion';
 import Breadcrumb from './Breadcrumb';
+import RecommendProduct from './RecommendProduct';
 const MyCart = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -56,6 +57,7 @@ const MyCart = () => {
         }
     };
     const handleDeleteCart = async (cart_id) => {
+        console.log(cart_id);
         await dispatch(deleteCartAsync(cart_id));
         await dispatch(CartCountAsync());
     };
@@ -264,6 +266,7 @@ const MyCart = () => {
                     </div>
                 </div>
             </div>
+            <RecommendProduct />
         </>
     );
 };

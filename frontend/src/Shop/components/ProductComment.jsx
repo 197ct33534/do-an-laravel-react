@@ -35,7 +35,11 @@ const ProductComment = () => {
                                 <div className="text-primary mb-2">
                                     <Rating defaultValue={cmt.stars_rated} readOnly />
                                 </div>
-                                <p>{cmt.content_review}</p>
+                                <p
+                                    dangerouslySetInnerHTML={{
+                                        __html: cmt && cmt.content_review,
+                                    }}
+                                ></p>
                             </div>
                         </div>
                     </>

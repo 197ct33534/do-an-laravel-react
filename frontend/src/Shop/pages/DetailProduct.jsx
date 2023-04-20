@@ -20,11 +20,11 @@ const DetailProduct = () => {
     const fetchProduct = async (id) => {
         dispatch(pendding());
         const response = await fetchDetailProduct(id);
-
-        if (response.data.data.length) {
-            setProduct(response.data.data);
+        console.log(response?.data?.data);
+        if (response?.data.success) {
+            setProduct(response.data);
         } else {
-            navigate('/notfound');
+            // navigate('/notfound');
         }
         dispatch(done());
     };
@@ -40,10 +40,10 @@ const DetailProduct = () => {
             name: 'Trang chủ',
             link: '/',
         },
-        {
-            name: product ? product[0]['product_name'] : '',
-            link: '#',
-        },
+        // {
+        //     name: product ? product[0]['product_name'] : '',
+        //     link: '#',
+        // },
     ];
     useEffect(() => {
         fetchProduct(id);
@@ -52,8 +52,8 @@ const DetailProduct = () => {
         fetchComments(id + search);
     }, [id, search]);
     return (
-        <ProductDetailContext.Provider value={{ product, comment }}>
-            <Breadcrumb PathList={BreadPath} />
+        <ProductDetailContext.Provider value={{ product: product?.data, comment }}>
+            <Breadcrumb PathList={BreadPath.concat(product?.category_tree)} />
             <ShopDetail />
         </ProductDetailContext.Provider>
     );

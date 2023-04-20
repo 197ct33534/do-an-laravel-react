@@ -1,13 +1,13 @@
-import React, { createContext } from 'react';
+import React, { createContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { categoryListNoParent } from '../../features/shopSlice';
+import { getBrandAsync, getCategoryAllAsync, getProductAsync } from '../../features/shopThunk';
 import Carousel from '../components/Carousel';
 import Categories from '../components/Categories';
 import Option from '../components/Option';
 import Products from '../components/Products';
 import Vendor from '../components/Vendor';
-import { useEffect } from 'react';
-import { getBrandAsync, getCategoryAllAsync, getProductAsync } from '../../features/shopThunk';
+import RecommendProduct from '../components/RecommendProduct';
 export const HomeContext = createContext();
 const Home = () => {
     const dispatch = useDispatch();
@@ -26,6 +26,7 @@ const Home = () => {
             <Option />
             <Categories />
             <Products />
+            <RecommendProduct />
             <Vendor />
         </HomeContext.Provider>
     );

@@ -93,9 +93,12 @@ class CartController extends Controller
         $cart_id = $request->input('cart_id');
         $user = \Auth()->user();
 
-        $cart = Cart::find($cart_id)->where('user_id', $user->id)->first();
+        $cart = Cart::find($cart_id);
+        if ($cart && $cart->user_id = $user->id) {
+            $cart->delete();
+        }
 
-        $cart->delete();
+
         return response()->json([
             'success'   => true,
             'message'   => 'Xóa sản phẩm trong giỏ hàng thành công',
