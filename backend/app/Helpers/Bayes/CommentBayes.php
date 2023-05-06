@@ -12,6 +12,10 @@ use Illuminate\Support\Facades\DB;
 class CommentBayes
 {
     // lấy ra cả dự liệu train
+    public function __construct()
+    {
+        set_time_limit(8000000);
+    }
     public function totalDataTraining()
     {
         return Rating::all()->count();
@@ -116,28 +120,30 @@ class CommentBayes
     // hàm sẽ lấy tất cả các message trả về dưới dạng từng từ trong tất cả các chuỗi
     public function getAllWord($vertical_column_name = 'content_review')
     {
-        $query = Rating::selectRaw("LOWER($vertical_column_name) as content_review")
-            ->get();
-        $str = '';
-        foreach ($query as $val) {
-            $str .= " " . preg_replace('/[+-=\/{}.!@#$%^&*~:();,_\-"`\'|]/', '', $val['content_review']);
-        }
 
-
-        $array_uni = array_unique(explode(" ", $this->clearStr(trim($str))));
-        $result = [];
-        foreach ($array_uni as $val) {
-            if (strlen($val) > 1) {
-                $result[] = $val;
+        $kq = Cache::remember('allword', 24 * 60 * 60 * 30, function () use ($vertical_column_name) {
+            $query = Rating::selectRaw("LOWER($vertical_column_name) as content_review")
+                ->get();
+            $str = '';
+            foreach ($query as $val) {
+                $str .= " " . preg_replace('/[+-=\/{}.!@#$%^&*~:();,_\-"`\'|]/', '', $val['content_review']);
             }
-        }
-        return $result;
+            $array_uni = array_unique(explode(" ", $this->clearStr(trim($str))));
+            $result = [];
+            foreach ($array_uni as $val) {
+                if (strlen($val) > 1) {
+                    $result[] = $val;
+                }
+            }
+            return $result;
+        });
+        return $kq;
     }
 
     // train
     public function train()
     {
-        $bayesComment = Cache::remember('bayes', 24 * 60 * 60 * 7, function () {
+        $bayesComment = Cache::remember('bayes', 24 * 60 * 60 * 30, function () {
             $all_word_train = $this->getAllWord();
             $arr = [];
             $arrClothing = [];
@@ -159,6 +165,7 @@ class CommentBayes
         //    $all_word_train = array_diff(getAllWord(),readFileStopWords());
         $all_word_train = $this->getAllWord();
         $store = $this->train();
+
         $data = $store['bayesComment'];
         $dataClothing = $store['bayesClothing'];
 

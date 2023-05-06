@@ -20,3 +20,4 @@ Route::get('/', function () {
 });
 Route::get('/comment', [RatingController::class, 'index']);
 Route::get('/apriori', [RatingController::class, 'test']);
+Route::get('/importCsv', [RatingController::class, 'importCsv']);
