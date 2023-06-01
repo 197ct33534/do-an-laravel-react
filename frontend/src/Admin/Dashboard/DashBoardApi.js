@@ -10,3 +10,15 @@ const config = {
 export async function fetchGetBudget() {
     return await axios.get(`${URL}/dashboard/budget`, config);
 }
+
+export async function fetchGetMonthlyRevenue() {
+    return await axios.get(`${URL}/dashboard/monthlyRevenue`, config);
+}
+
+export async function fetchGetQuantitySoldOfProduct() {
+    return await axios.get(`${URL}/dashboard/quantitySoldOfProduct`, config);
+}
+
+export async function fetchGetNumberOfCommentTypes() {
+    return await axios.get(`${URL}/dashboard/getNumberOfCommentTypes`, config);
+}

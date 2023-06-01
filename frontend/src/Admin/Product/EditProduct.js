@@ -89,6 +89,7 @@ const EditProduct = () => {
         resetField,
         setValue,
         setError,
+        getValues,
         formState: { errors },
     } = useForm({
         defaultValues: useMemo(() => {
@@ -162,7 +163,7 @@ const EditProduct = () => {
             temp[element] = '';
         });
 
-        setProduct({ ...product, attributes: [{ ...temp }] });
+        setProduct({ ...getValues(), attributes: [{ ...temp }] });
     };
     const handleChangeImage = (e) => {
         if (e.target.files && e.target.files.length > 0) {

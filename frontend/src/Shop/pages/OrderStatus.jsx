@@ -266,79 +266,86 @@ const OrderStatus = () => {
     return (
         <>
             <Breadcrumb PathList={BreadPath} />
-            <div className="col-lg-12">
-                <TableContainer
-                    component={Paper}
-                    style={{ maxWidth: '100%', width: '100%', overflowX: 'auto' }}
-                >
-                    <Table
-                        stickyHeader
-                        aria-label="collapsible table"
-                        sx={{
-                            '& .MuiTableRow-root:hover': {
-                                backgroundColor: '#f5f4e8e3',
-                            },
-                        }}
-                    >
-                        <TableHead>
-                            <TableRow
+            <div className="container-fluid">
+                <div className="row">
+                    <div className="col-lg-12">
+                        <TableContainer
+                            component={Paper}
+                            style={{ maxWidth: '100%', width: '100%', overflowX: 'auto' }}
+                        >
+                            <Table
+                                stickyHeader
+                                aria-label="collapsible table"
                                 sx={{
-                                    '& th': {
-                                        fontSize: '1rem',
-                                        color: '#262626',
-                                        backgroundColor: '#FFE075',
+                                    '& .MuiTableRow-root:hover': {
+                                        backgroundColor: '#f5f4e8e3',
                                     },
                                 }}
                             >
-                                <TableCell sx={{ maxWidth: '5%' }} />
-                                <TableCell>#</TableCell>
-                                <TableCell align="left">Tên</TableCell>
-                                <TableCell>SĐT </TableCell>
-                                <TableCell>Email </TableCell>
-                                <TableCell align="left" style={{ minWidth: '200px' }}>
-                                    Địa chỉ
-                                </TableCell>
-                                <TableCell align="left" style={{ minWidth: '100px' }}>
-                                    Ngày đặt
-                                </TableCell>
-                                <TableCell align="right" style={{ minWidth: '150px' }}>
-                                    Tổng tiền
-                                </TableCell>
-                                <TableCell align="left" style={{ minWidth: '200px' }}>
-                                    Trạng thái
-                                </TableCell>
-                                <TableCell align="right" style={{ minWidth: '200px' }}>
-                                    Thanh toán
-                                </TableCell>
+                                <TableHead>
+                                    <TableRow
+                                        sx={{
+                                            '& th': {
+                                                fontSize: '1rem',
+                                                color: '#262626',
+                                                backgroundColor: '#FFE075',
+                                            },
+                                        }}
+                                    >
+                                        <TableCell sx={{ maxWidth: '5%' }} />
+                                        <TableCell>#</TableCell>
+                                        <TableCell align="left">Tên</TableCell>
+                                        <TableCell>SĐT </TableCell>
+                                        <TableCell>Email </TableCell>
+                                        <TableCell align="left" style={{ minWidth: '200px' }}>
+                                            Địa chỉ
+                                        </TableCell>
+                                        <TableCell align="left" style={{ minWidth: '100px' }}>
+                                            Ngày đặt
+                                        </TableCell>
+                                        <TableCell align="right" style={{ minWidth: '150px' }}>
+                                            Tổng tiền
+                                        </TableCell>
+                                        <TableCell align="left" style={{ minWidth: '200px' }}>
+                                            Trạng thái
+                                        </TableCell>
+                                        <TableCell align="right" style={{ minWidth: '200px' }}>
+                                            Thanh toán
+                                        </TableCell>
 
-                                {/* <TableCell align="right" sx={{ width: '8%' }}>
+                                        {/* <TableCell align="right" sx={{ width: '8%' }}>
                                 Hành động
                             </TableCell> */}
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {data?.data?.map((row, key) => (
-                                <Row
-                                    key={row.order_id}
-                                    row={row}
-                                    stt={
-                                        (data?.pagination.current_page - 1) *
-                                            data?.pagination.per_page +
-                                        (key + 1)
-                                    }
-                                    handleOpenNewTab={handleOpenNewTab}
-                                />
-                            ))}
-                            {!data?.data && (
-                                <TableRow>
-                                    <TableCell colSpan={9} align="center">
-                                        <Typography variant="h5"> Chưa có đơn hàng nào</Typography>
-                                    </TableCell>
-                                </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {data?.data?.map((row, key) => (
+                                        <Row
+                                            key={row.order_id}
+                                            row={row}
+                                            stt={
+                                                (data?.pagination.current_page - 1) *
+                                                    data?.pagination.per_page +
+                                                (key + 1)
+                                            }
+                                            handleOpenNewTab={handleOpenNewTab}
+                                        />
+                                    ))}
+                                    {!data?.data && (
+                                        <TableRow>
+                                            <TableCell colSpan={9} align="center">
+                                                <Typography variant="h5">
+                                                    {' '}
+                                                    Chưa có đơn hàng nào
+                                                </Typography>
+                                            </TableCell>
+                                        </TableRow>
+                                    )}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </div>
+                </div>
             </div>
         </>
     );

@@ -110,6 +110,7 @@ class ProductController extends Controller
             }
 
             $filtered = array_values(Arr::except($val, ['sku', 'qty', 'image']));
+
             foreach ($filtered as $k => $v) {
                 $attributeProduct = new AttributeProductValue();
                 $attributeProduct->product_item_id = $product_item->id;

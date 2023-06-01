@@ -57,7 +57,7 @@ const Products = () => {
                                     {product.product_name}
                                 </Link>
                                 <div className="d-flex align-items-center justify-content-center mt-2">
-                                    <h5>{numberWithCommas(product.product_price)}</h5>
+                                    <h5>{numberWithCommas(product.product_price)} đ</h5>
                                     {/* <h6 className="text-muted ml-2">
                                         <del>$123.00</del>
                                     </h6> */}

@@ -137,4 +137,7 @@ Route::prefix('comments')->middleware('auth:sanctum')->group(function () {
 Route::prefix('dashboard')->middleware('auth:sanctum')->group(function () {
 
     Route::get('budget', [DashBoardController::class, 'index']);
+    Route::get('monthlyRevenue', [DashBoardController::class, 'getMonthlyRevenue']);
+    Route::get('quantitySoldOfProduct', [DashBoardController::class, 'getQuantitySoldOfProduct']);
+    Route::get('getNumberOfCommentTypes', [DashBoardController::class, 'getNumberOfCommentTypes']);
 });

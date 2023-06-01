@@ -8,10 +8,10 @@ import OwlCarousel from 'react-owl-carousel';
 const options = {
     loop: true,
     center: true,
-    items: 4,
+
     margin: 16,
     autoplay: true,
-    dots: true,
+    dots: false,
     autoplayTimeout: 8500,
     smartSpeed: 450,
     nav: false,
@@ -29,6 +29,7 @@ const options = {
 };
 const RecommendProduct = () => {
     const { recommendProduct } = useContext(LayoutShopContext);
+    console.log(recommendProduct);
 
     return (
         <>
@@ -71,7 +72,7 @@ const RecommendProduct = () => {
                                                 </Link>
                                                 <div className="d-flex align-items-center justify-content-center mt-2">
                                                     <h5>
-                                                        {numberWithCommas(product.product_price)}
+                                                        {numberWithCommas(product.product_price)} đ
                                                     </h5>
                                                 </div>
                                                 <div className="d-flex align-items-center justify-content-center mb-1">

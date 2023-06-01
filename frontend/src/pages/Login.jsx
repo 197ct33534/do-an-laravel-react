@@ -58,14 +58,14 @@ const Login = () => {
         await dispatch(loginAsync(data));
     };
     const back = localStorage.getItem('back');
-  
+
     // kiểm tra đã login và có token thì sẽ chuyển trang
     useEffect(() => {
         if (isLogggedin && localStorage.getItem('token')) {
             Promise.resolve().then(function () {
                 localStorage.setItem('userInfo', JSON.stringify(userInfo.data));
                 const back = localStorage.getItem('back');
-          
+
                 if (back) {
                     navigate(back);
                 }
@@ -77,17 +77,17 @@ const Login = () => {
             });
         }
     }, [isLogggedin, navigate, userInfo]);
-
     useEffect(() => {
         setContentAlert(error?.message);
         setOpenAlert(true);
     }, [error, setOpenAlert, contentAlert]);
     return (
-        <>
+        <div>
             {/* <ThemeProvider theme={theme}>
                 <Container component="main" maxWidth="md"> */}
-            <Box>
-                {/* <CssBaseline /> */}
+
+            <Box sx={{ backgroundColor: 'white', height: '100vh' }}>
+                <CssBaseline />
                 <Box
                     sx={{
                         marginTop: 8,
@@ -219,7 +219,7 @@ const Login = () => {
             </Box>
             {/* </Container>
             </ThemeProvider> */}
-        </>
+        </div>
     );
 };
 

@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Helpers\Bayes\CommentBayes;
 use  App\Helpers\Apriori\AprioriAlgorithm;
+use App\Models\OrderItem;
+use App\Models\Orders;
+use App\Models\Product;
 use App\Models\Rating;
 
 class RatingController extends Controller
@@ -12,16 +15,26 @@ class RatingController extends Controller
     public function index()
     {
         $bayes = new CommentBayes();
-        // dd(($bayes->train()));
-        dd($bayes->posteriorProbability("Hàng xấu lắm KO NÊN MUA nha Phần tay áo may bị đùn lại Vải xấu, mỏng xuyên thấu và màu khác trong hình 1 trời 1 vực luôn"));
+        dd($bayes->posteriorProbability("
+        Quá đẹp, hàng chất lượng, độn 6 phân.đi rất êm chân.cảm ơn shop Chất lượng sản phẩm tuyệt vời        "));
     }
-
+    public function postComment()
+    {
+        dd(13);
+        $bayes = new CommentBayes();
+        return ($bayes->posteriorProbability(request()->input('comment')));
+    }
+    public function testComment()
+    {
+        return view('comment');
+    }
     public function test()
     {
+
         $apriori = new AprioriAlgorithm();
-        $apriori->runApriori();
+        //$apriori->runApriori();
         $apriori->associationLawWithApriori();
-        // $apriori->productRecommend();
+        $apriori->productRecommend();
     }
 
     public function importCsv()
@@ -54,5 +67,44 @@ class RatingController extends Controller
         }
 
         return $data;
+    }
+
+    public function fakeOrder()
+    {
+
+        $listOrderDetail = [
+            'D000000014' => 254,
+            'V000000013' => 175, 'D000000012' => 252,
+            'V000000012' => 170,  'B000000002' => 256,
+        ];
+        $data_info_user_order = [
+            'user_id' => 403,
+            'name' => 'diem',
+            'email' => 'diem@gmail.com',
+            'phone' => '0911919309',
+            'address' => 'quận 2',
+            'total_price' => '1513000',
+            'payment_type' => '1',
+            'status' => '3',
+        ];
+        for ($i = 0; $i < 10; $i++) {
+            $order =  Orders::create(
+                $data_info_user_order
+            );
+            foreach ($listOrderDetail as $key => $id) {
+                $row = ([
+                    'order_id' => $order->id,
+                    'prod_id' => $id,
+                    'product_id' => $key,
+                    'qty' => 1,
+                    'price' => Product::where('product_id', $key)->first()->product_price,
+                ]);
+                // dd($row);
+                $order_item = OrderItem::create(
+                    $row
+                );
+            }
+        }
+        dd(123);
     }
 }

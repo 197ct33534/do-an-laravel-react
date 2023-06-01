@@ -74,7 +74,7 @@ const Sidebar = ({ collapsed, toggled, handleToggleSidebar, handleCollapsedChang
                         suffix={<span className="badge pink">NEW</span>}
                     >
                         Tổng quan
-                        <NavLink to="/" />
+                        <NavLink to="/admin" />
                     </MenuItem>
                     {/* <MenuItem icon={<FaGem />}>Components </MenuItem> */}
                     <MenuItem icon={<FaHeart />}>

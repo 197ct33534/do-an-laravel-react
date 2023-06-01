@@ -137,6 +137,7 @@ class CommentBayes
             }
             return $result;
         });
+
         return $kq;
     }
 

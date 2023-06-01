@@ -214,12 +214,13 @@ const CheckOut = () => {
                                                             {numberWithCommas(
                                                                 product.product_price
                                                             )}
+                                                            đ
                                                         </span>
                                                         <br />
                                                         <span>x {product.prod_qty}</span>
                                                         <br />
                                                         <span>
-                                                            {` ${numberWithCommas(totalproduct)}`}
+                                                            {` ${numberWithCommas(totalproduct)}`}đ
                                                         </span>
                                                     </p>
                                                 </div>
@@ -230,7 +231,7 @@ const CheckOut = () => {
                                 <div className="border-bottom pt-3 pb-2">
                                     <div className="d-flex justify-content-between mb-3">
                                         <h6>Tổng </h6>
-                                        <h6>{numberWithCommas(total)}</h6>
+                                        <h6>{numberWithCommas(total)}đ</h6>
                                     </div>
                                     <div className="d-flex justify-content-between">
                                         <h6 className="font-weight-medium">Phí giao hàng</h6>
@@ -246,12 +247,13 @@ const CheckOut = () => {
                                             {total > 500000
                                                 ? numberWithCommas(total)
                                                 : numberWithCommas(total + 30000)}
+                                            đ
                                         </h5>
                                     </div>
                                 </div>
                                 <div className="pt-2">
                                     <p style={{ color: 'red', fontStyle: 'italic' }}>
-                                        Lưu ý: Hóa đơn trên {numberWithCommas(500000)} sẽ được
+                                        Lưu ý: Hóa đơn trên {numberWithCommas(500000)}đ sẽ được
                                         freeship trên toàn quốc
                                     </p>
                                 </div>

@@ -137,7 +137,7 @@ const ShopDetailInfo = () => {
                         <small className="pt-1">({product.vote_count} đánh giá)</small>
                     </div>
                     <h3 className="font-weight-semi-bold mb-4">
-                        {numberWithCommas(product.product_price)}
+                        {numberWithCommas(product.product_price)} đ
                     </h3>
                     <div className="shopdetail-grid mb-4">
                         <strong>Thương hiệu :</strong>

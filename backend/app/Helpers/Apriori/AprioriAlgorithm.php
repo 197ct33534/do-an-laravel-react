@@ -6,6 +6,7 @@ use App\Models\OrderItem;
 use App\Models\Cart;
 
 use App\Models\Orders;
+use Illuminate\Support\Facades\Cache;
 
 class AprioriAlgorithm
 {
@@ -16,7 +17,11 @@ class AprioriAlgorithm
     public $data;
     public function __construct()
     {
+
+        ini_set('memory_limit', '2096M');
+        set_time_limit(8000000);
         $orders = OrderItem::all()->groupBy('order_id', true);
+
         $result = [];
         foreach ($orders as $item) {
             $result[] = $item->pluck('product_id')->toArray();
@@ -46,6 +51,7 @@ class AprioriAlgorithm
                 $result[$key] = $value;
             }
         }
+
         return $result;
     }
     // hàm lấy tập ứng viên;
@@ -66,8 +72,9 @@ class AprioriAlgorithm
         return $this->checkMinSupport($arrLi);
     }
     // hàm dùng để lấy tập ứng viên
-    function powerSet($array, $size)
+    public function powerSet($array, $size)
     {
+
         // add the empty set
         $results = [[]];
 
@@ -77,6 +84,7 @@ class AprioriAlgorithm
                 $results[] = array_merge(array($element), $combination);
             }
         }
+
         $kq = [];
         foreach ($results as $val) {
             if (count($val) === $size) {
@@ -168,8 +176,10 @@ class AprioriAlgorithm
         $getData = $this->getCadidates();
 
         $this->L = $getData;
+
         $size = 2;
         $arr = [];
+        $this->powerSet(array_keys($getData), $size);
         while (($arr = $this->powerSet(array_keys($getData), $size))) {
             //1
             // echo "bước phát sinh thứ $size </br>";
@@ -199,6 +209,9 @@ class AprioriAlgorithm
             // echo '</pre>';
             // die();
             $size++;
+            if ($size == 5) {
+                break;
+            }
         }
         // echo '<pre>';
         // print_r($this->L);
@@ -220,30 +233,34 @@ class AprioriAlgorithm
 
     public function associationLawWithApriori()
     {
-        $result = [];
 
-        foreach ($this->L as $key => $val) {
-            $arrKey = explode(',', $key);
-            if (count($arrKey) === 1) {
-                continue;
-            }
-            $table = [];
-            $association = $this->associationLaw($arrKey);
-            foreach ($association as $k => $v) {
-                $kq = $val / $this->L[$k];
-                if ($kq >= $this->minConf) {
-                    $table["$k->$v"] =  $kq;
+        $kq = Cache::remember('apriori', 24 * 60 * 60 * 30, function () {
+            $result = [];
+            foreach ($this->L as $key => $val) {
+                $arrKey = explode(',', $key);
+                if (count($arrKey) === 1) {
+                    continue;
+                }
+                $table = [];
+                $association = $this->associationLaw($arrKey);
+                foreach ($association as $k => $v) {
+                    $kq = $val / $this->L[$k];
+                    if ($kq >= $this->minConf) {
+                        $table["$k->$v"] =  $kq;
+                    }
+                }
+                if (!empty($table)) {
+                    $result[$key] = $table;
                 }
             }
-            if (!empty($table)) {
-                $result[$key] = $table;
-            }
-        }
+            return $result;
+        });
+
         //3
         // echo '<pre>';
         // print_r($result);
         // echo '</pre>';
-        $this->result_ariori = $result;
+        $this->result_ariori = $kq;
     }
 
     public function productRecommend()

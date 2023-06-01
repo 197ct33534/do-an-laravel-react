@@ -131,7 +131,7 @@ const MyCart = () => {
                                                     )}
                                                 </td>
                                                 <td className="align-middle">
-                                                    {numberWithCommas(product.product_price)}
+                                                    {numberWithCommas(product.product_price)}đ
                                                 </td>
                                                 <td className="align-middle">
                                                     <div
@@ -193,6 +193,7 @@ const MyCart = () => {
                                                     {numberWithCommas(
                                                         product.product_price * product.prod_qty
                                                     )}
+                                                    đ
                                                 </td>
                                                 <td className="align-middle">
                                                     <button

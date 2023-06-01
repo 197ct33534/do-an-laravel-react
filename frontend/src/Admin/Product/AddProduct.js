@@ -64,7 +64,7 @@ const AddProduct = () => {
     const { sku, image, qty, ...rest } = product.attributes[0];
 
     const schema = yup.object(ruleAddProduct(Object.keys(rest))).required();
-    const { control, handleSubmit, resetField } = useForm({
+    const { control, handleSubmit, resetField, reset, setValue, getValues } = useForm({
         defaultValues: useMemo(() => {
             return product;
         }, [product]),
@@ -75,6 +75,7 @@ const AddProduct = () => {
         name: 'attributes',
     });
     const handleSubmitForm = async (formValues) => {
+        console.log(formValues);
         const formData = new FormData();
         formData.append('product_name', formValues.product_name);
         if (desc) {
@@ -101,7 +102,9 @@ const AddProduct = () => {
         if (selectedImage) {
             formData.append('product_image', selectedImage);
         }
-
+        for (var pair of formData.entries()) {
+            console.log(pair[0] + ', ' + pair[1]);
+        }
         const response = await fetchPostProduct(formData);
 
         const success = response.data?.success;
@@ -126,8 +129,9 @@ const AddProduct = () => {
         attrSet?.map((element) => {
             temp[element] = '';
         });
-
-        setProduct({ ...product, attributes: [{ ...temp }] });
+        // console.log(getValues());
+        // console.log({ ...getValues(), attributes: [{ ...temp }] });
+        setProduct({ ...getValues(), attributes: [{ ...temp }] });
     };
     const handleChangeImage = (e) => {
         if (e.target.files && e.target.files.length > 0) {
@@ -198,11 +202,13 @@ const AddProduct = () => {
         dispatch(done());
     }
     useEffect(() => {
+        reset(product);
+    }, [product]);
+    useEffect(() => {
         fetchList();
     }, []);
-
     return (
-        <>
+        <div style={{ backgroundColor: 'white' }}>
             <Typography variant="h5">Thêm Sản Phẩm</Typography>
             <Box mt={3} textAlign="left">
                 <Button
@@ -611,7 +617,7 @@ const AddProduct = () => {
                     </Box>
                 </form>
             </Box>
-        </>
+        </div>
     );
 };
 

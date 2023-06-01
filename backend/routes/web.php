@@ -18,6 +18,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/comment', [RatingController::class, 'index']);
 Route::get('/apriori', [RatingController::class, 'test']);
+Route::get('/fakeOrder', [RatingController::class, 'fakeOrder']);
+Route::get('/comment', [RatingController::class, 'index']);
+Route::get('/test-comment', [RatingController::class, 'testComment']);
+Route::post('/post-comment', [RatingController::class, 'postComment'])->name('postComment');
+
 Route::get('/importCsv', [RatingController::class, 'importCsv']);

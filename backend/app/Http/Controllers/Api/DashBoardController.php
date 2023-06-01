@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\OrderItem;
 use App\Models\Orders;
 use App\Models\Rating;
 use App\Models\User;
@@ -71,5 +72,64 @@ class DashBoardController extends Controller
 
             ]
         ]);
+    }
+
+    public function getMonthlyRevenue()
+    {
+        $order = Orders::selectRaw('year(updated_at) year, month(updated_at) month,sum(total_price) AS total_price,count(status) as count_success')
+            ->whereRaw('year(updated_at) =' . date('Y') . ' and month(updated_at) <=' . date('m'))
+            ->groupBy('year', 'month')
+            ->orderBy('month', 'asc')
+            ->where('status', '3')->get();
+
+        return response()->json(
+            [
+                'labels' => $order->pluck('month'),
+                'data' => $order->pluck('total_price'),
+                'count_success' => $order->pluck('count_success'),
+            ]
+        );
+    }
+
+    public function getQuantitySoldOfProduct()
+    {
+        $productList =  OrderItem::join('mst_product', 'mst_product.product_id', 'order_items.product_id')
+            ->selectRaw('sum(qty) as count_sold_product, order_items.product_id , mst_product.product_name')
+            ->groupBy(['product_name', 'order_items.product_id'])
+
+            ->orderBy('count_sold_product', 'desc')
+            ->get();
+        return response()->json(
+            [
+                'labels' => $productList->pluck('product_name'),
+                'data' => $productList->pluck('count_sold_product'),
+            ]
+        );
+    }
+
+    public function getNumberOfCommentTypes()
+    {
+        $comment_setinment = Rating::where('order_id', '!=', 0)
+            ->selectRaw('setinment as type, count(*) AS SL')
+            ->groupBy('type')
+            ->orderBy('type', 'desc')
+            ->get();
+
+        $comment_star = Rating::where('order_id', '!=', 0)
+            ->selectRaw('stars_rated as star, count(*) AS SL')
+            ->groupBy('star')
+            ->orderBy('star', 'desc')
+            ->get();
+
+        return response()->json(
+            [
+                'labels_setinment' => $comment_setinment->pluck('type'),
+                'data_setinment' => $comment_setinment->pluck('SL'),
+
+                'labels_star' => $comment_star->pluck('star'),
+                'data_star' => $comment_star->pluck('SL'),
+
+            ]
+        );
     }
 }

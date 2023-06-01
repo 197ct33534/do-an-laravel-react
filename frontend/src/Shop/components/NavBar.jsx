@@ -48,15 +48,6 @@ const NavBar = () => {
                             </div>
                         </Link>
                         <div className="d-sm-block d-lg-none">
-                            <Link to="" className="btn px-0">
-                                <i className="fas fa-heart text-primary"></i>
-                                <span
-                                    className="badge text-secondary border border-secondary rounded-circle"
-                                    style={{ paddingBottom: '2px' }}
-                                >
-                                    0
-                                </span>
-                            </Link>
                             <Link to="/gio-hang" className="btn px-0 ml-3">
                                 <i className="fas fa-shopping-cart text-primary"></i>
                                 <span
@@ -76,15 +67,6 @@ const NavBar = () => {
                                 <ListMenu />
                             </div>
                             <div className="navbar-nav ml-auto py-0 d-none d-lg-block">
-                                <Link to="" className="btn px-0" title="Sản phẩm yêu thích">
-                                    <i className="fas fa-heart text-primary"></i>
-                                    <span
-                                        className="badge text-secondary border border-secondary rounded-circle"
-                                        style={{ paddingBottom: '2px' }}
-                                    >
-                                        0
-                                    </span>
-                                </Link>
                                 <Link to="/gio-hang" className="btn px-0 ml-3" title="Giỏ hàng">
                                     <i className="fas fa-shopping-cart text-primary"></i>
                                     <span
