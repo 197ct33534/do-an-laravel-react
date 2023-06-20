@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { useContext } from 'react';
-import { LayoutShopContext } from '../../pages/LayoutShop';
-import { numberWithCommas } from '../../Helper/Funtion';
-import { Link } from 'react-router-dom';
 import { Rating } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import OwlCarousel from 'react-owl-carousel';
-import { fetchgetProductRecommend } from '../../features/shopApi';
+import { Link } from 'react-router-dom';
+import { numberWithCommas } from '../../Helper/Funtion';
+import { fetchgetProductSameCate } from '../../features/shopApi';
 const options = {
     loop: true,
-    center: true,
+    center: false,
 
     margin: 16,
     autoplay: true,
@@ -28,32 +26,31 @@ const options = {
         },
     },
 };
-const RecommendProduct = ({ product_id }) => {
-    // const { recommendProduct } = useContext(LayoutShopContext);
-    const [recommendProduct, setRecommendProduct] = useState();
-    const fetchProductRecommend = async () => {
-        if (product_id) {
-            const res = await fetchgetProductRecommend(product_id);
+const SameProduct = ({ category_id }) => {
+    const [product, setProduct] = useState();
+    const fetchProductSameCate = async () => {
+        if (category_id) {
+            const res = await fetchgetProductSameCate(category_id);
             if (res.data.success) {
-                setRecommendProduct(res.data.data);
+                setProduct(res.data.data);
             }
         }
     };
     useEffect(() => {
-        fetchProductRecommend();
-    }, [product_id]);
+        fetchProductSameCate();
+    }, [category_id]);
     return (
         <>
-            {recommendProduct?.length > 0 && (
+            {product?.length > 0 && (
                 <div className="container-fluid pt-5">
                     <h2 className="section-title position-relative text-uppercase mx-xl-5 mb-4">
-                        <span className="bg-secondary pr-3">Đề xuất từ cửa hàng</span>
+                        <span className="bg-secondary pr-3">Các sản phẩm có cùng mặt hàng</span>
                     </h2>
                     <div className="row px-xl-5 pb-3">
                         <div className="col-md-12">
                             <OwlCarousel className="owl-carousel owl-theme" {...options}>
-                                {recommendProduct?.length > 0 &&
-                                    recommendProduct?.map((product) => (
+                                {product?.length > 0 &&
+                                    product?.map((product) => (
                                         // <div
                                         //     className="col-lg-3 col-md-4 col-sm-6 pb-1"
                                         //     key={'product' + product.product_id}
@@ -107,4 +104,4 @@ const RecommendProduct = ({ product_id }) => {
     );
 };
 
-export default RecommendProduct;
+export default SameProduct;

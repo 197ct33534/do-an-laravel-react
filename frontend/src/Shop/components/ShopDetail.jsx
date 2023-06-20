@@ -7,11 +7,12 @@ import ProductComment from './ProductComment';
 import ShopDetailImage from './ShopDetailImage';
 import ShopDetailInfo from './ShopDetailInfo';
 import RecommendProduct from './RecommendProduct';
+import SameProduct from './SameProduct';
 
 const ShopDetail = () => {
     var { product, comment } = useContext(ProductDetailContext);
     product = product ? product[0] : false;
-
+    console.log(product);
     const { hash, search } = useLocation();
     let hashtag = hash ?? '';
     if (search) {
@@ -89,7 +90,8 @@ const ShopDetail = () => {
                     </div>
                 </div>
             </div>
-            <RecommendProduct />
+            <RecommendProduct product_id={product.product_id} />
+            <SameProduct category_id={product.category_id} />
         </div>
     );
 };

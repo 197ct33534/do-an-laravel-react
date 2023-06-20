@@ -15,8 +15,9 @@ class RatingController extends Controller
     public function index()
     {
         $bayes = new CommentBayes();
+        // dd($bayes->train());
         dd($bayes->posteriorProbability("
-        Quá đẹp, hàng chất lượng, độn 6 phân.đi rất êm chân.cảm ơn shop Chất lượng sản phẩm tuyệt vời        "));
+        Kiểu dáng váy đẹp nhưng mà hơi hơi mỏng nha. Nói chung là cũng tạm được"));
     }
     public function postComment()
     {
@@ -32,22 +33,23 @@ class RatingController extends Controller
     {
 
         $apriori = new AprioriAlgorithm();
-        //$apriori->runApriori();
-        $apriori->associationLawWithApriori();
-        $apriori->productRecommend();
+
+        $apriori->runApriori();
+        dd($apriori->associationLawWithApriori());
+        // $apriori->productRecommend();
     }
 
     public function importCsv()
     {
-        $file = public_path('file/data.csv');
+        $file = public_path('file/data1.csv');
 
         $commentArr = $this->csvToArray($file);
-
+        // dd($commentArr);
         // for ($i = 0; $i < count($commentArr); $i++) {
-        //     Rating::firstOrCreate($commentArr[$i]);
+        //     Rating::create($commentArr[$i]);
         // }
 
-        return 'Jobi done or what ever';
+        return 'insert data successful';
     }
     function csvToArray($filename = '', $delimiter = ',')
     {

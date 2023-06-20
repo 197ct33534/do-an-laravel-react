@@ -83,6 +83,16 @@ export async function fetchgetProductCategory(listParam = '') {
     return await axios.get(`${URL}/products_cate/filter?${str.join('&')}`, config);
 }
 
-export async function fetchgetProductRecommend() {
-    return await axios.get(`${URL}/products/recommend`, config);
+export async function fetchgetProductRecommend(product_id) {
+    return await axios.get(`${URL}/products/recommend/${product_id}`, config);
+}
+export async function fetchgetTopSearchProduct() {
+    return await axios.get(`${URL}/products/topSearch`, config);
+}
+export async function fetchgetProductSameCate(cate_id) {
+    return await axios.get(`${URL}/products/sameCate/${cate_id}`, config);
+}
+
+export async function fetchgetAllProduct() {
+    return await axios.get(`${URL}/products/inputSearch`, config);
 }

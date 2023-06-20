@@ -1,7 +1,12 @@
 import React, { createContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { categoryListNoParent } from '../../features/shopSlice';
-import { getBrandAsync, getCategoryAllAsync, getProductAsync } from '../../features/shopThunk';
+import {
+    getBrandAsync,
+    getCategoryAllAsync,
+    getProductAsync,
+    getProductTopSearchAsync,
+} from '../../features/shopThunk';
 import Carousel from '../components/Carousel';
 import Categories from '../components/Categories';
 import Option from '../components/Option';
@@ -16,7 +21,7 @@ const Home = () => {
     useEffect(() => {
         // dispatch(getCategoryAsync());
         dispatch(getCategoryAllAsync());
-        dispatch(getProductAsync());
+        dispatch(getProductTopSearchAsync());
 
         dispatch(getBrandAsync());
     }, [dispatch]);

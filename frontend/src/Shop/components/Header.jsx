@@ -1,8 +1,28 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import InputField from '../../components/Form/InputField';
+import React, { useState, memo, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
+import { fetchgetAllProduct } from '../../features/shopApi';
 
 const Header = () => {
+    const navidate = useNavigate();
+    const [options, setOptions] = useState();
+
+    const getDataProduct = async () => {
+        const respone = await fetchgetAllProduct();
+        if (respone.status) {
+            setOptions(respone.data.data);
+        }
+    };
+    const handleChange = (newValue) => {
+        if (newValue) {
+            navidate('san-pham/' + newValue.product_id);
+        }
+    };
+    useEffect(() => {
+        getDataProduct();
+    }, []);
     return (
         <div className="container-fluid">
             <div className="row align-items-center bg-light py-3 px-xl-5 d-none d-lg-flex">
@@ -15,7 +35,7 @@ const Header = () => {
                     </Link>
                 </div>
                 <div className="col-lg-4 col-6 text-left">
-                    <form action="">
+                    {/* <form action="">
                         <div className="input-group">
                             <input
                                 type="text"
@@ -29,7 +49,24 @@ const Header = () => {
                                 </span>
                             </div>
                         </div>
-                    </form>
+                    </form> */}
+                    <Autocomplete
+                        // width="100%"
+                        // value={value}
+                        onChange={(event, newValue) => {
+                            handleChange(newValue);
+                        }}
+                        getOptionLabel={(option) => option?.product_name}
+                        // inputValue={inputValue}
+                        // onInputChange={(event, newInputValue) => {
+                        //     console.log(newInputValue);
+                        //     setInputValue(newInputValue);
+                        // }}
+                        id="controllable-states-demo"
+                        options={options ?? []}
+                        noOptionsText="Không tìm thấy kết quả"
+                        renderInput={(params) => <TextField {...params} label="Tìm kiếm" />}
+                    />
                 </div>
                 <div className="col-lg-4 col-6 text-right">
                     <p className="m-0">Hotline</p>
@@ -40,4 +77,4 @@ const Header = () => {
     );
 };
 
-export default Header;
+export default memo(Header);

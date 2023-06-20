@@ -6,6 +6,7 @@ import {
     getCategoryAllAsync,
     getCategoryAsync,
     getProductAsync,
+    getProductTopSearchAsync,
     postOrderAsync,
 } from './shopThunk';
 const initialState = {
@@ -41,12 +42,12 @@ export const shopSlice = createSlice({
                 state.brandList = action.payload.data;
             })
             // product trang home
-            .addCase(getProductAsync.pending, (state) => {
+            .addCase(getProductTopSearchAsync.pending, (state) => {
                 state.load = 'loading';
             })
-            .addCase(getProductAsync.fulfilled, (state, action) => {
+            .addCase(getProductTopSearchAsync.fulfilled, (state, action) => {
                 state.load = 'idle';
-                state.productList = action.payload.data.data;
+                state.productList = action.payload.data;
             })
 
             // category trang home

@@ -6,6 +6,7 @@ import {
     fetchAddCart,
     fetchCartCount,
     fetchDeleteCartCount,
+    fetchgetTopSearchProduct,
     fetchpostOrder,
     fetchPutCartCount,
 } from './shopApi';
@@ -16,6 +17,10 @@ export const getBrandAsync = createAsyncThunk('brand/get', async () => {
 });
 export const getProductAsync = createAsyncThunk('product/get', async () => {
     const response = await fetchGetFilterProduct({ perPage: 8, page: 1 });
+    return response.data;
+});
+export const getProductTopSearchAsync = createAsyncThunk('product/getTopSearch', async () => {
+    const response = await fetchgetTopSearchProduct();
     return response.data;
 });
 export const getCategoryAllAsync = createAsyncThunk('categoryAll/get', async () => {

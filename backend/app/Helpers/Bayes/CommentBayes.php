@@ -72,10 +72,13 @@ class CommentBayes
     {
         $conditionalProbability = [];
         foreach ($arrLabel as $label) {
-            $arr_query = Rating::select($vertical_column_name)
-                ->where($vertical_column_name, 'like', '%' . ($val) . '%')
-                ->where($nameColumn, $label);
-            // dd($arr_query->pluck($vertical_column_name));
+            // $arr_query = Rating::select($vertical_column_name)
+            //     ->where($vertical_column_name, 'like', '%' . ($val) . '%')
+            //     ->where($nameColumn, $label);
+            $word = '%' . ($val) . '%';
+            $arr_query = collect(DB::select("SELECT LOWER(content_review) AS content_review FROM ratings
+            WHERE $vertical_column_name LIKE '%$val%' AND $nameColumn = $label"));
+
             $subset = $arr_query->pluck($vertical_column_name)->filter(function ($item) use ($val) {
 
                 if (str_contains($item, $val)) {
@@ -146,6 +149,7 @@ class CommentBayes
     {
         $bayesComment = Cache::remember('bayes', 24 * 60 * 60 * 30, function () {
             $all_word_train = $this->getAllWord();
+
             $arr = [];
             $arrClothing = [];
             foreach ($all_word_train as $val) {
@@ -170,16 +174,18 @@ class CommentBayes
         $data = $store['bayesComment'];
         $dataClothing = $store['bayesClothing'];
 
-        $clear_str =  $this->clearStr($str);
+        $clear_str =  trim($this->clearStr($str));
         //    $arr_word = array_unique(array_diff( explode(' ',$clear_str),readFileStopWords()));
-        $arr_word = array_unique(explode(' ', $clear_str));
+        // $arr_word = array_unique(explode(' ', $clear_str));
         $P_1 = [];
         $P_0 = [];
         $P_am = [];
         $P_clothing_1 = [];
         $P_clothing_0 = [];
+
+
         foreach ($all_word_train as $key => $val) {
-            if (in_array($val, $arr_word) && str_contains($clear_str, $val)) {
+            if (str_contains($clear_str, $val)) {
                 $P_1[] = $data[$val]['1'] > 0 ? $data[$val]['1'] : (1 - $data[$val]['1']);
                 $P_0[] =  $data[$val]['0']  > 0 ? $data[$val]['0'] : (1 - $data[$val]['0']);
                 $P_am[] =  $data[$val]['-1'] > 0 ? $data[$val]['-1'] : (1 - $data[$val]['-1']);
@@ -195,15 +201,18 @@ class CommentBayes
         }
 
         $temp = $this->priorProbability();
+        // dd($data, $P_1);
+
         $result['so1'] = $this->multiplyElementsInArr($P_1);
         $result['so0'] = $this->multiplyElementsInArr($P_0);
         $result['soam'] = $this->multiplyElementsInArr($P_am);
-
+        // dd($result);
         $tempClothing = $this->priorProbabilityOfClothes();
         $result['clothing-1'] = $this->multiplyElementsInArr($P_clothing_1);
         $result['clothing-0'] = $this->multiplyElementsInArr($P_clothing_0);
 
         $mauSo = ($result['so1'] * $temp['1']) + ($result['so0'] * $temp['0']) + ($result['soam'] * $temp['-1']);
+
         $mauSoClothing =  ($result['clothing-1'] * $tempClothing['1']) + ($result['clothing-0'] * $tempClothing['0']);
 
         $result['1'] = ($result['so1'] * $temp['1']) / $mauSo;

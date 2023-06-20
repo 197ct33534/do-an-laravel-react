@@ -4,15 +4,16 @@ import { memo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { productList } from '../../features/shopSlice';
-import { getProductAsync } from '../../features/shopThunk';
+import { getProductAsync, getProductTopSearchAsync } from '../../features/shopThunk';
 import { numberWithCommas } from '../../Helper/Funtion';
 import '../css/Custom.css';
 const Products = () => {
     const products = useSelector(productList);
+    console.log(products);
     const dispatch = useDispatch();
     useEffect(() => {
         if (!products) {
-            dispatch(getProductAsync());
+            dispatch(getProductTopSearchAsync());
         }
     }, [dispatch, products]);
     return (

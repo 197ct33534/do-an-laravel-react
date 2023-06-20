@@ -263,25 +263,26 @@ class AprioriAlgorithm
         $this->result_ariori = $kq;
     }
 
-    public function productRecommend()
+    public function productRecommend($product_id)
     {
-        $user = \Auth()->user();
+        // $user = \Auth()->user();
         // lấy ra những id sản phẩm trong giỏ hàng và hóa đơn đã mua trước đó
-        $product_in_cart = Cart::where('user_id', $user->id)
-            ->selectRaw('product_id, count(*) AS SL')
-            ->groupBy('product_id')
-            ->orderBy('SL', 'desc')
-            ->limit(10)->pluck('product_id')->toArray();
+        // $product_in_cart = Cart::where('user_id', $user->id)
+        //     ->selectRaw('product_id, count(*) AS SL')
+        //     ->groupBy('product_id')
+        //     ->orderBy('SL', 'desc')
+        //     ->limit(10)->pluck('product_id')->toArray();
 
-        $product_in_order = Orders::where('user_id', $user->id)
-            ->join('order_items', 'order_items.order_id', 'orders.id')
-            ->selectRaw('product_id, count(*) AS SL')
-            ->groupBy('product_id')
-            ->orderBy('SL', 'desc')
-            ->limit(10)
-            ->pluck('product_id')->toArray();
+        // $product_in_order = Orders::where('user_id', $user->id)
+        //     ->join('order_items', 'order_items.order_id', 'orders.id')
+        //     ->selectRaw('product_id, count(*) AS SL')
+        //     ->groupBy('product_id')
+        //     ->orderBy('SL', 'desc')
+        //     ->limit(10)
+        //     ->pluck('product_id')->toArray();
 
-        $list_product_id =  array_unique(array_merge($product_in_cart, $product_in_order));
+        // $list_product_id =  array_unique(array_merge($product_in_cart, $product_in_order));
+        $list_product_id = [$product_id];
 
 
         $arr_recommend = [];

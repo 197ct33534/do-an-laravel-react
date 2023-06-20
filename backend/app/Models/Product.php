@@ -19,6 +19,7 @@ class Product extends Model
         'category_id',
         'brand_id',
         'gender',
+        'visit',
         // 'sku',
         // 'is_show',
         // 'is_new',

@@ -8,28 +8,27 @@ import Header from '../Shop/components/Header';
 import NavBar from '../Shop/components/NavBar';
 import '../Shop/css/LayoutShop.css';
 import SpinnerMui from '../components/Common/SpinnerMui';
-import { fetchgetProductRecommend } from '../features/shopApi';
-import { cartCount } from '../features/shopSlice';
+// import { fetchgetProductRecommend } from '../features/shopApi';
+// import { cartCount } from '../features/shopSlice';
 import { CartCountAsync, getCategoryAsync } from '../features/shopThunk';
 export const LayoutShopContext = createContext();
 const LayoutShop = () => {
     const dispatch = useDispatch();
-    const carts = useSelector(cartCount);
+    // const carts = useSelector(cartCount);
 
     const user = JSON.parse(localStorage.getItem('userInfo'));
-    const [recommendProduct, setRecommendProduct] = useState();
-    const fetchProductRecommend = async () => {
-        console.log(user);
-        if (user?.id) {
-            const res = await fetchgetProductRecommend();
-            if (res.data.success) {
-                setRecommendProduct(res.data.data);
-            }
-        }
-    };
-    useEffect(() => {
-        fetchProductRecommend();
-    }, [carts.cart_count]);
+    // const [recommendProduct, setRecommendProduct] = useState();
+    // const fetchProductRecommend = async () => {
+    //     if (user?.id) {
+    //         const res = await fetchgetProductRecommend();
+    //         if (res.data.success) {
+    //             setRecommendProduct(res.data.data);
+    //         }
+    //     }
+    // };
+    // useEffect(() => {
+    //     fetchProductRecommend();
+    // }, [carts.cart_count]);
     useEffect(() => {
         dispatch(getCategoryAsync());
         if (user?.id) {
@@ -39,7 +38,7 @@ const LayoutShop = () => {
 
     return (
         <>
-            <LayoutShopContext.Provider value={{ recommendProduct }}>
+            <LayoutShopContext.Provider value={{}}>
                 <Header />
                 <NavBar />
                 <Outlet />

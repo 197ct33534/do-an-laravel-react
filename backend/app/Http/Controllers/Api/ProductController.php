@@ -78,6 +78,7 @@ class ProductController extends Controller
         $product->product_price = $request->product_price;
         $product->gender = $request->gender;
         $product->active = $request->active;
+        $product->visit = 1;
         $product->brand_id = $request->brand_id;
         $product->category_id = $request->category_id;
         $product->save();
@@ -144,7 +145,17 @@ class ProductController extends Controller
             'data' =>     new ProductCollection($productList)
         ]);
     }
+    public function getInputSearchProduct()
+    {
 
+        $productList = Product::orderBy('product_name', 'asc')->select('product_id', 'product_name')->get();
+
+        return response()->json([
+            'success'   => true,
+            'message'   => Lang::get('messages.action_successful', ['action' => 'Lấy danh sách sản phẩm']),
+            'data' =>     $productList
+        ]);
+    }
     /**
      * cập nhật  sản phẩm vào bảng mst_product
      * @param StoreProductRequest $request
@@ -337,11 +348,15 @@ class ProductController extends Controller
 
             foreach ($productItem as $key => $item) {
                 $image = ProductImage::where('product_item_id', $item->id)->first();
-                if (Storage::exists('public/images/products/' . $image->name)) {
+
+                if ($image && Storage::exists('public/images/products/' . $image->name)) {
                     Storage::delete('public/images/products/' . $image->name);
+                    $image->delete();
                 }
+
+
                 ProductItem::where('id', $item->id)->delete();
-                $image->delete();
+
                 AttributeProductValue::where('product_item_id', $item->id)->delete();
                 // $item->attributeValue->delete();
             }
@@ -433,6 +448,9 @@ class ProductController extends Controller
     public function getDetailProduct($id)
     {
         $pro = Product::where('product_id', $id)->with(['productItems', 'comments'])->firstOrFail();
+        if ($pro) {
+            $pro->increment('visit');
+        }
         $data_category = [];
 
         $cate = Categories::find($pro->category_id);
@@ -536,16 +554,37 @@ class ProductController extends Controller
         ]);
     }
 
-    public function getProductRecommend()
+    public function getProductRecommend($id)
     {
-
         $apriori = new AprioriAlgorithm();
         $apriori->runApriori();
         $apriori->associationLawWithApriori();
-        $product_id_recomment = $apriori->productRecommend();
+        $product_id_recomment = $apriori->productRecommend($id);
 
         $productList = Product::whereIn('product_id', $product_id_recomment)->orderBy('created_at', 'desc')->paginate(20);
 
+        return response()->json([
+            'success' => true,
+            'message'   => Lang::get('messages.action_successful', ['action' => 'Lấy sản phẩm đề xuất cho khách hàng']),
+
+            'data' => ProductResource::collection($productList),
+        ]);
+    }
+    public function getProductSameCategory($cate_id)
+    {
+
+        $productList = Product::limit(10)->where('category_id', $cate_id)->get();
+        return response()->json([
+            'success' => true,
+            'message'   => Lang::get('messages.action_successful', ['action' => 'Lấy sản phẩm đề xuất cho khách hàng']),
+
+            'data' => ProductResource::collection($productList),
+        ]);
+    }
+
+    public function getProductTopSearch()
+    {
+        $productList = Product::limit(12)->orderBy('visit', 'desc')->get();
         return response()->json([
             'success' => true,
             'message'   => Lang::get('messages.action_successful', ['action' => 'Lấy sản phẩm đề xuất cho khách hàng']),
