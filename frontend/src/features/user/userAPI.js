@@ -84,8 +84,18 @@ export async function fetchGetOrder(listParam) {
 export async function fetchPutOrder(data) {
     return await axios.put(`${URL}/orders`, data, config);
 }
+
+export async function printOrder(order_id) {
+    return await axios.get(`${URL}/printOrder/${order_id}`, config);
+}
 export async function fetchPutComment(data) {
-    return await axios.put(`${URL}/comments`, data, config);
+    const config2 = {
+        headers: {
+            'Content-type': 'application/pdf',
+            'ngrok-skip-browser-warning': 69420,
+        },
+    };
+    return await axios.put(`${URL}/comments`, data, config2);
 }
 export async function fetchGetAllComment(listParam = '') {
     let str = [];

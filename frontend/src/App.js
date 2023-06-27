@@ -33,6 +33,7 @@ import OrderStatus from './Shop/pages/OrderStatus';
 import ScrollToTop from './Shop/pages/ScrollToTop';
 import ShopCategory from './Shop/pages/ShopCategory';
 import DashBoard from './Admin/Dashboard/DashBoard';
+import ServerNotWorking from './pages/ServerNotWorking';
 
 // import { CheckLogin } from "./middlewares/CheckLogin";
 // import Deni from "./pages/Deni";
@@ -103,7 +104,7 @@ function App() {
                 </Route>
             </Route>
             <Route path="/403" element={<Deni />} />
-            {/* <Route path="/500" element={<Page500 />} /> */}
+            <Route path="/500" element={<ServerNotWorking />} />
             <Route path="notfound" element={<NotFound />} />
             <Route path="/*" element={<NotFound />} />
         </Routes>

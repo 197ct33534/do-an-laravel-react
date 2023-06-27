@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\AttributeController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\DashBoardController;
+use App\Http\Controllers\Api\DownloadsController;
 use App\Http\Controllers\Api\OrderController;
 
 /*
@@ -61,7 +62,7 @@ Route::prefix('products')->middleware(['auth:sanctum', 'checkTokenExpered'])->gr
 });
 
 Route::post('uploads', [ProductController::class, 'postUploads']);
-
+Route::get('printOrder/{id}', [DownloadsController::class, 'getDownloadOrder']);
 Route::get('roles', [RoleController::class, 'getAllRole']);
 Route::prefix('roles')->middleware(['auth:sanctum', 'checkTokenExpered', 'checkPermission', 'role:Super-Admin'])->group(function () {
     Route::get('filter', [RoleController::class, 'getFilterRole']);

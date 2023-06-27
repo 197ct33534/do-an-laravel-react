@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\DownloadsController;
 use App\Http\Controllers\RatingController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
@@ -23,5 +24,5 @@ Route::get('/fakeOrder', [RatingController::class, 'fakeOrder']);
 Route::get('/comment', [RatingController::class, 'index']);
 Route::get('/test-comment', [RatingController::class, 'testComment']);
 Route::post('/post-comment', [RatingController::class, 'postComment'])->name('postComment');
-
+Route::get('printOrder/{id}', [DownloadsController::class, 'getDownloadOrder']);
 Route::get('/importCsv', [RatingController::class, 'importCsv']);

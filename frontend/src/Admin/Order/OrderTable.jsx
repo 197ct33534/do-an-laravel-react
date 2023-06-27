@@ -23,15 +23,22 @@ import EditIcon from '@mui/icons-material/Edit';
 import { capitalized, numberWithCommas } from '../../Helper/Funtion';
 import FormOrder from './FormOrder';
 import PrintIcon from '@mui/icons-material/Print';
+import { printOrder } from '../../features/user/userAPI';
+import { useDispatch } from 'react-redux';
+import { done, pendding } from '../../features/shopSlice';
+import axios from 'axios';
 function Row(props) {
     const navigate = useNavigate();
-    const { row, stt, handleUpdateStatusOrder } = props;
+    const { row, stt, handleUpdateStatusOrder, handlePrintOrder } = props;
     const [open, setOpen] = useState(false);
 
     const onEdit = (row) => {
         handleUpdateStatusOrder(row);
     };
-
+    const onPrint = (row) => {
+        console.log(row);
+        handlePrintOrder(row.order_id);
+    };
     return (
         <React.Fragment>
             <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
@@ -117,7 +124,7 @@ function Row(props) {
                 </TableCell>
                 <TableCell align="right">{row.payment_type_text}</TableCell>
                 <TableCell align="right">
-                    <Button variant="outlined" color="primary">
+                    <Button variant="outlined" color="primary" onClick={() => onPrint(row)}>
                         <PrintIcon />
                     </Button>
                 </TableCell>
@@ -218,6 +225,7 @@ function Row(props) {
     );
 }
 const OrderTable = ({ updateStatusOrder }) => {
+    const dispatch = useDispatch();
     const { orderList } = useContext(OrderContext);
     const [open, setOpen] = useState(false);
     const [row, setRow] = useState();
@@ -225,7 +233,24 @@ const OrderTable = ({ updateStatusOrder }) => {
         setRow(row);
         setOpen(true);
     };
+    const print = async (order_id) => {
+        dispatch(pendding());
+        const res = await axios({
+            responseType: 'blob',
+            url: 'http://127.0.0.1:8000/api/printOrder/' + order_id,
+        });
 
+        const url = window.URL.createObjectURL(new Blob([res.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `hoa_don_so_${order_id}.pdf`);
+        document.body.appendChild(link);
+        link.click();
+        dispatch(done());
+    };
+    const handlePrintOrder = (id) => {
+        print(id);
+    };
     return (
         <>
             <TableContainer component={Paper} style={{ overflowX: 'auto' }}>
@@ -283,6 +308,7 @@ const OrderTable = ({ updateStatusOrder }) => {
                                     (key + 1)
                                 }
                                 handleUpdateStatusOrder={handleUpdateStatusOrder}
+                                handlePrintOrder={handlePrintOrder}
                             />
                         ))}
                         {!orderList?.data && (
