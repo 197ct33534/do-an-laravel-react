@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\DashBoardController;
 use App\Http\Controllers\Api\DownloadsController;
 use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\RatingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -144,3 +145,4 @@ Route::prefix('dashboard')->middleware('auth:sanctum')->group(function () {
     Route::get('quantitySoldOfProduct', [DashBoardController::class, 'getQuantitySoldOfProduct']);
     Route::get('getNumberOfCommentTypes', [DashBoardController::class, 'getNumberOfCommentTypes']);
 });
+Route::post('test-comment', [RatingController::class, 'testComment']);

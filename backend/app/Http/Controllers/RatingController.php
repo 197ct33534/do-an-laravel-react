@@ -16,8 +16,7 @@ class RatingController extends Controller
     {
         $bayes = new CommentBayes();
         // dd($bayes->train());
-        dd($bayes->posteriorProbability("
-        Kiểu dáng váy đẹp nhưng mà hơi hơi mỏng nha. Nói chung là cũng tạm được"));
+        dd($bayes->posteriorProbability("Đôi giày này tạm"));
     }
     public function postComment()
     {
@@ -25,8 +24,12 @@ class RatingController extends Controller
         $bayes = new CommentBayes();
         return ($bayes->posteriorProbability(request()->input('comment')));
     }
-    public function testComment()
+    public function testComment(Request $request)
     {
+        $comment = $request->input('comment');
+        $bayes = new CommentBayes();
+        $result = $bayes->posteriorProbability($comment);
+        return $result["ket-luan"];
         return view('comment');
     }
     public function test()
@@ -75,9 +78,10 @@ class RatingController extends Controller
     {
 
         $listOrderDetail = [
-            'D000000014' => 254,
-            'V000000013' => 175, 'D000000012' => 252,
-            'V000000012' => 170,  'B000000002' => 256,
+            'M000000004' => 307,
+            'V000000012' => 169,
+            'D000000015' => 308,
+            'K000000004' => 295,
         ];
         $data_info_user_order = [
             'user_id' => 403,

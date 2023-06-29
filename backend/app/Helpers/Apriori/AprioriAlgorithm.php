@@ -179,7 +179,7 @@ class AprioriAlgorithm
 
         $size = 2;
         $arr = [];
-        $this->powerSet(array_keys($getData), $size);
+        // $this->powerSet(array_keys($getData), $size);
         while (($arr = $this->powerSet(array_keys($getData), $size))) {
             //1
             // echo "bước phát sinh thứ $size </br>";
