@@ -38,6 +38,7 @@ class RatingController extends Controller
         $apriori = new AprioriAlgorithm();
 
         $apriori->runApriori();
+
         dd($apriori->associationLawWithApriori());
         // $apriori->productRecommend();
     }

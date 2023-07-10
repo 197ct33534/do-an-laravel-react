@@ -179,6 +179,7 @@ class AprioriAlgorithm
 
         $size = 2;
         $arr = [];
+        // dd($getData);
         // $this->powerSet(array_keys($getData), $size);
         while (($arr = $this->powerSet(array_keys($getData), $size))) {
             //1

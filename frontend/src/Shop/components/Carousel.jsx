@@ -31,35 +31,35 @@ const Carousel = () => {
                         <div>
                             <img
                                 className="img-fluid Carousel-my-image"
-                                src="https://media-fmplus.cdn.vccloud.vn/uploads/sliders/f3c83835-70ce-4c6e-a2ee-37263745cfc5.png"
+                                src={process.env.PUBLIC_URL + '/assets/images/banner_1.png'}
                                 alt=""
                             />
                         </div>
                         <div>
                             <img
                                 className="img-fluid Carousel-my-image"
-                                src="https://media-fmplus.cdn.vccloud.vn/uploads/sliders/22a4c16a-b9dc-43ac-939e-9fb36e823ea2.png"
+                                src={process.env.PUBLIC_URL + '/assets/images/banner_2.png'}
                                 alt=""
                             />
                         </div>
                         <div>
                             <img
                                 className="img-fluid Carousel-my-image"
-                                src="https://media-fmplus.cdn.vccloud.vn/uploads/sliders/76b79ffc-6eee-4dcf-8fb3-22ee3f42150e.png"
+                                src={process.env.PUBLIC_URL + '/assets/images/banner_3.png'}
                                 alt=""
                             />
                         </div>
                         <div>
                             <img
                                 className="img-fluid Carousel-my-image"
-                                src="https://media-fmplus.cdn.vccloud.vn/uploads/sliders/efcab46b-6a33-4417-99a8-f514b0ef27ad.png"
+                                src={process.env.PUBLIC_URL + '/assets/images/banner_4.png'}
                                 alt=""
                             />
                         </div>
                         <div>
                             <img
                                 className="img-fluid Carousel-my-image"
-                                src="https://media-fmplus.cdn.vccloud.vn/uploads/sliders/169531c2-b3d7-4c65-93e3-e520ee48136a.png"
+                                src={process.env.PUBLIC_URL + '/assets/images/banner_5.png'}
                                 alt=""
                             />
                         </div>
