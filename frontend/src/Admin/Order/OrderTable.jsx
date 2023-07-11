@@ -237,7 +237,7 @@ const OrderTable = ({ updateStatusOrder }) => {
         dispatch(pendding());
         const res = await axios({
             responseType: 'blob',
-            url: 'http://127.0.0.1:8000/api/printOrder/' + order_id,
+            url: process.env.REACT_APP_API_URL + '/printOrder/' + order_id,
         });
 
         const url = window.URL.createObjectURL(new Blob([res.data]));
