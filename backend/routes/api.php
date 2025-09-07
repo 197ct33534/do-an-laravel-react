@@ -33,7 +33,9 @@ use App\Http\Controllers\RatingController;
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
-
+Route::get('/hello', function () {
+    return response()->json(['message' => 'Hello, World!']);
+});
 
 Route::post('/login', [UserController::class, 'postLogin']);
 Route::post('/resigter', [UserController::class, 'postResigter']);
