@@ -54,6 +54,13 @@ services:
       # - frontend
     networks:
       - app-network
+  redis:
+    image: redis:7.0
+    container_name: redis_cache
+    ports:
+      - "6379:6379"
+    networks:
+      - app-network
 
 networks:
   app-network:
